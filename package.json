@@ -1,0 +1,62 @@
+{
+  "author": "Vitalii Maslianok <maslianok@gmail.com> (https://github.com/maslianok)",
+  "bugs": {
+    "url": "https://github.com/maslianok/react-responsive-tabs/issues"
+  },
+  "dependencies": {},
+  "description": "React responsive tabs",
+  "devDependencies": {
+    "babel": "^5.5.8",
+    "babel-core": "^5.6.18",
+    "babel-eslint": "^3.1.15",
+    "babel-loader": "^5.1.4",
+    "eslint": "^0.23",
+    "eslint-config-airbnb": "0.0.6",
+    "eslint-plugin-react": "^2.3.0",
+    "expect": "^1.6.0",
+    "isparta": "^3.0.3",
+    "jsdom": "^6.5.1",
+    "mocha": "^2.2.5",
+    "mocha-jsdom": "^1.0.0",
+    "react": "^0.14.0",
+    "react-addons-test-utils": "^0.14.0",
+    "react-dom": "^0.14.0",
+    "rimraf": "^2.3.4",
+    "webpack": "^1.11.0"
+  },
+  "directories": {
+    "example": "example"
+  },
+  "homepage": "https://github.com/maslianok/react-responsive-tabs",
+  "keywords": [
+    "react",
+    "responsive",
+    "tabs",
+    "tab"
+  ],
+  "license": "MIT",
+  "main": "lib/index.js",
+  "maintainers": [
+    "maslianok <maslianok@gmail.com>"
+  ],
+  "name": "react-responsive-tabs",
+  "optionalDependencies": {},
+  "peerDependencies": {
+    "react": "^0.14.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/maslianok/react-responsive-tabs.git"
+  },
+  "scripts": {
+    "build": "babel src --out-dir lib",
+    "build:watch": "babel src --watch --out-dir lib",
+    "clean": "rimraf lib",
+    "lint": "eslint src test example",
+    "prepublish": "npm run lint && npm run test && npm run clean && npm run build",
+    "test": "NODE_ENV=test mocha --compilers js:babel/register --recursive",
+    "test:cov": "babel-node ./node_modules/.bin/isparta cover ./node_modules/.bin/_mocha -- --recursive",
+    "test:watch": "NODE_ENV=test mocha --compilers js:babel/register --recursive --watch"
+  },
+  "version": "0.1.0"
+}
