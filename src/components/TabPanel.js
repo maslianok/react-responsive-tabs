@@ -1,4 +1,4 @@
-import React, {PropTypes} from 'react';
+import React, {PropTypes, Component} from 'react';
 import cx from 'classnames';
 
 export default class TabPanel extends Component {
@@ -23,12 +23,11 @@ export default class TabPanel extends Component {
       </div>
     );
   }
-};
+}
 
 TabPanel.propTypes = {
   className: PropTypes.string,
   selected: PropTypes.bool,
-  id: PropTypes.string,
   tabId: PropTypes.string,
   children: PropTypes.oneOfType([
     PropTypes.array,
@@ -39,6 +38,5 @@ TabPanel.propTypes = {
 
 TabPanel.defaultProps = {
   selected: false,
-  id: null,
   tabId: null
 };

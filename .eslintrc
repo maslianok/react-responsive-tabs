@@ -1,15 +1,15 @@
 {
-  "extends": "eslint-config-airbnb",
+  "parser": "babel-eslint",
   "env": {
     "browser": true,
     "mocha": true,
     "node": true
   },
   "rules": {
-    "no-console": 0,
-  },
-  "plugins": [
-    "react"
-  ]
+    "strict": [2, "never"],
+    "quotes": [2, "single"],
+    "eol-last": [0],
+    "no-mixed-requires": [0],
+    "no-underscore-dangle": [0]
+  }
 }
-

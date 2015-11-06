@@ -1,6 +1,4 @@
-import React, {PropTypes, Component} from 'react';
-import { render } from 'react-dom'
-import cx from 'classnames';
+import React, {Component} from 'react';
 
 export default class Tabs extends Component {
 
@@ -12,7 +10,7 @@ export default class Tabs extends Component {
     let raf = window.requestAnimationFrame ||
       window.mozRequestAnimationFrame ||
       window.webkitRequestAnimationFrame ||
-      fn => window.setTimeout(fn, 20);
+      (fn => window.setTimeout(fn, 20));
     return fn => raf(fn);
   }
 
@@ -40,8 +38,8 @@ export default class Tabs extends Component {
 
   _checkTriggers(element) {
     //TODO Check only width?
-    return element.offsetWidth != element.__resizeLast__.width ||
-      element.offsetHeight != element.__resizeLast__.height;
+    return element.offsetWidth !== element.__resizeLast__.width ||
+      element.offsetHeight !== element.__resizeLast__.height;
   }
 
   _getScrollListener() {
@@ -67,26 +65,26 @@ export default class Tabs extends Component {
           });
         }
       });
-    }
+    };
   }
 
 
   componentDidMount() {
     const fn = this.props._onResize;
-    const element = this.refs.myInput.parentNode;
+    const element = this.refs.resizeTriggers.parentNode;
 
     if (this.attachEvent()) {
       element.attachEvent('onresize', fn);
     } else {
       if (!element.__resizeTriggers__) {
-        if (getComputedStyle(element).position == 'static') {
+        if (getComputedStyle(element).position === 'static') {
           element.style.position = 'relative';
         }
         element.__resizeLast__ = {};
         element.__resizeListeners__ = [];
-        element.__resizeTriggers__ = element.getElementsByClassName("resize-triggers")[0];
+        element.__resizeTriggers__ = element.getElementsByClassName('resize-triggers')[0];
 
-        resetTriggers(element);
+        this._resetTriggers(element);
 
         element.addEventListener('scroll', this._getScrollListener(), true);
       }
@@ -96,7 +94,7 @@ export default class Tabs extends Component {
 
   componentWillUnmount() {
     const fn = this.props._onResize;
-    const element = this.refs.myInput.parentNode;
+    const element = this.refs.resizeTriggers.parentNode;
 
     if (this.attachEvent()) {
       element.detachEvent('onresize', fn);
@@ -119,3 +117,4 @@ export default class Tabs extends Component {
       </div>
     );
   }
+}

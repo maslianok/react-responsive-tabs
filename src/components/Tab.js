@@ -3,19 +3,8 @@ import cx from 'classnames';
 
 export default class Tab extends Component {
 
-
-  componentWillMount() {
-
-  },
-
-  componentWillReceiveProps(newProps) {
-
-  },
-
   render() {
-
     return (
-
       <div
         className={cx(
           'Tabs__Tab',
@@ -44,7 +33,6 @@ export default class Tab extends Component {
 Tab.propTypes = {
   className: PropTypes.string,
   onClick: PropTypes.func,
-  id: PropTypes.string,
   selected: PropTypes.bool,
   disabled: PropTypes.bool,
   panelId: PropTypes.string,
@@ -57,6 +45,5 @@ Tab.propTypes = {
 
 Tab.defaultProps = {
   selected: false,
-  id: null,
   panelId: null
 };
