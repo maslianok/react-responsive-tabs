@@ -1,13 +1,11 @@
-import React, { Component, PropTypes } from 'react'
+import React, {Component} from 'react';
 import {Tabs, Tab, TabPanel} from 'react-responsive-tabs';
 
 class App extends Component {
   render() {
     return (
       <div>
-
         <Tabs>
-
           <Tab key="1" className="">Lorem ipsum dolor sit amet 1</Tab>
           <TabPanel key="1" className="">Lorem ipsum dolor sit amet 1</TabPanel>
 
@@ -22,11 +20,9 @@ class App extends Component {
 
           <Tab key="5" className="">Lorem ipsum dolor sit amet 5</Tab>
           <TabPanel key="5" className="">Lorem ipsum dolor sit amet 5</TabPanel>
-
         </Tabs>
-        
       </div>
-    )
+    );
   }
 }
 
