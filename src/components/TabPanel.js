@@ -1,42 +1,38 @@
 import React, {PropTypes, Component} from 'react';
-import cx from 'classnames';
 
 export default class TabPanel extends Component {
   render() {
+    const props = this.props;
 
     return (
       <div
-        className={cx(
-          'Tabs__TabPanel',
-          this.props.className,
-          {
-            'Tabs__TabPanel--selected': this.props.selected
-          }
-        )}
+        style={props.panelStyle}
         role="tabpanel"
-        id={this.props.id}
-        aria-labeledby={this.props.tabId}
-        aria-hidden={this.props.selected ? 'false' : 'true'}
-        style={{display: this.props.selected ? null : 'none'}}
+        id={props.key}
+        aria-labeledby={props.tabId}
+        aria-hidden={props.selected ? 'false' : 'true'}
       >
-        {this.props.children}
+        {props.children}
       </div>
     );
   }
 }
 
 TabPanel.propTypes = {
-  className: PropTypes.string,
-  selected: PropTypes.bool,
-  tabId: PropTypes.string,
   children: PropTypes.oneOfType([
     PropTypes.array,
     PropTypes.object,
     PropTypes.string
-  ])
+  ]),
+  key: PropTypes.string,
+  style: PropTypes.object,
+
+  //generic props
+  panelStyle: PropTypes.object,
+  selected: PropTypes.bool,
+  tabId: PropTypes.string
 };
 
 TabPanel.defaultProps = {
-  selected: false,
-  tabId: null
+
 };

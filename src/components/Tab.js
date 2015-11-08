@@ -1,29 +1,23 @@
 import React, {PropTypes, Component} from 'react';
-import cx from 'classnames';
 
 export default class Tab extends Component {
 
   render() {
+    let props = this.props;
+
     return (
       <div
-        className={cx(
-          'Tabs__Tab',
-          this.props.className,
-          {
-            'Tabs__Tab--selected': this.props.selected,
-            'Tabs__Tab--disabled': this.props.disabled
-          }
-        )}
+        style={props.tabStyle}
         role="tab"
-        id={this.props.id}
-        aria-selected={this.props.selected ? 'true' : 'false'}
-        aria-expanded={this.props.selected ? 'true' : 'false'}
-        aria-disabled={this.props.disabled ? 'true' : 'false'}
-        aria-controls={this.props.panelId}
+        id={props.key}
+        aria-selected={props.selected ? 'true' : 'false'}
+        aria-expanded={props.selected ? 'true' : 'false'}
+        aria-disabled={props.disabled ? 'true' : 'false'}
+        aria-controls={props.panelId}
         tabIndex="0"
-        onClick={this.props.onClick}
+        onClick={props.onClick}
       >
-        {this.props.children}
+        {props.children}
       </div>
 
     );
@@ -31,19 +25,23 @@ export default class Tab extends Component {
 }
 
 Tab.propTypes = {
-  className: PropTypes.string,
-  onClick: PropTypes.func,
-  selected: PropTypes.bool,
-  disabled: PropTypes.bool,
-  panelId: PropTypes.string,
   children: PropTypes.oneOfType([
     PropTypes.array,
     PropTypes.object,
     PropTypes.string
-  ])
+  ]),
+  disabled: PropTypes.bool,
+  key: PropTypes.string,
+  onClick: PropTypes.func,
+  style: PropTypes.object,
+  selectedStyle: PropTypes.object,
+  disabledStyle: PropTypes.object,
+  
+  //generic props
+  panelId: PropTypes.string,
+  selected: PropTypes.bool,
+  tabStyle: PropTypes.object
 };
 
 Tab.defaultProps = {
-  selected: false,
-  panelId: null
 };

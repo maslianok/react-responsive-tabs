@@ -1,6 +1,10 @@
+import Tabs from './components/Tabs';
+import Tab from './components/Tab';
+import TabPanel from './components/TabPanel';
+
 export default {
-  Tabs: require('./components/Tabs'),
-  Tab: require('./components/Tab'),
-  TabPanel: require('./components/TabPanel')
+  Tabs: Tabs,
+  Tab: Tab,
+  TabPanel: TabPanel
 };
 

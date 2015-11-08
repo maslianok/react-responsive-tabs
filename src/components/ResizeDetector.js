@@ -1,6 +1,6 @@
-import React, {Component} from 'react';
+import React, {PropTypes, Component} from 'react';
 
-export default class Tabs extends Component {
+export default class ResizeDetector extends Component {
 
   attachEvent() {
     return document.attachEvent;
@@ -118,3 +118,7 @@ export default class Tabs extends Component {
     );
   }
 }
+
+ResizeDetector.propTypes = {
+  _onResize: PropTypes.func
+};

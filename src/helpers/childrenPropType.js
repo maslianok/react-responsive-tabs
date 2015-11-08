@@ -46,7 +46,7 @@ export default function childrenPropTypes(props, propName) {
     return error;
   }
 
-  for(var i = 0; i < tabsKeys.length; i++) {
+  for(let i = 0; i < tabsKeys.length; i++) {
     if (panelsKeys.indexOf(tabsKeys[i]) === -1) {
       error = new Error(
         'Cant find `TabPanel` for `Tab` with key `' + tabsKeys[i] + '`'
