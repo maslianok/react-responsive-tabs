@@ -17,32 +17,34 @@ module.exports = {
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoErrorsPlugin()
   ],
+  resolve: { 
+    alias: {'react-responsive-tabs': path.join(__dirname, '..', 'src', 'index.js')},
+    root: path.join(__dirname, 'node_modules')
+  },
   module: {
     loaders: [{
       test: /\.js$/,
       loaders: ['babel'],
       exclude: /node_modules/,
-      include: __dirname
     }]
   }
 }
 
 
-// When inside Redux repo, prefer src to compiled version.
+// When inside repo, prefer src to compiled version.
 // You can safely delete these lines in your project.
-var reduxSrc = path.join(__dirname, '..', 'src')
-var reduxNodeModules = path.join(__dirname, '..', 'node_modules')
-var fs = require('fs')
-if (fs.existsSync(reduxSrc) && fs.existsSync(reduxNodeModules)) {
-  // Resolve Redux to source
-  module.exports.resolve = { alias: { 'react-responsive-tabs': reduxSrc } }
-  // Compile Redux from source
-  module.exports.module.loaders.push({
-    test: /\.js$/,
-    loaders: ['babel'],
-    include: reduxSrc
-  })
-}
+// var src = path.join(__dirname, '..', 'src')
+// var fs = require('fs')
+// if (fs.existsSync(src)) {
+//   // Resolve to source
+//   module.exports.resolve = { alias: { 'react-responsive-tabs': src } }
+//   // Compile from source
+//   // module.exports.module.loaders.push({
+//   //   test: /\.js$/,
+//   //   loaders: ['babel'],
+//   //   include: src
+//   // })
+// }
 
 
 

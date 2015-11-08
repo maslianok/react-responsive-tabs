@@ -3,10 +3,6 @@
   "bugs": {
     "url": "https://github.com/maslianok/react-responsive-tabs/issues"
   },
-  "dependencies": {
-    "react": "^0.14.0",
-    "react-dom": "^0.14.0"
-  },
   "description": "React responsive tabs",
   "devDependencies": {
     "babel": "^5",
@@ -36,9 +32,6 @@
   ],
   "name": "react-responsive-tabs",
   "optionalDependencies": {},
-  "peerDependencies": {
-    "react": "^0.14.0"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/maslianok/react-responsive-tabs.git"

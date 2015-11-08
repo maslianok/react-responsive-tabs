@@ -22,28 +22,20 @@ export default class Tabs extends Component {
   constructor(props) {
     super(props);
 
+    this.tabRefs = {};
+
     this.state = {
-      elements: {},
       tabsWidth: {},
       blockWidth: 0,
       tabsTotalWidth: 0,
-      showMoreWidth: 0,
+      showMoreWidth: 40,
       selectedKey: this.props.selectedKey
     };
 
     // this._onResize = this._onResize.bind(this);
     this._clone = this._clone.bind(this);
-    this._updateElements = this._updateElements.bind(this);
     this._updateTabsWidth = this._updateTabsWidth.bind(this);
     this._getElements = this._getElements.bind(this);
-  }
-
-  componentWillMount() {
-    this._updateElements();
-  }
-
-  componentWillReceiveProps() {
-    this._updateElements();
   }
 
   componentDidMount() {
@@ -54,7 +46,6 @@ export default class Tabs extends Component {
     if (this.props !== prevProps) {
       this._updateTabsWidth();
     }
-
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -65,55 +56,39 @@ export default class Tabs extends Component {
   }
 
   render() {
+    console.log('render Tabs');
+
     const styles = Object.assign({}, defaultStyles.tabsWrapper, this.props.styles);
 
     let {visible, hidden} = this._getElements();
 
-    console.log(visible, hidden);
-
     return (
       <div
-        styles={styles}
+        style = {styles}
+        ref = "tabsWrapper"
         onKeyDown={this._handleKeyDown}>
 
         {visible}
 
         <ShowMore
-          ref = "Tabs__showMore"
-          styles = {defaultStyles.showMoreStyles}
+          ref = "tabsShowMore"
+          style = {defaultStyles.showMoreStyles}
           isShown = {this.props.showMore}
           hiddenTabs = {hidden}
         />
-
-
       </div>
     );
 
     // <ResizeDetector onResize={this._onResize} />
   }
 
-  _updateElements() {
-    const children = this.props.children;
-    let elements = {};
-
-    React.Children.forEach(children, (child) => {
-      if (!elements[child.key]) {
-        elements[child.key] = {};
-      }
-
-      elements[child.key][child.type.name] = child;
-    });
-
-    this.setState({elements});
-  }
-
   _updateTabsWidth(initialCall) {
-    let elements = this.state.elements;
+    let tabRefs = this.tabRefs;
     let tabsTotalWidth = 0;
     let tabsWidth = {};
 
-    Object.keys(elements).forEach(function(key) {
-      const width = findDOMNode(elements[key].tabElement).offsetWidth;
+    Object.keys(tabRefs).forEach((key) => {
+      const width = findDOMNode(tabRefs[key]).offsetWidth;
       tabsWidth[key] = width;
       tabsTotalWidth += width;
     });
@@ -121,32 +96,46 @@ export default class Tabs extends Component {
     let newState = {tabsWidth, tabsTotalWidth};
 
     if (initialCall) {
-      newState.showMoreWidth = findDOMNode(this.refs.Tabs__showMore).offsetWidth;
+      let showMore = findDOMNode(this.refs.tabsShowMore);
+      if (showMore) {
+        newState.showMoreWidth = showMore.offsetWidth;
+      }
     }
 
     this.setState(newState);
   }
 
   _getElements() {
+    let elements = {};
+    this.props.children.forEach((child) => {
+      if (!elements[child.key]) {
+        elements[child.key] = {};
+      }
+
+      elements[child.key][child.type.name] = child;
+    });
+
     const state = this.state;
     const clone = this._clone;
     const {showMore, transformWidth} = this.props.showMore;
-    const {blockWidth, tabsTotalWidth, elements, tabsWidth} = state;
+    const {blockWidth, tabsTotalWidth, tabsWidth} = state;
     const collapsed = blockWidth < transformWidth;
 
+    let tabIndex = 0;
     let availableWidth = blockWidth - (tabsTotalWidth > blockWidth ? state.showMoreWidth : 0);
 
-    let tabIndex = 0;
+    return Object.keys(elements).reduce((result, key) => {
+      const originalTab = elements[key].Tab;
+      const originalPanel = elements[key].TabPanel;
 
-    return Object.keys(elements).reduce(function(result, key) {
-      const TabOriginal = elements[key].Tab;
-      const TabPanelOriginal = elements[key].TabPanel;
-      const selected = state.selectedKey === TabOriginal.key;
-      const disabled = TabOriginal.disabled;
+      const selected = (!state.selectedKey && !tabIndex) || state.selectedKey === originalTab.key;
+      const disabled = originalTab.props.disabled;
       const payload = {tabIndex, collapsed, selected, disabled};
 
-      const Tab = clone(TabOriginal, payload);
-      const TabPanel = clone(TabPanelOriginal, payload);
+      const Tab = clone(originalTab, payload);
+      const Panel = clone(originalPanel, payload);
+
+      tabIndex++;
 
       if (
         //don't need to `Show more` button
@@ -164,28 +153,31 @@ export default class Tabs extends Component {
       } else {
         result.hidden.push(Tab);
       }
-      result.visible.push(TabPanel);
+      result.visible.push(Panel);
       availableWidth -= tabsWidth[key];
-      tabIndex++;
+
       return {visible: result.visible, hidden: result.hidden};
     }, {visible: [], hidden: []});
   }
 
   _clone(element, payload) {
+    const key = element.key;
     let props;
     switch (element.type.name) {
       case 'Tab':
         props = {
-          key: tabPrefix + element.key, 
-          panelId: panelPrefix + element.key, 
+          key: tabPrefix + key,
+          originalKey: key,
+          ref: (tab) => {tab && (this.tabRefs[tab.props.originalKey] = tab)},
+          panelId: panelPrefix + key, 
           selected: payload.selected, 
           tabStyle: this._getStylesFor(element, payload)
         };
         break;
       case 'TabPanel':
         props = {
-          key: panelPrefix + element.key, 
-          tabId: tabPrefix + element.key, 
+          key: panelPrefix + key,
+          tabId: tabPrefix + key,
           selected: payload.selected, 
           panelStyle: this._getStylesFor(element, payload)
         };
@@ -199,7 +191,7 @@ export default class Tabs extends Component {
       style = {}, 
       selectedStyle = {}, 
       disabledStyle = {}
-    } = element;
+    } = element.props;
 
     const {
       defaultStyle, 

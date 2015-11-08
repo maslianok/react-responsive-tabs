@@ -7,9 +7,9 @@ export default class ShowMore extends Component {
     }
 
     return (
-      <div className="Tabs__showMore" role="navigation" ariaHaspopup="true" tabIndex="0">
+      <div style={this.props.style.showMoreTab} role="navigation" ariaHaspopup="true" tabIndex="0">
         <span>...</span>
-        <div className="Tabs__showMoreList" ariaHidden="true" role="menu">
+        <div style={this.props.style.showMoreList} ariaHidden="true" role="menu">
           {this.props.hiddenElements}
         </div>
       </div>
@@ -18,6 +18,7 @@ export default class ShowMore extends Component {
 }
 
 ShowMore.propTypes = {
-  isShown: PropTypes.bool,
+  isShown: PropTypes.bool.isRequired,
   hiddenElements: PropTypes.array,
+  style: PropTypes.object.isRequired,
 };

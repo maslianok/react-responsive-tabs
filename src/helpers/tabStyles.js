@@ -15,7 +15,8 @@ export default {
       padding: '.7em 1em',
       cursor: 'pointer',
       zIndex: 1,
-      whiteSpace: 'nowrap'
+      whiteSpace: 'nowrap',
+      marginLeft: '-1px'
     },
     firstTabStyle: {
       marginLeft: 0
@@ -57,7 +58,8 @@ export default {
       cursor: 'pointer',
       zIndex: 1,
       whiteSpace: 'nowrap',
-      position: 'relative'
+      position: 'relative',
+      marginLeft: '-1px'
     },
     showMoreList: {
       position: 'absolute',
