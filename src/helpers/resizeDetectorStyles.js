@@ -1,30 +1,26 @@
-let commonStyles = {
-  content: ' ',
-  display: 'block',
-  position: 'absolute',
-  top: '0',
-  left: '0',
-  height: '100%',
-  width: '100%',
-  overflow: 'hidden'
-};
-
 export default {
-  resizeTriggers: {
-    extend: commonStyles,
-    visibility: 'hidden',
-    opacity: 0
+  parentStyle: {
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    right: 0,
+    bottom: 0,
+    overflow: 'scroll',
+    zIndex: -1,
+    visibility: 'hidden'
   },
-  resizeTrigger: {
-    extend: commonStyles,
-    background: '#eee',
-    overflow: 'auto'
+  shrinkChildStyle: {
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    width: '200%',
+    height: '200%'
   },
-  contractTrigger: {
-    '&:before': {
-      extend: commonStyles,
-      width: '200%',
-      height: '200%'
-    }
+  expandChildStyle: {
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    width: '100%',
+    height: '100%'
   }
 };

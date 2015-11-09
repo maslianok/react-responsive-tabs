@@ -2,7 +2,7 @@ import React, {Component, PropTypes} from 'react';
 
 export default class ShowMore extends Component {
   render() {
-    if (!this.props.isShown || !this.props.hiddenElements || !this.props.hiddenElements.length) {
+    if (!this.props.isShown || !this.props.hiddenTabs || !this.props.hiddenTabs.length) {
       return null;
     }
 
@@ -10,7 +10,7 @@ export default class ShowMore extends Component {
       <div style={this.props.style.showMoreTab} role="navigation" ariaHaspopup="true" tabIndex="0">
         <span>...</span>
         <div style={this.props.style.showMoreList} ariaHidden="true" role="menu">
-          {this.props.hiddenElements}
+          {this.props.hiddenTabs}
         </div>
       </div>
     );
@@ -19,6 +19,6 @@ export default class ShowMore extends Component {
 
 ShowMore.propTypes = {
   isShown: PropTypes.bool.isRequired,
-  hiddenElements: PropTypes.array,
+  hiddenTabs: PropTypes.array,
   style: PropTypes.object.isRequired,
 };

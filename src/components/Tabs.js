@@ -5,11 +5,12 @@
 //IdleCallback?
 //react router
 
+
 import React, {PropTypes, Component, cloneElement} from 'react';
 import {findDOMNode} from 'react-dom';
 
 import ShowMore from './ShowMore';
-// import ResizeDetector from './ResizeDetector';
+import ResizeDetector from './ResizeDetector';
 
 import childrenPropType from '../helpers/childrenPropType';
 import defaultStyles from '../helpers/tabStyles';
@@ -32,27 +33,36 @@ export default class Tabs extends Component {
       selectedKey: this.props.selectedKey
     };
 
-    // this._onResize = this._onResize.bind(this);
     this._clone = this._clone.bind(this);
-    this._updateTabsWidth = this._updateTabsWidth.bind(this);
+    this._onResize = this._onResize.bind(this);
+    this._setTabsWidth = this._setTabsWidth.bind(this);
     this._getElements = this._getElements.bind(this);
   }
 
-  componentDidMount() {
-    this._updateTabsWidth(true);
-  }
+  componentWillReceiveProps(nextProps) {
+    console.log('componentWillReceiveProps, set blockWidth to 0');
 
-  componentDidUpdate(prevProps) {
-    if (this.props !== prevProps) {
-      this._updateTabsWidth();
-    }
+    //TODO: check tab keys and tab names
+
+    // this.setState({
+    //   blockWidth: 0
+    // });
   }
 
   shouldComponentUpdate(nextProps, nextState) {
     return nextProps !== this.props ||
-      nextState.elements !== this.state.elements ||
       nextState.blockWidth !== this.state.blockWidth ||
       nextState.selectedKey !== this.state.selectedKey;
+  }
+
+  componentDidMount() {
+    this._setTabsWidth();
+  }
+
+  componentDidUpdate() {
+    if (!this.state.blockWidth) {
+      this._setTabsWidth();
+    }
   }
 
   render() {
@@ -76,30 +86,31 @@ export default class Tabs extends Component {
           isShown = {this.props.showMore}
           hiddenTabs = {hidden}
         />
+
+        <ResizeDetector handleWidth onResize={this._onResize} />
       </div>
     );
-
-    // <ResizeDetector onResize={this._onResize} />
   }
 
-  _updateTabsWidth(initialCall) {
-    let tabRefs = this.tabRefs;
+  _setTabsWidth() {
+    const tabRefs = this.tabRefs;
+    const cachedWidth = this.state.tabsWidth;
+
+    const blockWidth = this.refs.tabsWrapper.offsetWidth;
+
     let tabsTotalWidth = 0;
     let tabsWidth = {};
-
     Object.keys(tabRefs).forEach((key) => {
       const width = findDOMNode(tabRefs[key]).offsetWidth;
       tabsWidth[key] = width;
       tabsTotalWidth += width;
     });
 
-    let newState = {tabsWidth, tabsTotalWidth};
+    let newState = {tabsWidth, tabsTotalWidth, blockWidth};
 
-    if (initialCall) {
-      let showMore = findDOMNode(this.refs.tabsShowMore);
-      if (showMore) {
-        newState.showMoreWidth = showMore.offsetWidth;
-      }
+    let showMore = findDOMNode(this.refs.tabsShowMore);
+    if (showMore) {
+      newState.showMoreWidth = showMore.offsetWidth;
     }
 
     this.setState(newState);
@@ -117,9 +128,9 @@ export default class Tabs extends Component {
 
     const state = this.state;
     const clone = this._clone;
-    const {showMore, transformWidth} = this.props.showMore;
+    const {showMore, transformWidth} = this.props;
     const {blockWidth, tabsTotalWidth, tabsWidth} = state;
-    const collapsed = blockWidth < transformWidth;
+    const collapsed = blockWidth && blockWidth < transformWidth;
 
     let tabIndex = 0;
     let availableWidth = blockWidth - (tabsTotalWidth > blockWidth ? state.showMoreWidth : 0);
@@ -135,6 +146,8 @@ export default class Tabs extends Component {
       const Tab = clone(originalTab, payload);
       const Panel = clone(originalPanel, payload);
 
+      const tabWidth = tabsWidth[key] || 0;
+
       tabIndex++;
 
       if (
@@ -147,14 +160,14 @@ export default class Tabs extends Component {
         //all tabs are fit into the block
         blockWidth > tabsTotalWidth ||
         //current tab fit into the block
-        availableWidth - tabsWidth[key] > 0
+        availableWidth - tabWidth > 0
       ) {
         result.visible.push(Tab);
       } else {
         result.hidden.push(Tab);
       }
       result.visible.push(Panel);
-      availableWidth -= tabsWidth[key];
+      availableWidth -= tabWidth;
 
       return {visible: result.visible, hidden: result.hidden};
     }, {visible: [], hidden: []});
@@ -228,7 +241,7 @@ export default class Tabs extends Component {
   }
 
   _onResize(tabpanel) {
-    this.setState({blockWidth: tabpanel.offsetWidth});
+    this.setState({blockWidth: this.refs.tabsWrapper.offsetWidth});
   }
 
 }

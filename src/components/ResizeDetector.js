@@ -1,124 +1,102 @@
-import React, {PropTypes, Component} from 'react';
+import React, {Component, PropTypes} from 'react';
+import {findDOMNode} from 'react-dom';
+
+import {parentStyle, shrinkChildStyle, expandChildStyle} from '../helpers/resizeDetectorStyles';
 
 export default class ResizeDetector extends Component {
 
-  attachEvent() {
-    return document.attachEvent;
-  }
+  constructor(props) {
+    super();
 
-  _getRequestFrame() {
-    let raf = window.requestAnimationFrame ||
-      window.mozRequestAnimationFrame ||
-      window.webkitRequestAnimationFrame ||
-      (fn => window.setTimeout(fn, 20));
-    return fn => raf(fn);
-  }
-
-  _getCancelFrame() {
-    let cancel = window.cancelAnimationFrame ||
-      window.mozCancelAnimationFrame ||
-      window.webkitCancelAnimationFrame ||
-      window.clearTimeout;
-    return id => cancel(id);
-  }
-
-  _resetTriggers(element) {
-    let triggers = element.__resizeTriggers__;
-    let expand = triggers.firstElementChild;
-    let contract = triggers.lastElementChild;
-    let expandChild = expand.firstElementChild;
-
-    contract.scrollLeft = contract.scrollWidth;
-    contract.scrollTop = contract.scrollHeight;
-    expandChild.style.width = expand.offsetWidth + 1 + 'px';
-    expandChild.style.height = expand.offsetHeight + 1 + 'px';
-    expand.scrollLeft = expand.scrollWidth;
-    expand.scrollTop = expand.scrollHeight;
-  }
-
-  _checkTriggers(element) {
-    //TODO Check only width?
-    return element.offsetWidth !== element.__resizeLast__.width ||
-      element.offsetHeight !== element.__resizeLast__.height;
-  }
-
-  _getScrollListener() {
-    const requestFrame = this._getRequestFrame();
-    const cancelFrame = this._getCancelFrame();
-    const resetTriggers = this._resetTriggers;
-    const checkTriggers = this._checkTriggers;
-
-    return e => {
-      let element = this;
-      resetTriggers(this);
-
-      if (this.__resizeRAF__) {
-        cancelFrame(this.__resizeRAF__);
-      }
-
-      this.__resizeRAF__ = requestFrame(function() {
-        if (checkTriggers(element)) {
-          element.__resizeLast__.width = element.offsetWidth;
-          element.__resizeLast__.height = element.offsetHeight;
-          element.__resizeListeners__.forEach(function(fn) {
-            fn.call(element, e);
-          });
-        }
-      });
+    this.state = {
+      expandScrollLeft: 0,
+      expandScrollTop: 0,
+      shrinkScrollTop: 0,
+      shrinkScrollLeft: 0,
+      lastWidth: 0,
+      lastHeight: 0,
     };
+
+    this.reset = this.reset.bind(this);
+    this.handleScroll = this.handleScroll.bind(this);
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    return this.props != nextProps;
+  }
 
   componentDidMount() {
-    const fn = this.props._onResize;
-    const element = this.refs.resizeTriggers.parentNode;
-
-    if (this.attachEvent()) {
-      element.attachEvent('onresize', fn);
-    } else {
-      if (!element.__resizeTriggers__) {
-        if (getComputedStyle(element).position === 'static') {
-          element.style.position = 'relative';
-        }
-        element.__resizeLast__ = {};
-        element.__resizeListeners__ = [];
-        element.__resizeTriggers__ = element.getElementsByClassName('resize-triggers')[0];
-
-        this._resetTriggers(element);
-
-        element.addEventListener('scroll', this._getScrollListener(), true);
-      }
-      element.__resizeListeners__.push(fn);
-    }
+    this.reset();
   }
 
-  componentWillUnmount() {
-    const fn = this.props._onResize;
-    const element = this.refs.resizeTriggers.parentNode;
+  reset() {
+    const {
+      expand,
+      shrink,
+      container,
+      props
+    } = this;
 
-    if (this.attachEvent()) {
-      element.detachEvent('onresize', fn);
-    } else {
-      element.__resizeListeners__.splice(element.__resizeListeners__.indexOf(fn), 1);
-      if (!element.__resizeListeners__.length) {
-        element.removeEventListener('scroll', this._getScrollListener());
-        element.__resizeTriggers__ = !element.removeChild(element.__resizeTriggers__);
-      }
+    this.setState({
+      lastWidth: props.handleWidth && container.parentElement.offsetWidth,
+      lastHeight: props.handleHeight && container.parentElement.offsetHeight,
+    });
+
+    expand.scrollLeft = expand.scrollWidth;
+    expand.scrollTop = expand.scrollHeight;
+
+    shrink.scrollLeft = shrink.scrollWidth;
+    shrink.scrollTop = shrink.scrollHeight;
+  }
+
+  handleScroll(evt) {
+    const {container, state, props} = this;
+
+    if (
+      (props.handleWidth && container.parentElement.offsetWidth != state.lastWidth) ||
+      (props.handleHeight && container.parentElement.offsetHeight != state.lastHeight)
+    ) {
+      this.props.onResize();
     }
+
+    this.reset();
   }
 
   render() {
+    const {state} = this;
+
     return (
-      <div ref="resizeTriggers" className="resize-triggers">
-        <div className="expand-trigger">
-          <div></div>
-        </div>
-        <div className="contract-trigger"></div>
-      </div>
+      <resize-sensor
+        style={parentStyle}
+        ref={(ref) => {this.container = findDOMNode(ref)}}
+      >
+        <expand
+          style={parentStyle}
+          onScroll={this.handleScroll}
+          ref={(ref) => {this.expand = findDOMNode(ref)}}
+        >
+          <expand-child style={expandChildStyle}/>
+        </expand>
+        <shrink
+          style={parentStyle}
+          onScroll={this.handleScroll}
+          ref={(ref) => {this.shrink = findDOMNode(ref)}}
+        >
+          <shrink-child style={shrinkChildStyle}/>
+        </shrink>
+      </resize-sensor>
     );
   }
 }
 
 ResizeDetector.propTypes = {
-  _onResize: PropTypes.func
+  handleWidth: PropTypes.bool,
+  handleHeight: PropTypes.bool,
+  onResize: PropTypes.func.isRequired
+};
+
+ResizeDetector.defaultProps = {
+  handleWidth: false,
+  handleHeight: false,
+  onResize: () => console.error('ResizeDetector:onResize')
 };
