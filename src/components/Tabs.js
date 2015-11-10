@@ -1,10 +1,8 @@
-//use resize sensor to handle block resize
-//use accessibility principles
-//responsive layout
+//TODO IdleCallback
+//TODO react router
 
-//IdleCallback?
-//react router
-
+//TODO click handler
+//TODO show more handler
 
 import React, {PropTypes, Component, cloneElement} from 'react';
 import {findDOMNode} from 'react-dom';
@@ -40,13 +38,30 @@ export default class Tabs extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log('componentWillReceiveProps, set blockWidth to 0');
+    //TODO: how else can we check that Tab children has changed 
+    //and we have to recalculate tabsWidth
+    let updateTabs = false;
+    const children = this.props.children;
+    const nextChildren = nextProps.children;
+    if (children.length != nextChildren.length) {
+      updateTabs = true;
+    } else {
+      for (let i = 0; i < children.length; i++) {
+        if (
+          children[i].type.name == 'Tab' && 
+          (children[i].key != nextChildren[i].key ||
+          children[i].props.children != nextChildren[i].props.children)
+        ) {
+          updateTabs = true;
+          break;
+        }
+      }
+    }
 
-    //TODO: check tab keys and tab names
-
-    // this.setState({
-    //   blockWidth: 0
-    // });
+    if (updateTabs) {
+      console.log('Tabs has been updated! Start recalculating...');
+      this.setState({blockWidth: 0});
+    }
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -67,7 +82,6 @@ export default class Tabs extends Component {
 
   render() {
     console.log('render Tabs');
-
     const styles = Object.assign({}, defaultStyles.tabsWrapper, this.props.styles);
 
     let {visible, hidden} = this._getElements();
