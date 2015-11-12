@@ -8,6 +8,8 @@ export default {
     display: 'none'
   },
 
+
+
   Tab: {
     defaultStyle: {
       background: '#eee',
@@ -33,6 +35,8 @@ export default {
     }
   },
 
+
+
   TabPanel: {
     defaultStyle: {
       width: '100%',
@@ -50,16 +54,21 @@ export default {
     }
   },
 
+
+
   showMoreStyles: {
     showMoreTab: {
       background: '#eee',
       border: '1px solid #ddd',
-      padding: '.7em 1em',
       cursor: 'pointer',
       zIndex: 1,
       whiteSpace: 'nowrap',
       position: 'relative',
       marginLeft: '-1px'
+    },
+    showMoreLabel: {
+      padding: '.7em 1em',
+      display: 'inline-block'
     },
     showMoreList: {
       position: 'absolute',
