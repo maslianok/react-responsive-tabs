@@ -8,19 +8,28 @@ export default class Tab extends Component {
     return (
       <div
         style={props.tabStyle}
+        className="Tabs__tab"
         role="tab"
-        id={props.key}
+        id={props.id}
         aria-selected={props.selected ? 'true' : 'false'}
         aria-expanded={props.selected ? 'true' : 'false'}
         aria-disabled={props.disabled ? 'true' : 'false'}
         aria-controls={props.panelId}
         tabIndex="0"
-        onClick={props.onClick}
+        onClick={this._onClick.bind(this)}
       >
         {props.children}
       </div>
 
     );
+  }
+
+  _onClick() {
+    if (this.props.selected) {
+      return false;
+    }
+
+    this.props.onClick(this.props.originalKey);
   }
 }
 
@@ -31,17 +40,16 @@ Tab.propTypes = {
     PropTypes.string
   ]),
   disabled: PropTypes.bool,
-  key: PropTypes.string,
-  onClick: PropTypes.func,
-  style: PropTypes.object,
-  selectedStyle: PropTypes.object,
-  disabledStyle: PropTypes.object,
   
   //generic props
   panelId: PropTypes.string,
   selected: PropTypes.bool,
-  tabStyle: PropTypes.object
-};
+  tabStyle: PropTypes.object,
+  onClick: PropTypes.func,
+  id: PropTypes.string,
+  originalKey: PropTypes.string,
 
-Tab.defaultProps = {
+  style: PropTypes.object,
+  selectedStyle: PropTypes.object,
+  disabledStyle: PropTypes.object
 };

@@ -18,14 +18,22 @@ export default class ShowMore extends Component {
 
     const isListHidden = this.state.isHidden;
 
-    let listStyles = {
+    const listStyles = {
       ...this.props.style.showMoreList,
       display: isListHidden ? 'none' : 'block'
     };
 
+    let showMoreLabelStyles = this.props.style.showMoreLabel;
+    if (!this.state.isHidden) {
+      showMoreLabelStyles = {
+        ...showMoreLabelStyles,
+        ...this.props.style.showMoreSelectedLabel
+      }
+    }
+
     return (
       <div style={this.props.style.showMoreTab} role="navigation" ariaHaspopup="true" tabIndex="0">
-        <span style={this.props.style.showMoreLabel} onClick={this._onClick}>...</span>
+        <div style={showMoreLabelStyles} onClick={this._onClick}>...</div>
         <div style={listStyles} aria-hidden={isListHidden} role="menu">
           {this.props.hiddenTabs}
         </div>

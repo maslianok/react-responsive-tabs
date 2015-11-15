@@ -1,3 +1,6 @@
+const defaultColor = '#eee';
+const activeColor = '#fff';
+const borderColor = '#ddd';
 
 export default {
   tabsWrapper: {
@@ -9,23 +12,27 @@ export default {
   },
 
 
-
   Tab: {
     defaultStyle: {
-      background: '#eee',
-      border: '1px solid #ddd',
+      background: defaultColor,
+      borderWidth: '1px',
+      borderStyle: 'solid',
+      borderColor: borderColor,
       padding: '.7em 1em',
       cursor: 'pointer',
       zIndex: 1,
       whiteSpace: 'nowrap',
-      marginLeft: '-1px'
+      marginLeft: '-1px',
+      ':focus': {
+        'zIndex': 2
+      }
     },
     firstTabStyle: {
       marginLeft: 0
     },
     defaultSelectedStyle: {
-      background: '#fff',
-      borderBottom: '1px solid #fff'
+      background: activeColor,
+      borderColor: borderColor + ' ' + borderColor + ' ' + activeColor,
     },
     defaultDisabledStyle: {
       
@@ -36,13 +43,12 @@ export default {
   },
 
 
-
   TabPanel: {
     defaultStyle: {
       width: '100%',
       marginTop: '-1px',
       padding: '1em',
-      border: '1px solid #ddd',
+      border: '1px solid ' + borderColor,
       order: 1,
       display: 'none'
     },
@@ -55,11 +61,10 @@ export default {
   },
 
 
-
   showMoreStyles: {
     showMoreTab: {
-      background: '#eee',
-      border: '1px solid #ddd',
+      background: defaultColor,
+      border: '1px solid ' + borderColor,
       cursor: 'pointer',
       zIndex: 1,
       whiteSpace: 'nowrap',
@@ -68,7 +73,12 @@ export default {
     },
     showMoreLabel: {
       padding: '.7em 1em',
-      display: 'inline-block'
+      position: 'relative',
+      bottom: '-1px',
+      'zIndex': 1,
+    },
+    showMoreSelectedLabel: {
+      'backgroundColor': defaultColor,
     },
     showMoreList: {
       position: 'absolute',

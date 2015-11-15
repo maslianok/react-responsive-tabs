@@ -9,6 +9,7 @@ import {findDOMNode} from 'react-dom';
 
 import ShowMore from './ShowMore';
 import ResizeDetector from './ResizeDetector';
+import Styles from './Styles';
 
 import childrenPropType from '../helpers/childrenPropType';
 import defaultStyles from '../helpers/tabStyles';
@@ -35,6 +36,7 @@ export default class Tabs extends Component {
     this._onResize = this._onResize.bind(this);
     this._setTabsWidth = this._setTabsWidth.bind(this);
     this._getElements = this._getElements.bind(this);
+    this._onChangeTab = this._onChangeTab.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -89,8 +91,11 @@ export default class Tabs extends Component {
     return (
       <div
         style = {styles}
+        className="Tabs__list"
         ref = "tabsWrapper"
         onKeyDown={this._handleKeyDown}>
+
+        <Styles />
 
         {visible}
 
@@ -194,8 +199,10 @@ export default class Tabs extends Component {
       case 'Tab':
         props = {
           key: tabPrefix + key,
+          id: tabPrefix + key,
           originalKey: key,
           ref: (tab) => {tab && (this.tabRefs[tab.props.originalKey] = tab)},
+          onClick: this._onChangeTab,
           panelId: panelPrefix + key, 
           selected: payload.selected, 
           tabStyle: this._getStylesFor(element, payload)
@@ -204,6 +211,7 @@ export default class Tabs extends Component {
       case 'TabPanel':
         props = {
           key: panelPrefix + key,
+          id: panelPrefix + key,
           tabId: tabPrefix + key,
           selected: payload.selected, 
           panelStyle: this._getStylesFor(element, payload)
@@ -256,6 +264,10 @@ export default class Tabs extends Component {
 
   _onResize(tabpanel) {
     this.setState({blockWidth: this.refs.tabsWrapper.offsetWidth});
+  }
+
+  _onChangeTab(key) {
+    this.setState({selectedKey: key});
   }
 
 }
