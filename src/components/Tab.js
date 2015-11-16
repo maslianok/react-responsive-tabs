@@ -7,8 +7,7 @@ export default class Tab extends Component {
 
     return (
       <div
-        style={props.tabStyle}
-        className="Tabs__tab"
+        className={props.classNames}
         role="tab"
         id={props.id}
         aria-selected={props.selected ? 'true' : 'false'}
@@ -44,12 +43,9 @@ Tab.propTypes = {
   //generic props
   panelId: PropTypes.string,
   selected: PropTypes.bool,
-  tabStyle: PropTypes.object,
   onClick: PropTypes.func,
   id: PropTypes.string,
   originalKey: PropTypes.string,
 
-  style: PropTypes.object,
-  selectedStyle: PropTypes.object,
-  disabledStyle: PropTypes.object
+  classNames: PropTypes.string
 };

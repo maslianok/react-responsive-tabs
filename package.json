@@ -5,7 +5,9 @@
   },
   "description": "React responsive tabs",
   "peerDependencies": {
-    "radium": "^0.15"
+    "classnames": "^2.2.0",
+    "css-loader": "^0.23.0",
+    "style-loader": "^0.13.0"
   },
   "devDependencies": {
     "babel": "^5",
@@ -13,11 +15,13 @@
     "babel-eslint": "^4.1.4",
     "babel-loader": "^5",
     "babel-plugin-react-transform": "^1.1.1",
+    "classnames": "^2.2.0",
+    "css-loader": "^0.23.0",
     "eslint": "^1.9",
     "eslint-plugin-react": "^3.7.0",
-    "radium": "^0.15",
     "react-transform-hmr": "^1.0.1",
     "rimraf": "^2.3.4",
+    "style-loader": "^0.13.0",
     "webpack": "^1.12.6"
   },
   "directories": {

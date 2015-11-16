@@ -1,4 +1,5 @@
 import React, {Component, PropTypes} from 'react';
+import classNames from 'classnames';
 
 export default class ShowMore extends Component {
   constructor() {
@@ -18,23 +19,22 @@ export default class ShowMore extends Component {
 
     const isListHidden = this.state.isHidden;
 
-    const listStyles = {
-      ...this.props.style.showMoreList,
-      display: isListHidden ? 'none' : 'block'
-    };
+    const styles = this.props.styles;
 
-    let showMoreLabelStyles = this.props.style.showMoreLabel;
-    if (!this.state.isHidden) {
-      showMoreLabelStyles = {
-        ...showMoreLabelStyles,
-        ...this.props.style.showMoreSelectedLabel
-      }
-    }
+    const listStyles = classNames({
+      [styles['Tabs__show-more-list']]: true,
+      [styles['Tabs__show-more-list--opened']]: !isListHidden
+    });
+
+    let showMoreLabelStyles = classNames({
+      [styles['Tabs__show-more-label']]: true,
+      [styles['Tabs__show-more-label--selected']]: !isListHidden
+    });
 
     return (
-      <div style={this.props.style.showMoreTab} role="navigation" ariaHaspopup="true" tabIndex="0">
-        <div style={showMoreLabelStyles} onClick={this._onClick}>...</div>
-        <div style={listStyles} aria-hidden={isListHidden} role="menu">
+      <div className={styles['Tabs__show-more']} role="navigation" ariaHaspopup="true" tabIndex="0">
+        <div className={showMoreLabelStyles} onClick={this._onClick}>...</div>
+        <div className={listStyles} aria-hidden={isListHidden} role="menu">
           {this.props.hiddenTabs}
         </div>
       </div>
@@ -50,5 +50,5 @@ export default class ShowMore extends Component {
 ShowMore.propTypes = {
   isShown: PropTypes.bool.isRequired,
   hiddenTabs: PropTypes.array,
-  style: PropTypes.object.isRequired,
+  styles: PropTypes.object.isRequired,
 };

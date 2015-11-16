@@ -4,15 +4,18 @@
 //TODO click handler
 //TODO show more handler
 
+//TODO pass classNames or even styles
+
 import React, {PropTypes, Component, cloneElement} from 'react';
 import {findDOMNode} from 'react-dom';
+import classNames from 'classnames';
 
 import ShowMore from './ShowMore';
 import ResizeDetector from './ResizeDetector';
-import Styles from './Styles';
 
 import childrenPropType from '../helpers/childrenPropType';
-import defaultStyles from '../helpers/tabStyles';
+
+import styles from 'style!css?modules&localIdentName=[local]!../styles/style.css';
 
 const tabPrefix = 'tab-';
 const panelPrefix = 'panel-';
@@ -61,7 +64,6 @@ export default class Tabs extends Component {
     }
 
     if (updateTabs) {
-      console.log('Tabs has been updated! Start recalculating...');
       this.setState({blockWidth: 0});
     }
   }
@@ -84,24 +86,20 @@ export default class Tabs extends Component {
 
   render() {
     console.log('render Tabs');
-    const styles = Object.assign({}, defaultStyles.tabsWrapper, this.props.styles);
 
     let {visible, hidden} = this._getElements();
 
     return (
       <div
-        style = {styles}
-        className="Tabs__list"
+        className={styles.Tabs__wrapper}
         ref = "tabsWrapper"
         onKeyDown={this._handleKeyDown}>
-
-        <Styles />
 
         {visible}
 
         <ShowMore
           ref = "tabsShowMore"
-          style = {defaultStyles.showMoreStyles}
+          styles = {styles}
           isShown = {this.props.showMore}
           hiddenTabs = {hidden}
         />
@@ -205,7 +203,7 @@ export default class Tabs extends Component {
           onClick: this._onChangeTab,
           panelId: panelPrefix + key, 
           selected: payload.selected, 
-          tabStyle: this._getStylesFor(element, payload)
+          classNames: this._getClassNamesFor(element, payload)
         };
         break;
       case 'TabPanel':
@@ -214,50 +212,30 @@ export default class Tabs extends Component {
           id: panelPrefix + key,
           tabId: tabPrefix + key,
           selected: payload.selected, 
-          panelStyle: this._getStylesFor(element, payload)
+          classNames: this._getClassNamesFor(element, payload)
         };
         break;
     }
     return cloneElement(element, props);
   }
 
-  _getStylesFor(element, payload) {
-    const {
-      style = {}, 
-      selectedStyle = {}, 
-      disabledStyle = {}
-    } = element.props;
-
-    const {
-      defaultStyle, 
-      firstTabStyle, 
-      defaultSelectedStyle, 
-      defaultDisabledStyle, 
-      defaultCollapsedStyle
-    } = defaultStyles[element.type.name];
-
+  _getClassNamesFor(element, payload) {
     switch (element.type.name) {
       case 'Tab':
-        return Object.assign(
-          {}, 
-          defaultStyle, 
-          style, 
-          payload.tabIndex ? {} : firstTabStyle,
-          payload.selected ? defaultSelectedStyle : {},
-          payload.selected ? selectedStyle : {},
-          payload.disabled ? defaultDisabledStyle : {},
-          payload.disabled ? disabledStyle : {},
-          payload.collapsed ? defaultCollapsedStyle : {}
-        );
+        return classNames({
+          [styles.Tab]: true,
+          [styles['Tab--first']]: !payload.tabIndex,
+          [styles['Tab--selected']]: payload.selected,
+          [styles['Tab--disabled']]: payload.disabled,
+          [styles['Tab--collapsed']]: payload.collapsed
+        });
         break;
       case 'TabPanel':
-        return Object.assign(
-          {},
-          defaultStyle,
-          style,
-          payload.selected ? defaultSelectedStyle : {display: 'none'},
-          payload.collapsed ? defaultCollapsedStyle : {}
-        );
+        return classNames({
+          [styles['Tab-panel']]: true,
+          [styles['Tab-panel--selected']]: payload.selected,
+          [styles['Tab-panel--collapsed']]: payload.collapsed
+        });
         break;
     }
   }

@@ -1,114 +1,80 @@
 .Tabs__wrapper {
+  position: relative;
   display: flex;
   flex-wrap: wrap;
 }
 
+.Tabs__hidden {
+  display: none;
+}
 
-
-
-
-.Tabs__tab,
-.Tabs__showMore {
-  background: #eee; 
-  border: 1px solid #ddd; 
-  padding: .7em 1em;
+.Tab__styles {
+  background: #eee;
+  border: 1px solid #ddd;
   cursor: pointer;
   z-index: 1;
   white-space: nowrap;
-  margin-left: -1px; 
+  margin-left: -1px;
 }
 
-.Tabs__tab:first-of-type {
+
+.Tab {
+  composes: Tab__styles;
+  padding: .7em 1em;
+}
+.Tab--first {
   margin-left: 0;
 }
-
-.Tabs__tab--selected {
+.Tab--selected {
   background: #fff;
-  border-bottom: 1px solid #fff;
+  border-color: #ddd #ddd #fff;
+}
+.Tab--disabled {
+}
+.Tab--collapsed {
+  width: 100%;
+}
+.Tab:focus {
+  z-index: 2
 }
 
-.Tabs__tab--disabled {
-  
-}
 
 
-
-
-
-
-.Tabs__panel {
-  display: none;
+.Tab-panel {
   width: 100%;
   margin-top: -1px;
   padding: 1em;
   border: 1px solid #ddd;
   order: 1;
-}
-
-.Tabs__panel--selected {
-  display: block;
-}
-
-
-
-
-
-.Tabs__showMore {
-  position: relative;
-}
-
-.Tabs__showMoreList {
-  position: absolute;
-  right: -1px;
-  top: 100%;
-}
-
-.Tabs__showMoreList[aria-hidden='true'] {
   display: none;
 }
-
-
-
-
-
-
-.Tabs__collapsed  .Tabs__tab {
-  width: 100%;
+.Tab-panel--selected {
+  display: block;
 }
-.Tabs__collapsed  .Tabs__panel {
+.Tab-panel--collapsed {
   order: 0;
 }
 
 
-
-
-
-
-/* resize detection */
-.resize-triggers { 
-  visibility: hidden; 
-  opacity: 0; 
+.Tabs__show-more {
+  composes: Tab__styles;
+  position: relative;
 }
-
-.resize-triggers, 
-.resize-triggers > div, 
-.contract-trigger:before { 
-  content: " "; 
-  display: block; 
-  position: absolute; 
-  top: 0; 
-  left: 0; 
-  height: 100%; 
-  width: 100%; 
-  overflow: hidden; 
+.Tabs__show-more-label {
+  padding: .7em 1em;
+  position: relative;
+  bottom: -1px;
+  z-index: 1;
 }
-
-.resize-triggers > div { 
-  background: #eee; 
-  overflow: auto; 
+.Tabs__show-more-label--selected {
+  background-color: #eee;
 }
-
-.contract-trigger:before { 
-  width: 200%; 
-  height: 200%; 
+.Tabs__show-more-list {
+  position: absolute;
+  right: -1px;
+  top: 100%;
+  display: none;
+}
+.Tabs__show-more-list--opened {
+  display: block;
 }

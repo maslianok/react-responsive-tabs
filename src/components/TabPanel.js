@@ -6,7 +6,7 @@ export default class TabPanel extends Component {
 
     return (
       <div
-        style={props.panelStyle}
+        className={props.classNames}
         role="tabpanel"
         id={props.key}
         aria-labeledby={props.tabId}
@@ -28,11 +28,8 @@ TabPanel.propTypes = {
   style: PropTypes.object,
 
   //generic props
-  panelStyle: PropTypes.object,
+  classNames: PropTypes.string,
   selected: PropTypes.bool,
   tabId: PropTypes.string
 };
 
-TabPanel.defaultProps = {
-
-};
