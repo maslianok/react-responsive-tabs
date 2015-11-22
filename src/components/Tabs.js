@@ -92,10 +92,7 @@ export default class Tabs extends Component {
     let {visible, hidden} = this._getElements();
 
     return (
-      <div
-        className={styles.Tabs__wrapper}
-        ref="tabsWrapper"
-        onKeyDown={this._onKeyDown}>
+      <div className={styles.Tabs__wrapper} ref="tabsWrapper" onKeyDown={this._onKeyDown}>
 
         {visible}
 
@@ -106,7 +103,11 @@ export default class Tabs extends Component {
           hiddenTabs={hidden}
         />
 
-        <ResizeDetector handleWidth onResize={this._onResize} />
+        {(() => {
+          if (this.props.showMore || this.props.transform) {
+            return <ResizeDetector handleWidth onResize={this._onResize} />
+          }
+        })()}
       </div>
     );
   }
@@ -147,9 +148,9 @@ export default class Tabs extends Component {
 
     const state = this.state;
     const clone = this._clone;
-    const {showMore, transformWidth} = this.props;
+    const {showMore, transform, transformWidth} = this.props;
     const {blockWidth, tabsTotalWidth, tabsWidth} = state;
-    const collapsed = blockWidth && blockWidth < transformWidth;
+    const collapsed = blockWidth && transform && blockWidth < transformWidth;
 
     let tabIndex = 0;
     let availableWidth = blockWidth - (tabsTotalWidth > blockWidth ? state.showMoreWidth : 0);

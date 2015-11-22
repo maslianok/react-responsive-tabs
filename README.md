@@ -15,6 +15,10 @@ The component outputs HTML code that follows accessibility principles (aka [WAI-
 We are using [`react-resize-detector`](https://github.com/maslianok/react-resize-detector). No timers. Just pure event-based element resize detection.
 
 
+## Installation
+`npm install react-responsive-tabs`
+
+
 ## Demo
 
 #### [Live demo](http://maslianok.github.io/react-responsive-tabs/)
@@ -84,10 +88,19 @@ class App extends Component {
 render(<App />, document.getElementById('root'));
 ```
 
+## API
 
-## Installation
-`npm install react-responsive-tabs`
+#### selectedTabKey
+(Number|String) Tab with this key will be selected by default.
 
+#### showMore
+(Bool) Show `Show more` list. Default: `true`.
+
+#### transform
+(Bool) Transform to accordion if element width less than `transformWidth`. Default: `true`.
+
+#### transformWidth
+(Number) Transform to accordion if wrapper width less than this value. Default: 800
 
 ### License
 MIT
