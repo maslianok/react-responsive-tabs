@@ -89,8 +89,6 @@ export default class Tabs extends Component {
   }
 
   render() {
-    console.log('render Tabs');
-
     let {visible, hidden} = this._getElements();
 
     return (

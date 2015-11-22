@@ -1,34 +1,47 @@
 import React, {Component} from 'react';
 import {Tabs, Tab, TabPanel} from 'react-responsive-tabs';
 
+const presidents = [
+  {
+    name: 'George Washington',
+    biography: 'George Washington (February 22, 1732 – December 14, 1799) was the first President of the United States...'
+  },
+  {
+    name: 'Thomas Jefferson',
+    biography: 'Thomas Jefferson (April 13 1743 – July 4, 1826) was an American lawyer'
+  },
+  {
+    name: 'Abraham Lincoln',
+    biography: 'Abraham Lincoln (February 12, 1809 – April 15, 1865) was the 16th President of the United States'
+  },
+  {
+    name: 'Benjamin Harrison',
+    biography: 'Benjamin Harrison (August 20, 1833 – March 13, 1901) was the 23rd President of the United States'
+  },
+  {
+    name: 'William McKinley',
+    biography: 'William McKinley (January 29, 1843 – September 14, 1901) was the 25th President of the United States'
+  },
+  {
+    name: 'Franklin D. Roosevelt',
+    biography: 'Franklin Delano Roosevelt (January 30, 1882 – April 12, 1945), commonly known by his initials FDR, was an American statesman'
+  },
+  {
+    name: 'Theodore Roosevelt',
+    biography: 'Theodore Roosevelt (October 27, 1858 – January 6, 1919), often referred to as Teddy or TR...'
+  }
+];
+
 class App extends Component {
   render() {
     return (
       <div>
         <Tabs>
-          <Tab key="1">Lorem ipsum dolor sit amet 1</Tab>
-          <TabPanel key="1">Lorem ipsum dolor sit amet 1</TabPanel>
-
-          <Tab key="2">Lorem ipsum dolor sit amet 2</Tab>
-          <TabPanel key="2">Lorem ipsum dolor sit amet 2</TabPanel>
-
-          <Tab key="3">Lorem ipsum dolor sit amet 3</Tab>
-          <TabPanel key="3">Lorem ipsum dolor sit amet 3</TabPanel>
-
-          <Tab key="4">Lorem ipsum dolor sit amet 4</Tab>
-          <TabPanel key="4">Lorem ipsum dolor sit amet 4</TabPanel>
-
-          <Tab key="5">Lorem ipsum dolor sit amet 5</Tab>
-          <TabPanel key="5">Lorem ipsum dolor sit amet 5</TabPanel>
-
-          <Tab key="6">Lorem ipsum dolor sit amet 6</Tab>
-          <TabPanel key="6">Lorem ipsum dolor sit amet 6</TabPanel>
-
-          <Tab key="7">Lorem ipsum dolor sit amet 7</Tab>
-          <TabPanel key="7">Lorem ipsum dolor sit amet 7</TabPanel>
-
-          <Tab key="8">Lorem ipsum dolor sit amet 8</Tab>
-          <TabPanel key="8">Lorem ipsum dolor sit amet 8</TabPanel>
+          {presidents.reduce((result, president, i) => {
+            result.push(<Tab key={i}>{president.name}</Tab>);
+            result.push(<TabPanel key={i}>{president.biography}</TabPanel>);
+            return result;
+          }, [])}
         </Tabs>
       </div>
     );
