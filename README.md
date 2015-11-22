@@ -12,7 +12,7 @@ The component outputs HTML code that follows accessibility principles (aka [WAI-
 ![Accessible tabs](https://cloud.githubusercontent.com/assets/3485490/11324576/f4775a4c-913d-11e5-9ec2-f13beb8bd578.gif)
 
 ### Fast
-We are using `[react-resize-detector](https://github.com/maslianok/react-resize-detector)`. No timers. Just pure event-based element resize detection.
+We are using [`react-resize-detector`](https://github.com/maslianok/react-resize-detector). No timers. Just pure event-based element resize detection.
 
 
 ## Demo
