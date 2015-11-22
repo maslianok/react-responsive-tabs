@@ -7,7 +7,8 @@
   "peerDependencies": {
     "classnames": "^2.2.0",
     "css-loader": "^0.23.0",
-    "style-loader": "^0.13.0"
+    "style-loader": "^0.13.0",
+    "react-resize-detector": "^0.1.4"
   },
   "devDependencies": {
     "babel": "^5",
@@ -53,5 +54,8 @@
     "test:cov": "babel-node ./node_modules/.bin/isparta cover ./node_modules/.bin/_mocha -- --recursive",
     "test:watch": "NODE_ENV=test mocha --compilers js:babel/register --recursive --watch"
   },
-  "version": "0.1.0"
+  "version": "0.1.0",
+  "dependencies": {
+    "react-resize-detector": "^0.1.4"
+  }
 }

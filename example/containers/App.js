@@ -21,14 +21,14 @@ class App extends Component {
           <Tab key="5">Lorem ipsum dolor sit amet 5</Tab>
           <TabPanel key="5">Lorem ipsum dolor sit amet 5</TabPanel>
 
-          <Tab key="6">Lorem ipsum dolor sit amet 5</Tab>
-          <TabPanel key="6">Lorem ipsum dolor sit amet 5</TabPanel>
+          <Tab key="6">Lorem ipsum dolor sit amet 6</Tab>
+          <TabPanel key="6">Lorem ipsum dolor sit amet 6</TabPanel>
 
-          <Tab key="7">Lorem ipsum dolor sit amet 5</Tab>
-          <TabPanel key="7">Lorem ipsum dolor sit amet 5</TabPanel>
+          <Tab key="7">Lorem ipsum dolor sit amet 7</Tab>
+          <TabPanel key="7">Lorem ipsum dolor sit amet 7</TabPanel>
 
-          <Tab key="8">Lorem ipsum dolor sit amet 5</Tab>
-          <TabPanel key="8">Lorem ipsum dolor sit amet 5</TabPanel>
+          <Tab key="8">Lorem ipsum dolor sit amet 8</Tab>
+          <TabPanel key="8">Lorem ipsum dolor sit amet 8</TabPanel>
         </Tabs>
       </div>
     );

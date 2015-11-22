@@ -6,10 +6,12 @@ export default class ShowMore extends Component {
     super();
 
     this.state = {
+      isFocused: false,
       isHidden: true
     }
 
     this._onClick = this._onClick.bind(this);
+    this._onKeyDown = this._onKeyDown.bind(this);
   }
 
   render() {
@@ -32,7 +34,16 @@ export default class ShowMore extends Component {
     });
 
     return (
-      <div className={styles['Tabs__show-more']} role="navigation" ariaHaspopup="true" tabIndex="0">
+      <div 
+        ref="showMore"
+        className={styles['Tabs__show-more']} 
+        role="navigation" 
+        ariaHaspopup="true" 
+        tabIndex="0"
+        onKeyDown={this._onKeyDown}
+        onFocus={() => this.setState({isFocused: true})}
+        onBlur={() => this.setState({isFocused: false})}
+      >
         <div className={showMoreLabelStyles} onClick={this._onClick}>...</div>
         <div className={listStyles} aria-hidden={isListHidden} role="menu">
           {this.props.hiddenTabs}
@@ -45,10 +56,15 @@ export default class ShowMore extends Component {
     this.setState({isHidden: !this.state.isHidden});
   }
 
+  _onKeyDown(event) {
+    if (event.keyCode == 13 && event.target == this.refs.showMore && this.state.isFocused) {
+      this.setState({isHidden: !this.state.isHidden});
+    }
+  }
 }
 
 ShowMore.propTypes = {
   isShown: PropTypes.bool.isRequired,
   hiddenTabs: PropTypes.array,
-  styles: PropTypes.object.isRequired,
+  styles: PropTypes.object.isRequired
 };

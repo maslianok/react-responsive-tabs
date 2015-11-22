@@ -16,6 +16,8 @@ export default class Tab extends Component {
         aria-controls={props.panelId}
         tabIndex="0"
         onClick={this._onClick.bind(this)}
+        onFocus={props.onFocus.bind(this, props.originalKey)}
+        onBlur={props.onBlur}
       >
         {props.children}
       </div>
@@ -44,6 +46,8 @@ Tab.propTypes = {
   panelId: PropTypes.string,
   selected: PropTypes.bool,
   onClick: PropTypes.func,
+  onFocus: PropTypes.func,
+  onBlur: PropTypes.func,
   id: PropTypes.string,
   originalKey: PropTypes.string,
 

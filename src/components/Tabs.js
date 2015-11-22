@@ -1,7 +1,6 @@
 //TODO IdleCallback
 //TODO react router
 
-//TODO click handler
 //TODO show more handler
 
 //TODO pass classNames or even styles
@@ -11,7 +10,7 @@ import {findDOMNode} from 'react-dom';
 import classNames from 'classnames';
 
 import ShowMore from './ShowMore';
-import ResizeDetector from './ResizeDetector';
+import ResizeDetector from 'react-resize-detector';
 
 import childrenPropType from '../helpers/childrenPropType';
 
@@ -32,14 +31,19 @@ export default class Tabs extends Component {
       blockWidth: 0,
       tabsTotalWidth: 0,
       showMoreWidth: 40,
-      selectedKey: this.props.selectedKey
+      selectedTabKey: this.props.selectedTabKey,
+      focusedTabKey: null
     };
 
     this._clone = this._clone.bind(this);
-    this._onResize = this._onResize.bind(this);
     this._setTabsWidth = this._setTabsWidth.bind(this);
     this._getElements = this._getElements.bind(this);
+
     this._onChangeTab = this._onChangeTab.bind(this);
+    this._onResize = this._onResize.bind(this);
+    this._onKeyDown = this._onKeyDown.bind(this);
+    this._onFocusTab = this._onFocusTab.bind(this);
+    this._onBlurTab = this._onBlurTab.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -71,7 +75,7 @@ export default class Tabs extends Component {
   shouldComponentUpdate(nextProps, nextState) {
     return nextProps !== this.props ||
       nextState.blockWidth !== this.state.blockWidth ||
-      nextState.selectedKey !== this.state.selectedKey;
+      nextState.selectedTabKey !== this.state.selectedTabKey;
   }
 
   componentDidMount() {
@@ -92,16 +96,16 @@ export default class Tabs extends Component {
     return (
       <div
         className={styles.Tabs__wrapper}
-        ref = "tabsWrapper"
-        onKeyDown={this._handleKeyDown}>
+        ref="tabsWrapper"
+        onKeyDown={this._onKeyDown}>
 
         {visible}
 
         <ShowMore
-          ref = "tabsShowMore"
-          styles = {styles}
-          isShown = {this.props.showMore}
-          hiddenTabs = {hidden}
+          ref="tabsShowMore"
+          styles={styles}
+          isShown={this.props.showMore}
+          hiddenTabs={hidden}
         />
 
         <ResizeDetector handleWidth onResize={this._onResize} />
@@ -156,7 +160,7 @@ export default class Tabs extends Component {
       const originalTab = elements[key].Tab;
       const originalPanel = elements[key].TabPanel;
 
-      const selected = (!state.selectedKey && !tabIndex) || state.selectedKey === originalTab.key;
+      const selected = (!state.selectedTabKey && !tabIndex) || state.selectedTabKey === originalTab.key;
       const disabled = originalTab.props.disabled;
       const payload = {tabIndex, collapsed, selected, disabled};
 
@@ -201,6 +205,8 @@ export default class Tabs extends Component {
           originalKey: key,
           ref: (tab) => {tab && (this.tabRefs[tab.props.originalKey] = tab)},
           onClick: this._onChangeTab,
+          onFocus: this._onFocusTab,
+          onBlur: this._onBlurTab,
           panelId: panelPrefix + key, 
           selected: payload.selected, 
           classNames: this._getClassNamesFor(element, payload)
@@ -245,7 +251,21 @@ export default class Tabs extends Component {
   }
 
   _onChangeTab(key) {
-    this.setState({selectedKey: key});
+    this.setState({selectedTabKey: key});
+  }
+
+  _onFocusTab(key) {
+    this.setState({focusedTabKey: key});
+  }
+
+  _onBlurTab() {
+    this.setState({focusedTabKey: null});
+  }
+
+  _onKeyDown(event) {
+    if (event.keyCode == 13 && this.state.focusedTabKey) {
+      this.setState({selectedTabKey: this.state.focusedTabKey});
+    }
   }
 
 }
@@ -254,7 +274,7 @@ Tabs.propTypes = {
   children: childrenPropType,
   idPrefix: PropTypes.string,
   onSelect: PropTypes.func,
-  selectedKey: PropTypes.any,
+  selectedTabKey: PropTypes.any,
   showMore: PropTypes.bool,
   styles: PropTypes.object,
   transform: PropTypes.bool,
