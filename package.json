@@ -15,12 +15,10 @@
     "babel-core": "^5",
     "babel-eslint": "^4.1.4",
     "babel-loader": "^5",
-    "babel-plugin-react-transform": "^1.1.1",
     "classnames": "^2.2.0",
     "css-loader": "^0.23.0",
     "eslint": "^1.9",
     "eslint-plugin-react": "^3.7.0",
-    "react-transform-hmr": "^1.0.1",
     "rimraf": "^2.3.4",
     "style-loader": "^0.13.0",
     "webpack": "^1.12.6"
@@ -47,14 +45,14 @@
     "url": "git+https://github.com/maslianok/react-responsive-tabs.git"
   },
   "scripts": {
-    "build": "babel src --out-dir lib",
+    "build": "babel src --out-dir lib && node -e \"require('ncp').ncp('./src/styles', './lib/styles')\"",
     "clean": "rimraf lib",
     "lint": "eslint example src",
     "prepublish": "npm run lint && npm run clean && npm run build",
     "test:cov": "babel-node ./node_modules/.bin/isparta cover ./node_modules/.bin/_mocha -- --recursive",
     "test:watch": "NODE_ENV=test mocha --compilers js:babel/register --recursive --watch"
   },
-  "version": "0.1.1",
+  "version": "0.1.2",
   "dependencies": {
     "react-resize-detector": "^0.1.4"
   }
