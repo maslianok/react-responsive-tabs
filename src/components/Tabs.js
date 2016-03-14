@@ -1,16 +1,14 @@
 // TODO react router
 // TODO pass classNames or even styles
-
 import React, { PropTypes, Component } from 'react';
 import { findDOMNode } from 'react-dom';
 import ResizeDetector from 'react-resize-detector';
+import jss from 'js-stylesheet';
 import classNames from 'classnames';
 
 import ShowMore from './ShowMore';
 import Tab from './Tab';
 import TabPanel from './TabPanel';
-
-import styles from 'style!css?modules&localIdentName=[local]!../styles/style.css';
 
 const tabPrefix = 'tab-';
 const panelPrefix = 'panel-';
@@ -43,6 +41,7 @@ export default class Tabs extends Component {
   }
 
   componentDidMount() {
+    jss(require('../styles/style.js'));
     this._setTabsWidth();
   }
 
@@ -159,17 +158,17 @@ export default class Tabs extends Component {
     switch (type) {
       case 'tab':
         return classNames({
-          [styles.Tab]: true,
-          [styles['Tab--first']]: !tabIndex,
-          [styles['Tab--selected']]: selected,
-          [styles['Tab--disabled']]: disabled,
-          [styles['Tab--collapsed']]: collapsed,
+          Tab: true,
+          'Tab--first': !tabIndex,
+          'Tab--selected': selected,
+          'Tab--disabled': disabled,
+          'Tab--collapsed': collapsed,
         });
       case 'panel':
         return classNames({
-          [styles['Tab-panel']]: true,
-          [styles['Tab-panel--selected']]: selected,
-          [styles['Tab-panel--collapsed']]: collapsed,
+          'Tab-panel': true,
+          'Tab-panel--selected': selected,
+          'Tab-panel--collapsed': collapsed,
         });
       default:
         return '';
@@ -202,7 +201,7 @@ export default class Tabs extends Component {
     const { tabsVisible, tabsHidden, panels } = this._getTabs();
 
     return (
-      <div className={styles.Tabs__wrapper} ref="tabsWrapper" onKeyDown={this._onKeyDown}>
+      <div className="Tabs__wrapper" ref="tabsWrapper" onKeyDown={this._onKeyDown}>
         {panels.reduce((result, panel) => {
           if (tabsVisible[panel.key]) {
             result.push(<Tab {...this._getTabProps(tabsVisible[panel.key])} />);
@@ -211,7 +210,7 @@ export default class Tabs extends Component {
           return result;
         }, [])}
 
-        <ShowMore ref="tabsShowMore" styles={styles} isShown={this.props.showMore}>
+        <ShowMore ref="tabsShowMore" isShown={this.props.showMore}>
           {tabsHidden.map(tab => <Tab {...this._getTabProps(tab)} />)}
         </ShowMore>
 
@@ -248,5 +247,4 @@ Tabs.defaultProps = {
   showMore: true,
   transform: true,
   transformWidth: 800,
-  styles: {},
 };

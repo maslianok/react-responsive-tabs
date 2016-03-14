@@ -1,16 +1,15 @@
 {
   "author": "Vitalii Maslianok <maslianok@gmail.com> (https://github.com/maslianok)",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "bugs": {
     "url": "https://github.com/maslianok/react-responsive-tabs/issues"
   },
   "description": "React responsive tabs",
   "peerDependencies": {
-    "react": "^0.14.7",
-    "style-loader": "^0.13.0",
-    "css-loader": "^0.23.1"
+    "react": "^0.14.7"
   },
   "dependencies": {
+    "js-stylesheet": "0.0.1",
     "react-resize-detector": "^0.2.0"
   },
   "devDependencies": {
@@ -25,12 +24,9 @@
     "eslint-config-airbnb": "^6.0.2",
     "eslint-plugin-import": "^1.0.3",
     "eslint-plugin-react": "^4.1.0",
-    "ncp": "^2.0.0",
     "react": "^0.14.7",
     "rimraf": "^2.3.4",
-    "webpack": "^1.12.14",
-    "style-loader": "^0.13.0",
-    "css-loader": "^0.23.1"
+    "webpack": "^1.12.14"
   },
   "directories": {
     "example": "example"
@@ -54,7 +50,7 @@
     "url": "git+https://github.com/maslianok/react-responsive-tabs.git"
   },
   "scripts": {
-    "build": "babel --presets=react,es2015 src --out-dir lib && node -e \"require('ncp').ncp('./src/styles', './lib/styles')\"",
+    "build": "babel --presets=react,es2015 src --out-dir lib",
     "clean": "rimraf lib",
     "lint": "eslint -c .eslintrc src",
     "prepublish": "npm run lint && npm run clean && npm run build",

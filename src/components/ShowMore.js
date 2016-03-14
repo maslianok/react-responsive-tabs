@@ -46,23 +46,20 @@ export default class ShowMore extends Component {
     }
 
     const isListHidden = this.state.isHidden;
-
-    const styles = this.props.styles;
-
     const listStyles = classNames({
-      [styles['Tabs__show-more-list']]: true,
-      [styles['Tabs__show-more-list--opened']]: !isListHidden,
+      'Tabs__show-more-list': true,
+      'Tabs__show-more-list--opened': !isListHidden,
     });
 
     const showMoreLabelStyles = classNames({
-      [styles['Tabs__show-more-label']]: true,
-      [styles['Tabs__show-more-label--selected']]: !isListHidden,
+      'Tabs__show-more-label': true,
+      'Tabs__show-more-label--selected': !isListHidden,
     });
 
     return (
       <div
         ref="showMore"
-        className={styles['Tabs__show-more']}
+        className="Tabs__show-more"
         role="navigation"
         ariaHaspopup="true"
         tabIndex="0"
@@ -86,5 +83,4 @@ ShowMore.propTypes = {
     PropTypes.string,
   ]),
   isShown: PropTypes.bool.isRequired,
-  styles: PropTypes.object.isRequired,
 };
