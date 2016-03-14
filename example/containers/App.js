@@ -1,8 +1,6 @@
 /* eslint max-len: 0 */
 import React from 'react';
-import T from 'react-responsive-tabs';
-
-const { Tabs, Tab, TabPanel } = T;
+import Tabs from 'react-responsive-tabs';
 
 const presidents = [
   {
