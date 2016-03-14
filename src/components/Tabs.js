@@ -1,6 +1,4 @@
-// TODO IdleCallback
 // TODO react router
-// TODO show more handler
 // TODO pass classNames or even styles
 
 import React, { PropTypes, Component } from 'react';
@@ -28,7 +26,7 @@ export default class Tabs extends Component {
       blockWidth: 0,
       tabsTotalWidth: 0,
       showMoreWidth: 40,
-      selectedTabKey: this.props.selectedTabKey,
+      selectedTabKey: props.selectedTabKey,
       focusedTabKey: null,
     };
 
@@ -223,7 +221,6 @@ export default class Tabs extends Component {
       </div>
     );
   }
-
 }
 
 Tabs.propTypes = {

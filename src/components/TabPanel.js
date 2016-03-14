@@ -37,4 +37,3 @@ TabPanel.propTypes = {
   selected: PropTypes.bool,
   tabId: PropTypes.string,
 };
-
