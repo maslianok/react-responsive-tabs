@@ -93,8 +93,7 @@ export default class Tabs extends Component {
     let availableWidth = blockWidth - (tabsTotalWidth > blockWidth ? showMoreWidth : 0);
 
     return items.reduce((result, item, index) => {
-      const disabled = item.disabled;
-      const { key = index, title, content } = item;
+      const { key = index, title, content, disabled } = item;
       const selected = (!selectedTabKey && !tabIndex) || selectedTabKey === key;
       const payload = { tabIndex, collapsed, selected, disabled, key };
       const tabPayload = Object.assign({}, payload, { title });
@@ -103,6 +102,7 @@ export default class Tabs extends Component {
 
       tabIndex++;
 
+      /* eslint-disable no-param-reassign */
       if (
         // don't need to `Show more` button
         !showMore ||
@@ -115,16 +115,17 @@ export default class Tabs extends Component {
         // current tab fit into the block
         availableWidth - tabWidth > 0
       ) {
-        result.tabsVisible.push(tabPayload);
+        result.tabsVisible[key] = tabPayload;
       } else {
         result.tabsHidden.push(tabPayload);
       }
+      /* eslint-enable no-param-reassign */
 
       result.panels.push(panelPayload);
       availableWidth -= tabWidth;
 
       return result;
-    }, { tabsVisible: [], tabsHidden: [], panels: [] });
+    }, { tabsVisible: {}, tabsHidden: [], panels: [] });
   }
 
   _getTabProps({ title, key, selected, collapsed, tabIndex, disabled }) {
@@ -227,10 +228,7 @@ export default class Tabs extends Component {
 
 Tabs.propTypes = {
   items: PropTypes.arrayOf(PropTypes.shape({
-    key: PropTypes.oneOfType([
-      PropTypes.number,
-      PropTypes.string,
-    ]),
+    key: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     title: PropTypes.string,
     content: PropTypes.oneOfType([
       PropTypes.array,
@@ -247,7 +245,7 @@ Tabs.propTypes = {
   wrapperClass: PropTypes.string,
   tabClass: PropTypes.string,
   panelClass: PropTypes.string,
-  onChange: PropTypes.string,
+  onChange: PropTypes.func,
 };
 
 Tabs.defaultProps = {

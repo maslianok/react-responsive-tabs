@@ -34,8 +34,7 @@ const presidents = [
 ];
 
 function getTabs() {
-  return presidents.map((president, i) => ({
-    key: i,
+  return presidents.map(president => ({
     title: president.name,
     content: president.biography,
   }));
