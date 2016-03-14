@@ -39,62 +39,33 @@ npm install && npm start
 
 ## Example
 
-#### Example 1
 ```javascript
 import React, {Component} from 'react';
 import {render} from 'react-dom';
-import {Tabs, Tab, TabPanel} from 'react-responsive-tabs';
-
-class App extends Component {
-  render() {
-    return (
-      <div>
-        <Tabs>
-          <Tab key="1">George Washington</Tab>
-          <TabPanel key="1">...</TabPanel>
-
-          <Tab key="2">Theodore Roosevelt</Tab>
-          <TabPanel key="2">...</TabPanel>
-        </Tabs>
-      </div>
-    );
-  }
-}
-
-render(<App />, document.getElementById('root'));
-```
-
-#### Example 2
-```javascript
-import React, {Component} from 'react';
-import {render} from 'react-dom';
-import {Tabs, Tab, TabPanel} from 'react-responsive-tabs';
+import Tabs from 'react-responsive-tabs';
 
 const presidents = [
   {name: 'George Washington', biography: '...'},
   {name: 'Theodore Roosevelt', biography: '...'},
 ];
 
-class App extends Component {
-  render() {
-    return (
-      <div>
-        <Tabs>
-          {presidents.reduce((result, president, i) => {
-            result.push(<Tab key={i}>{president.name}</Tab>);
-            result.push(<TabPanel key={i}>{president.biography}</TabPanel>);
-            return result;
-          }, [])}
-        </Tabs>
-      </div>
-    );
-  }
+function getTabs() {
+  return presidents.map(president => ({
+    key: index, // Optional. Equals to tab index if this property is omitted
+    title: president.name,
+    content: president.biography,
+  }));
 }
+
+const App = () => <Tabs items={getTabs()} />;
 
 render(<App />, document.getElementById('root'));
 ```
 
 ## API
+
+#### items
+(Array) Tabs data
 
 #### selectedTabKey
 (Number|String) Tab with this key will be selected by default.
