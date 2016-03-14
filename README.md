@@ -79,5 +79,14 @@ render(<App />, document.getElementById('root'));
 #### transformWidth
 (Number) Transform to accordion if wrapper width less than this value. Default: 800
 
+#### wrapperClass
+(String) Wrapper class
+
+#### tabClass
+(String) Tab class
+
+#### panelClass
+(String) Tab panel class
+
 ### License
 MIT

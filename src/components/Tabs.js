@@ -4,7 +4,7 @@ import React, { PropTypes, Component } from 'react';
 import { findDOMNode } from 'react-dom';
 import ResizeDetector from 'react-resize-detector';
 import jss from 'js-stylesheet';
-import classNames from 'classnames';
+import cs from 'classnames';
 
 import ShowMore from './ShowMore';
 import Tab from './Tab';
@@ -43,7 +43,7 @@ export default class Tabs extends Component {
 
   componentDidMount() {
     jss(styles);
-    this._setTabsWidth();
+    setTimeout(this._setTabsWidth, 0);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -158,16 +158,14 @@ export default class Tabs extends Component {
   _getClassNamesFor(type, { selected, collapsed, tabIndex, disabled }) {
     switch (type) {
       case 'tab':
-        return classNames({
-          Tab: true,
+        return cs('Tab', this.props.tabClass, {
           'Tab--first': !tabIndex,
           'Tab--selected': selected,
           'Tab--disabled': disabled,
           'Tab--collapsed': collapsed,
         });
       case 'panel':
-        return classNames({
-          'Tab-panel': true,
+        return cs('Tab-panel', this.props.panelClass, {
           'Tab-panel--selected': selected,
           'Tab-panel--collapsed': collapsed,
         });
@@ -199,10 +197,11 @@ export default class Tabs extends Component {
   }
 
   render() {
-    const { tabsVisible, tabsHidden, panels } = this._getTabs();
+    const { tabsVisible, tabsHidden, panels, wrapperClass } = this._getTabs();
+    const wrapperClasses = cs('Tabs__wrapper', wrapperClass);
 
     return (
-      <div className="Tabs__wrapper" ref="tabsWrapper" onKeyDown={this._onKeyDown}>
+      <div className={wrapperClasses} ref="tabsWrapper" onKeyDown={this._onKeyDown}>
         {panels.reduce((result, panel) => {
           if (tabsVisible[panel.key]) {
             result.push(<Tab {...this._getTabProps(tabsVisible[panel.key])} />);
@@ -242,10 +241,16 @@ Tabs.propTypes = {
   showMore: PropTypes.bool,
   transform: PropTypes.bool,
   transformWidth: PropTypes.number,
+  wrapperClass: PropTypes.string,
+  tabClass: PropTypes.string,
+  panelClass: PropTypes.string,
 };
 
 Tabs.defaultProps = {
   showMore: true,
   transform: true,
   transformWidth: 800,
+  wrapperClass: '',
+  tabClass: '',
+  panelClass: '',
 };
