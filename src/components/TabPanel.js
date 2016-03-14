@@ -1,35 +1,30 @@
-import React, {PropTypes, Component} from 'react';
+import React, { PropTypes } from 'react';
 
-export default class TabPanel extends Component {
-  render() {
-    const props = this.props;
+const TabPanel = ({ classNames, key, tabId, selected, children }) => (
+  <div
+    className={classNames}
+    role="tabpanel"
+    id={key}
+    aria-labeledby={tabId}
+    aria-hidden={selected ? 'false' : 'true'}
+  >
+    {children}
+  </div>
+);
 
-    return (
-      <div
-        className={props.classNames}
-        role="tabpanel"
-        id={props.key}
-        aria-labeledby={props.tabId}
-        aria-hidden={props.selected ? 'false' : 'true'}
-      >
-        {props.children}
-      </div>
-    );
-  }
-}
+export default TabPanel;
 
 TabPanel.propTypes = {
   children: PropTypes.oneOfType([
     PropTypes.array,
     PropTypes.object,
-    PropTypes.string
+    PropTypes.string,
   ]),
   key: PropTypes.string,
-  style: PropTypes.object,
 
-  //generic props
+  // generic props
   classNames: PropTypes.string,
   selected: PropTypes.bool,
-  tabId: PropTypes.string
+  tabId: PropTypes.string,
 };
 

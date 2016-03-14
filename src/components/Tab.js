@@ -1,48 +1,49 @@
-import React, {PropTypes, Component} from 'react';
+import React, { PropTypes } from 'react';
 
-export default class Tab extends Component {
-
-  render() {
-    let props = this.props;
-
-    return (
-      <div
-        className={props.classNames}
-        role="tab"
-        id={props.id}
-        aria-selected={props.selected ? 'true' : 'false'}
-        aria-expanded={props.selected ? 'true' : 'false'}
-        aria-disabled={props.disabled ? 'true' : 'false'}
-        aria-controls={props.panelId}
-        tabIndex="0"
-        onClick={this._onClick.bind(this)}
-        onFocus={props.onFocus.bind(this, props.originalKey)}
-        onBlur={props.onBlur}
-      >
-        {props.children}
-      </div>
-
-    );
-  }
-
-  _onClick() {
-    if (this.props.selected) {
-      return false;
-    }
-
-    this.props.onClick(this.props.originalKey);
-  }
+function onTabClick(selected, onClick, originalKey) {
+  return () => !selected && onClick(originalKey);
 }
+
+const Tab = ({
+  id,
+  classNames,
+  selected,
+  disabled,
+  panelId,
+  onClick,
+  onFocus,
+  onBlur,
+  originalKey,
+  children,
+}) => (
+    <div
+      className={classNames}
+      role="tab"
+      id={id}
+      aria-selected={selected ? 'true' : 'false'}
+      aria-expanded={selected ? 'true' : 'false'}
+      aria-disabled={disabled ? 'true' : 'false'}
+      aria-controls={panelId}
+      tabIndex="0"
+      onClick={onTabClick(selected, onClick, originalKey)}
+      onFocus={onFocus(originalKey)}
+      onBlur={onBlur}
+    >
+      {children}
+    </div>
+);
+
+export default Tab;
 
 Tab.propTypes = {
   children: PropTypes.oneOfType([
     PropTypes.array,
     PropTypes.object,
-    PropTypes.string
+    PropTypes.string,
   ]),
   disabled: PropTypes.bool,
-  
-  //generic props
+
+  // generic props
   panelId: PropTypes.string,
   selected: PropTypes.bool,
   onClick: PropTypes.func,
@@ -51,5 +52,5 @@ Tab.propTypes = {
   id: PropTypes.string,
   originalKey: PropTypes.string,
 
-  classNames: PropTypes.string
+  classNames: PropTypes.string,
 };
