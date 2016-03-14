@@ -180,6 +180,9 @@ export default class Tabs extends Component {
 
   _onChangeTab(selectedTabKey) {
     this.setState({ selectedTabKey });
+    if (this.props.onChange) {
+      this.props.onChange(selectedTabKey);
+    }
   }
 
   _onFocusTab(focusedTabKey) {
@@ -244,6 +247,7 @@ Tabs.propTypes = {
   wrapperClass: PropTypes.string,
   tabClass: PropTypes.string,
   panelClass: PropTypes.string,
+  onChange: PropTypes.string,
 };
 
 Tabs.defaultProps = {

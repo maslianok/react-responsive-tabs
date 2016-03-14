@@ -67,6 +67,9 @@ render(<App />, document.getElementById('root'));
 #### items
 (Array) Tabs data
 
+#### onChange(key)
+(Function) onChange callback
+
 #### selectedTabKey
 (Number|String) Tab with this key will be selected by default.
 
