@@ -9,6 +9,7 @@ import classNames from 'classnames';
 import ShowMore from './ShowMore';
 import Tab from './Tab';
 import TabPanel from './TabPanel';
+import styles from '../styles/style';
 
 const tabPrefix = 'tab-';
 const panelPrefix = 'panel-';
@@ -41,7 +42,7 @@ export default class Tabs extends Component {
   }
 
   componentDidMount() {
-    jss(require('../styles/style.js'));
+    jss(styles);
     this._setTabsWidth();
   }
 
