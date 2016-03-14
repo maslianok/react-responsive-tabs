@@ -3,16 +3,14 @@
 // TODO show more handler
 // TODO pass classNames or even styles
 
-// TODO debounce
-
 import React, { PropTypes, Component } from 'react';
+import { findDOMNode } from 'react-dom';
+import ResizeDetector from 'react-resize-detector';
 import classNames from 'classnames';
 
 import ShowMore from './ShowMore';
 import Tab from './Tab';
 import TabPanel from './TabPanel';
-import ResizeDetector from 'react-resize-detector';
-import childrenPropType from '../helpers/childrenPropType';
 
 import styles from 'style!css?modules&localIdentName=[local]!../styles/style.css';
 
@@ -69,19 +67,18 @@ export default class Tabs extends Component {
   }
 
   _setTabsWidth() {
-    const tabRefs = this.tabRefs;
     const blockWidth = this.refs.tabsWrapper.offsetWidth;
-
     let tabsTotalWidth = 0;
     const tabsWidth = {};
-    Object.keys(tabRefs).forEach(key => {
-      const width = tabRefs[key].offsetWidth;
-      tabsWidth[key] = width;
+    Object.keys(this.refs).filter(ref => ref.indexOf(tabPrefix) === 0).forEach(key => {
+      const width = findDOMNode(this.refs[key]).offsetWidth;
+      tabsWidth[key.replace(tabPrefix, '')] = width;
       tabsTotalWidth += width;
     });
 
     const newState = { tabsWidth, tabsTotalWidth, blockWidth };
-    const showMore = this.refs.tabsShowMore;
+    const showMore = findDOMNode(this.refs.tabsShowMore);
+
     if (showMore) {
       newState.showMoreWidth = showMore.offsetWidth;
     }
@@ -97,13 +94,14 @@ export default class Tabs extends Component {
     let tabIndex = 0;
     let availableWidth = blockWidth - (tabsTotalWidth > blockWidth ? showMoreWidth : 0);
 
-    return items.reduce((result, item) => {
-      const selected = (!selectedTabKey && !tabIndex) || selectedTabKey === item.key;
+    return items.reduce((result, item, index) => {
       const disabled = item.disabled;
-      const payload = { tabIndex, collapsed, selected, disabled, key: item.key };
-      const tabPayload = Object.assign({}, payload, { title: item.title });
-      const panelPayload = Object.assign({}, payload, { content: item.content });
-      const tabWidth = tabsWidth[item.key] || 0;
+      const { key = index, title, content } = item;
+      const selected = (!selectedTabKey && !tabIndex) || selectedTabKey === key;
+      const payload = { tabIndex, collapsed, selected, disabled, key };
+      const tabPayload = Object.assign({}, payload, { title });
+      const panelPayload = Object.assign({}, payload, { content });
+      const tabWidth = tabsWidth[key] || 0;
 
       tabIndex++;
 
@@ -137,12 +135,8 @@ export default class Tabs extends Component {
       children: title,
       key: tabPrefix + key,
       id: tabPrefix + key,
+      ref: tabPrefix + key,
       originalKey: key,
-      ref: tab => {
-        if (tab) {
-          this.tabRefs[tab.props.originalKey] = tab;
-        }
-      },
       onClick: this._onChangeTab,
       onFocus: this._onFocusTab,
       onBlur: this._onBlurTab,
@@ -205,12 +199,7 @@ export default class Tabs extends Component {
       this.setState({ selectedTabKey: this.state.focusedTabKey });
     }
   }
-  // <ShowMore
-  //   ref="tabsShowMore"
-  //   styles={styles}
-  //   isShown={this.props.showMore}
-  //   hiddenTabs={tabsHidden}
-  // />
+
   render() {
     const { tabsVisible, tabsHidden, panels } = this._getTabs();
 
@@ -224,6 +213,10 @@ export default class Tabs extends Component {
           return result;
         }, [])}
 
+        <ShowMore ref="tabsShowMore" styles={styles} isShown={this.props.showMore}>
+          {tabsHidden.map(tab => <Tab {...this._getTabProps(tab)} />)}
+        </ShowMore>
+
         {(this.props.showMore || this.props.transform) &&
           <ResizeDetector handleWidth onResize={this._onResize} />
         }
@@ -234,7 +227,18 @@ export default class Tabs extends Component {
 }
 
 Tabs.propTypes = {
-  items: childrenPropType,
+  items: PropTypes.arrayOf(PropTypes.shape({
+    key: PropTypes.oneOfType([
+      PropTypes.number,
+      PropTypes.string,
+    ]),
+    title: PropTypes.string,
+    content: PropTypes.oneOfType([
+      PropTypes.array,
+      PropTypes.object,
+      PropTypes.string,
+    ]),
+  })),
   idPrefix: PropTypes.string,
   onSelect: PropTypes.func,
   selectedTabKey: PropTypes.any,

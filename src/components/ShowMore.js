@@ -12,6 +12,14 @@ export default class ShowMore extends Component {
 
     this._onClick = this._onClick.bind(this);
     this._onKeyDown = this._onKeyDown.bind(this);
+    this._onFocus = this._onFocus.bind(this);
+    this._onBlur = this._onBlur.bind(this);
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    return this.props.children.length !== nextProps.children.length ||
+      this.props.isShown !== nextProps.isShown ||
+      this.state !== nextState;
   }
 
   _onClick() {
@@ -33,7 +41,7 @@ export default class ShowMore extends Component {
   }
 
   render() {
-    if (!this.props.isShown || !this.props.hiddenTabs || !this.props.hiddenTabs.length) {
+    if (!this.props.isShown || !this.props.children || !this.props.children.length) {
       return null;
     }
 
@@ -64,7 +72,7 @@ export default class ShowMore extends Component {
       >
         <div className={showMoreLabelStyles} onClick={this._onClick}>...</div>
         <div className={listStyles} aria-hidden={isListHidden} role="menu">
-          {this.props.hiddenTabs}
+          {this.props.children}
         </div>
       </div>
     );
@@ -72,7 +80,11 @@ export default class ShowMore extends Component {
 }
 
 ShowMore.propTypes = {
+  children: PropTypes.oneOfType([
+    PropTypes.array,
+    PropTypes.object,
+    PropTypes.string,
+  ]),
   isShown: PropTypes.bool.isRequired,
-  hiddenTabs: PropTypes.array,
   styles: PropTypes.object.isRequired,
 };
