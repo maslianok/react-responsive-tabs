@@ -13,7 +13,9 @@ import styles from '../styles/style';
 const tabPrefix = 'tab-';
 const panelPrefix = 'panel-';
 
-jss(styles);
+if (document) {
+  jss(styles);
+}
 
 export default class Tabs extends Component {
   constructor(props) {
