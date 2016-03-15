@@ -1,5 +1,4 @@
 // TODO react router
-// TODO pass classNames or even styles
 import React, { PropTypes, Component } from 'react';
 import { findDOMNode } from 'react-dom';
 import ResizeDetector from 'react-resize-detector';
@@ -13,6 +12,8 @@ import styles from '../styles/style';
 
 const tabPrefix = 'tab-';
 const panelPrefix = 'panel-';
+
+jss(styles);
 
 export default class Tabs extends Component {
   constructor(props) {
@@ -42,7 +43,6 @@ export default class Tabs extends Component {
   }
 
   componentDidMount() {
-    jss(styles);
     setTimeout(this._setTabsWidth, 0);
   }
 
@@ -93,11 +93,11 @@ export default class Tabs extends Component {
     let availableWidth = blockWidth - (tabsTotalWidth > blockWidth ? showMoreWidth : 0);
 
     return items.reduce((result, item, index) => {
-      const { key = index, title, content, disabled } = item;
+      const { key = index, title, content, disabled, tabClassName, panelClassName } = item;
       const selected = (!selectedTabKey && !tabIndex) || selectedTabKey === key;
       const payload = { tabIndex, collapsed, selected, disabled, key };
-      const tabPayload = Object.assign({}, payload, { title });
-      const panelPayload = Object.assign({}, payload, { content });
+      const tabPayload = Object.assign({}, payload, { title, className: tabClassName });
+      const panelPayload = Object.assign({}, payload, { content, className: panelClassName });
       const tabWidth = tabsWidth[key] || 0;
 
       tabIndex++;
@@ -128,7 +128,7 @@ export default class Tabs extends Component {
     }, { tabsVisible: {}, tabsHidden: [], panels: [] });
   }
 
-  _getTabProps({ title, key, selected, collapsed, tabIndex, disabled }) {
+  _getTabProps({ title, key, selected, collapsed, tabIndex, disabled, className }) {
     return {
       selected,
       children: title,
@@ -140,33 +140,39 @@ export default class Tabs extends Component {
       onFocus: this._onFocusTab,
       onBlur: this._onBlurTab,
       panelId: panelPrefix + key,
-      classNames: this._getClassNamesFor('tab', { selected, collapsed, tabIndex, disabled }),
+      classNames: this._getClassNamesFor('tab', {
+        selected,
+        collapsed,
+        tabIndex,
+        disabled,
+        className,
+      }),
     };
   }
 
-  _getPanelProps({ key, content, selected, collapsed }) {
+  _getPanelProps({ key, content, selected, collapsed, className }) {
     return {
       selected,
       children: content,
       key: panelPrefix + key,
       id: panelPrefix + key,
       tabId: tabPrefix + key,
-      classNames: this._getClassNamesFor('panel', { selected, collapsed }),
+      classNames: this._getClassNamesFor('panel', { selected, collapsed, className }),
     };
   }
 
 
-  _getClassNamesFor(type, { selected, collapsed, tabIndex, disabled }) {
+  _getClassNamesFor(type, { selected, collapsed, tabIndex, disabled, className = '' }) {
     switch (type) {
       case 'tab':
-        return cs('Tab', this.props.tabClass, {
+        return cs('Tab', className, this.props.tabClass, {
           'Tab--first': !tabIndex,
           'Tab--selected': selected,
           'Tab--disabled': disabled,
           'Tab--collapsed': collapsed,
         });
       case 'panel':
-        return cs('Tab-panel', this.props.panelClass, {
+        return cs('Tab-panel', className, this.props.panelClass, {
           'Tab-panel--selected': selected,
           'Tab-panel--collapsed': collapsed,
         });
@@ -230,6 +236,8 @@ Tabs.propTypes = {
   items: PropTypes.arrayOf(PropTypes.shape({
     key: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     title: PropTypes.string,
+    panelClassName: PropTypes.string,
+    tabClassName: PropTypes.string,
     content: PropTypes.oneOfType([
       PropTypes.array,
       PropTypes.object,

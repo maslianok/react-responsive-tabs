@@ -52,6 +52,8 @@ const presidents = [
 function getTabs() {
   return presidents.map(president => ({
     key: index, // Optional. Equals to tab index if this property is omitted
+    tabClassName: 'tab', // Optional
+    panelClassName: 'panel', // Optional
     title: president.name,
     content: president.biography,
   }));

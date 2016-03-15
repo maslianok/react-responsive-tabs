@@ -37,6 +37,8 @@ function getTabs() {
   return presidents.map(president => ({
     title: president.name,
     content: president.biography,
+    tabClassName: 'aaaa',
+    panelClassName: 'bbbb',
   }));
 }
 
