@@ -1,6 +1,6 @@
 {
   "author": "Vitalii Maslianok <maslianok@gmail.com> (https://github.com/maslianok)",
-  "version": "0.4.6",
+  "version": "0.4.7",
   "bugs": {
     "url": "https://github.com/maslianok/react-responsive-tabs/issues"
   },
@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "js-stylesheet": "0.0.1",
-    "react-resize-detector": "^0.2.0"
+    "react-resize-detector": "^0.2.2"
   },
   "devDependencies": {
     "babel-cli": "^6.5.1",
