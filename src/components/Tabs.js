@@ -1,6 +1,5 @@
 // TODO react router
 import React, { PropTypes, Component } from 'react';
-import { findDOMNode } from 'react-dom';
 import ResizeDetector from 'react-resize-detector';
 import jss from 'js-stylesheet';
 import cs from 'classnames';
@@ -67,17 +66,17 @@ export default class Tabs extends Component {
   }
 
   _setTabsWidth() {
-    const blockWidth = this.refs.tabsWrapper.offsetWidth;
+    const blockWidth = this.tabsWrapper.offsetWidth;
     let tabsTotalWidth = 0;
     const tabsWidth = {};
-    Object.keys(this.refs).filter(ref => ref.indexOf(tabPrefix) === 0).forEach(key => {
-      const width = findDOMNode(this.refs[key]).offsetWidth;
+    Object.keys(this.refs).forEach(key => {
+      const width = this.refs[key].offsetWidth;
       tabsWidth[key.replace(tabPrefix, '')] = width;
       tabsTotalWidth += width;
     });
 
     const newState = { tabsWidth, tabsTotalWidth, blockWidth };
-    const showMore = findDOMNode(this.refs.tabsShowMore);
+    const showMore = this.tabsShowMore;
 
     if (showMore) {
       newState.showMoreWidth = showMore.offsetWidth;
@@ -184,7 +183,7 @@ export default class Tabs extends Component {
   }
 
   _onResize() {
-    this.setState({ blockWidth: this.refs.tabsWrapper.offsetWidth });
+    this.setState({ blockWidth: this.tabsWrapper.offsetWidth });
   }
 
   _onChangeTab(selectedTabKey) {
@@ -213,7 +212,7 @@ export default class Tabs extends Component {
     const wrapperClasses = cs('Tabs__wrapper', wrapperClass);
 
     return (
-      <div className={wrapperClasses} ref="tabsWrapper" onKeyDown={this._onKeyDown}>
+      <div className={wrapperClasses} ref={e => {this.tabsWrapper = e;}} onKeyDown={this._onKeyDown}>
         {panels.reduce((result, panel) => {
           if (tabsVisible[panel.key]) {
             result.push(<Tab {...this._getTabProps(tabsVisible[panel.key])} />);
@@ -222,7 +221,7 @@ export default class Tabs extends Component {
           return result;
         }, [])}
 
-        <ShowMore ref="tabsShowMore" isShown={this.props.showMore}>
+        <ShowMore ref={e => {this.tabsShowMore = e;}} isShown={this.props.showMore}>
           {tabsHidden.map(tab => <Tab {...this._getTabProps(tab)} />)}
         </ShowMore>
 
