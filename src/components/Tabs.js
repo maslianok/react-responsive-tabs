@@ -69,8 +69,8 @@ export default class Tabs extends Component {
     const blockWidth = this.tabsWrapper.offsetWidth;
     let tabsTotalWidth = 0;
     const tabsWidth = {};
-    Object.keys(this.refs).forEach(key => {
-      const width = this.refs[key].offsetWidth;
+    Object.keys(this.tabRefs).forEach(key => {
+      const width = this.tabRefs[key].offsetWidth;
       tabsWidth[key.replace(tabPrefix, '')] = width;
       tabsTotalWidth += width;
     });
@@ -135,7 +135,7 @@ export default class Tabs extends Component {
       children: title,
       key: tabPrefix + key,
       id: tabPrefix + key,
-      ref: tabPrefix + key,
+      ref: e => {this.tabRefs[tabPrefix + key] = e;},
       originalKey: key,
       onClick: this._onChangeTab,
       onFocus: this._onFocusTab,
