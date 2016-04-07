@@ -212,7 +212,11 @@ export default class Tabs extends Component {
     const wrapperClasses = cs('Tabs__wrapper', wrapperClass);
 
     return (
-      <div className={wrapperClasses} ref={e => {this.tabsWrapper = e;}} onKeyDown={this._onKeyDown}>
+      <div
+        className={wrapperClasses}
+        ref={e => {this.tabsWrapper = e;}}
+        onKeyDown={this._onKeyDown}
+      >
         {panels.reduce((result, panel) => {
           if (tabsVisible[panel.key]) {
             result.push(<Tab {...this._getTabProps(tabsVisible[panel.key])} />);
