@@ -1,12 +1,12 @@
 {
   "author": "Vitalii Maslianok <maslianok@gmail.com> (https://github.com/maslianok)",
-  "version": "0.4.9",
+  "version": "0.5.0",
   "bugs": {
     "url": "https://github.com/maslianok/react-responsive-tabs/issues"
   },
   "description": "React responsive tabs",
   "peerDependencies": {
-    "react": "^0.14.7"
+    "react": "^0.14.7 || ^15.0.0"
   },
   "dependencies": {
     "js-stylesheet": "0.0.1",
@@ -25,7 +25,7 @@
     "eslint-config-airbnb": "^6.0.2",
     "eslint-plugin-import": "^1.0.3",
     "eslint-plugin-react": "^4.1.0",
-    "react": "^0.14.7",
+    "react": "^0.15.1",
     "rimraf": "^2.3.4",
     "webpack": "^1.12.14"
   },
