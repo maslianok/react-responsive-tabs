@@ -8,13 +8,13 @@ export default class TabPanel extends Component {
   }
 
   render() {
-    const { classNames, key, tabId, selected, children } = this.props;
+    const { classNames, id, tabId, selected, children } = this.props;
 
     return (
       <div
         className={classNames}
         role="tabpanel"
-        id={key}
+        id={id}
         aria-labeledby={tabId}
         aria-hidden={selected ? 'false' : 'true'}
       >
@@ -30,7 +30,7 @@ TabPanel.propTypes = {
     PropTypes.object,
     PropTypes.string,
   ]),
-  key: PropTypes.string,
+  id: PropTypes.string,
 
   // generic props
   classNames: PropTypes.string,
