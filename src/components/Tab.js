@@ -27,8 +27,9 @@ export default class Tab extends Component {
 
     return (
       <div
-        className={classNames}
+        ref="tab"
         role="tab"
+        className={classNames}
         id={id}
         aria-selected={selected ? 'true' : 'false'}
         aria-expanded={selected ? 'true' : 'false'}

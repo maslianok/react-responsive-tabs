@@ -70,13 +70,13 @@ export default class Tabs extends Component {
     let tabsTotalWidth = 0;
     const tabsWidth = {};
     Object.keys(this.tabRefs).forEach(key => {
-      const width = this.tabRefs[key].offsetWidth;
+      const width = this.tabRefs[key].refs.tab.offsetWidth;
       tabsWidth[key.replace(tabPrefix, '')] = width;
       tabsTotalWidth += width;
     });
 
     const newState = { tabsWidth, tabsTotalWidth, blockWidth };
-    const showMore = this.tabsShowMore;
+    const showMore = this.tabsShowMore.refs.showMore;
 
     if (showMore) {
       newState.showMoreWidth = showMore.offsetWidth;
