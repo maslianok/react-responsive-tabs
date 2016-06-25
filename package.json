@@ -22,9 +22,10 @@
     "babel-preset-react": "^6.3.13",
     "classnames": "^2.2.3",
     "eslint": "^2.7.0",
-    "eslint-config-airbnb": "^6.0.2",
+    "eslint-config-airbnb": "^9.0.1",
     "eslint-plugin-import": "^1.0.3",
-    "eslint-plugin-react": "^4.1.0",
+    "eslint-plugin-jsx-a11y": "^1.5.3",
+    "eslint-plugin-react": "^5.2.2",
     "react": "^15.1.0",
     "rimraf": "^2.3.4",
     "webpack": "^1.12.14"

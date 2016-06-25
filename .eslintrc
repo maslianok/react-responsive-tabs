@@ -9,6 +9,9 @@
     "react",
     "import"
   ],
+  "rules": {
+    "no-underscore-dangle": 0
+  },
   "settings": {
     "import/resolve": {
       moduleDirectory: ["node_modules"]

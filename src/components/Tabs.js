@@ -135,7 +135,7 @@ export default class Tabs extends Component {
       children: title,
       key: tabPrefix + key,
       id: tabPrefix + key,
-      ref: e => {this.tabRefs[tabPrefix + key] = e;},
+      ref: e => { this.tabRefs[tabPrefix + key] = e; },
       originalKey: key,
       onClick: this._onChangeTab,
       onFocus: this._onFocusTab,
@@ -214,7 +214,7 @@ export default class Tabs extends Component {
     return (
       <div
         className={wrapperClasses}
-        ref={e => {this.tabsWrapper = e;}}
+        ref={e => { this.tabsWrapper = e; }}
         onKeyDown={this._onKeyDown}
       >
         {panels.reduce((result, panel) => {
@@ -225,7 +225,7 @@ export default class Tabs extends Component {
           return result;
         }, [])}
 
-        <ShowMore ref={e => {this.tabsShowMore = e;}} isShown={this.props.showMore}>
+        <ShowMore ref={e => { this.tabsShowMore = e; }} isShown={this.props.showMore}>
           {tabsHidden.map(tab => <Tab {...this._getTabProps(tab)} />)}
         </ShowMore>
 
