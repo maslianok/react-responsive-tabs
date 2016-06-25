@@ -17,10 +17,6 @@ module.exports = {
     new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.HotModuleReplacementPlugin(),
   ],
-  resolve: {
-    alias: { 'react-responsive-tabs': path.join(__dirname, '..', 'src', 'index') },
-    root: path.join(__dirname, 'node_modules'),
-  },
   module: {
     loaders: [
       {
