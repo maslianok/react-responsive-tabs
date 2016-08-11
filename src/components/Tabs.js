@@ -208,8 +208,8 @@ export default class Tabs extends Component {
   }
 
   render() {
-    const { tabsVisible, tabsHidden, panels, wrapperClass } = this._getTabs();
-    const wrapperClasses = cs('Tabs__wrapper', wrapperClass);
+    const { tabsVisible, tabsHidden, panels } = this._getTabs();
+    const wrapperClasses = cs('Tabs__wrapper', this.props.wrapperClass);
 
     return (
       <div
