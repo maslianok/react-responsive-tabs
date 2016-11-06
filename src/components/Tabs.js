@@ -12,7 +12,7 @@ import styles from '../styles/style';
 const tabPrefix = 'tab-';
 const panelPrefix = 'panel-';
 
-if (window && window.document) {
+if (typeof window !== 'undefined' && typeof window.document !== 'undefined') {
   jss(styles);
 }
 
