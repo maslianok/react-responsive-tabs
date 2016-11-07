@@ -27,7 +27,7 @@ export default class ShowMore extends Component {
   }
 
   _onKeyDown(event) {
-    if (event.keyCode === 13 && event.target === this.refs.showMore && this.state.isFocused) {
+    if (event.keyCode === 13 && event.target === this.showMore && this.state.isFocused) {
       this.setState({ isHidden: !this.state.isHidden });
     }
   }
@@ -58,10 +58,10 @@ export default class ShowMore extends Component {
 
     return (
       <div
-        ref="showMore"
+        ref={el => (this.showMore = el)}
         className="Tabs__show-more"
         role="navigation"
-        ariaHaspopup="true"
+        ariaHasPopup="true"
         tabIndex="0"
         onKeyDown={this._onKeyDown}
         onFocus={this._onFocus}

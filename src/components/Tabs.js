@@ -69,14 +69,14 @@ export default class Tabs extends Component {
     const blockWidth = this.tabsWrapper.offsetWidth;
     let tabsTotalWidth = 0;
     const tabsWidth = {};
-    Object.keys(this.tabRefs).forEach(key => {
-      const width = this.tabRefs[key].refs.tab.offsetWidth;
+    Object.keys(this.tabRefs).forEach((key) => {
+      const width = this.tabRefs[key].tab.offsetWidth;
       tabsWidth[key.replace(tabPrefix, '')] = width;
       tabsTotalWidth += width;
     });
 
     const newState = { tabsWidth, tabsTotalWidth, blockWidth };
-    const showMore = this.tabsShowMore.refs.showMore;
+    const showMore = this.tabsShowMore.showMore;
 
     if (showMore) {
       newState.showMoreWidth = showMore.offsetWidth;
@@ -101,7 +101,7 @@ export default class Tabs extends Component {
       const panelPayload = Object.assign({}, payload, { content, className: panelClassName });
       const tabWidth = tabsWidth[key] || 0;
 
-      tabIndex++;
+      tabIndex += 1;
 
       /* eslint-disable no-param-reassign */
       if (
@@ -135,7 +135,7 @@ export default class Tabs extends Component {
       children: title,
       key: tabPrefix + key,
       id: tabPrefix + key,
-      ref: e => { this.tabRefs[tabPrefix + key] = e; },
+      ref: e => (this.tabRefs[tabPrefix + key] = e),
       originalKey: key,
       onClick: this._onChangeTab,
       onFocus: this._onFocusTab,
@@ -214,7 +214,7 @@ export default class Tabs extends Component {
     return (
       <div
         className={wrapperClasses}
-        ref={e => { this.tabsWrapper = e; }}
+        ref={e => (this.tabsWrapper = e)}
         onKeyDown={this._onKeyDown}
       >
         {panels.reduce((result, panel) => {
@@ -225,7 +225,7 @@ export default class Tabs extends Component {
           return result;
         }, [])}
 
-        <ShowMore ref={e => { this.tabsShowMore = e; }} isShown={this.props.showMore}>
+        <ShowMore ref={e => (this.tabsShowMore = e)} isShown={this.props.showMore}>
           {tabsHidden.map(tab => <Tab {...this._getTabProps(tab)} />)}
         </ShowMore>
 
@@ -238,6 +238,7 @@ export default class Tabs extends Component {
 }
 
 Tabs.propTypes = {
+  /* eslint-disable react/no-unused-prop-types */
   items: PropTypes.arrayOf(PropTypes.shape({
     key: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     title: PropTypes.string,
@@ -249,9 +250,11 @@ Tabs.propTypes = {
       PropTypes.string,
     ]),
   })),
-  idPrefix: PropTypes.string,
-  onSelect: PropTypes.func,
-  selectedTabKey: PropTypes.any,
+  /* eslint-enable react/no-unused-prop-types */
+  selectedTabKey: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.string,
+  ]),
   showMore: PropTypes.bool,
   transform: PropTypes.bool,
   transformWidth: PropTypes.number,

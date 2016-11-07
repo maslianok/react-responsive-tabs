@@ -15,7 +15,7 @@ export default class TabPanel extends Component {
         className={classNames}
         role="tabpanel"
         id={id}
-        aria-labeledby={tabId}
+        aria-labelledby={tabId}
         aria-hidden={selected ? 'false' : 'true'}
       >
         {children}

@@ -27,7 +27,7 @@ export default class Tab extends Component {
 
     return (
       <div
-        ref="tab"
+        ref={e => (this.tab = e)}
         role="tab"
         className={classNames}
         id={id}
