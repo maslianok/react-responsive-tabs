@@ -1,7 +1,6 @@
 // TODO react router
 import React, { PropTypes, Component } from 'react';
 import ResizeDetector from 'react-resize-detector';
-import jss from 'js-stylesheet';
 import cs from 'classnames';
 
 import ShowMore from './ShowMore';
@@ -11,10 +10,6 @@ import styles from '../styles/style';
 
 const tabPrefix = 'tab-';
 const panelPrefix = 'panel-';
-
-if (typeof window !== 'undefined' && typeof window.document !== 'undefined') {
-  jss(styles);
-}
 
 export default class Tabs extends Component {
   constructor(props) {
