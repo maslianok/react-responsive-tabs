@@ -61,7 +61,6 @@ export default class ShowMore extends Component {
         ref={el => (this.showMore = el)}
         className="Tabs__show-more"
         role="navigation"
-        ariaHasPopup="true"
         tabIndex="0"
         onKeyDown={this._onKeyDown}
         onFocus={this._onFocus}
