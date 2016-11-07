@@ -33,7 +33,6 @@
     }
   },
   "dependencies": {
-    "js-stylesheet": "0.0.1",
     "react-resize-detector": "^0.3.0",
     "classnames": "^2.2.3"
   },
