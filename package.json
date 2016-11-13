@@ -81,6 +81,7 @@
     "test": "CI=true react-scripts test --env=jsdom",
     "test:cov": "react-scripts test --env=jsdom --coverage",
     "build:commonjs": "cross-env BABEL_ENV=commonjs babel src --out-dir lib",
+    "build:commonjs:watch": "cross-env BABEL_ENV=commonjs babel src --out-dir lib --watch",
     "build:umd": "cross-env BABEL_ENV=commonjs NODE_ENV=development webpack src/index.js dist/tabs.js",
     "build:umd:min": "cross-env BABEL_ENV=commonjs NODE_ENV=production webpack src/index.js dist/tabs.min.js",
     "build": "npm run build:commonjs && npm run build:umd && npm run build:umd:min",

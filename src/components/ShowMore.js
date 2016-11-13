@@ -10,10 +10,18 @@ export default class ShowMore extends Component {
       isHidden: true,
     };
 
-    this._onClick = this._onClick.bind(this);
-    this._onKeyDown = this._onKeyDown.bind(this);
-    this._onFocus = this._onFocus.bind(this);
-    this._onBlur = this._onBlur.bind(this);
+    this.onKeyDown = this.onKeyDown.bind(this);
+    this.close = this.close.bind(this);
+    this.toggleVisibility = this.toggleVisibility.bind(this);
+    this.onFocus = this.onFocus.bind(this);
+    this.onBlur = this.onBlur.bind(this);
+  }
+
+  componentWillMount() {
+    if (typeof window !== 'undefined') {
+      window.addEventListener('click', this.close);
+      window.addEventListener('keydown', this.onKeyDown);
+    }
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -22,22 +30,41 @@ export default class ShowMore extends Component {
       this.state !== nextState;
   }
 
-  _onClick() {
-    this.setState({ isHidden: !this.state.isHidden });
-  }
-
-  _onKeyDown(event) {
-    if (event.keyCode === 13 && event.target === this.showMore && this.state.isFocused) {
-      this.setState({ isHidden: !this.state.isHidden });
+  componentWillUnmount() {
+    if (typeof window !== 'undefined') {
+      window.removeEventListener('click', this.close);
+      window.removeEventListener('keydown', this.onKeyDown);
     }
   }
 
-  _onFocus() {
+  onFocus() {
     this.setState({ isFocused: true });
   }
 
-  _onBlur() {
+  onBlur() {
     this.setState({ isFocused: false });
+  }
+
+  onKeyDown(event) {
+    const { isFocused, isHidden } = this.state;
+    if (event.keyCode === 13) {
+      if (isFocused) {
+        this.setState({ isHidden: !this.state.isHidden });
+      } else if (!isHidden) {
+        this.setState({ isHidden: true });
+      }
+    }
+  }
+
+  close() {
+    if (!this.state.isHidden) {
+      this.setState({ isHidden: true });
+    }
+  }
+
+  toggleVisibility(event) {
+    event.stopPropagation();
+    this.setState({ isHidden: !this.state.isHidden });
   }
 
   render() {
@@ -62,11 +89,11 @@ export default class ShowMore extends Component {
         className="Tabs__show-more"
         role="navigation"
         tabIndex="0"
-        onKeyDown={this._onKeyDown}
-        onFocus={this._onFocus}
-        onBlur={this._onBlur}
+        onFocus={this.onFocus}
+        onBlur={this.onBlur}
+        onClick={this.toggleVisibility}
       >
-        <div className={showMoreLabelStyles} onClick={this._onClick}>...</div>
+        <div className={showMoreLabelStyles}>...</div>
         <div className={listStyles} aria-hidden={isListHidden} role="menu">
           {this.props.children}
         </div>
