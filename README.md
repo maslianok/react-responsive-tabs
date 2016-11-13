@@ -31,18 +31,31 @@ We are using [`react-resize-detector`](https://github.com/maslianok/react-resize
 
 Local demo
 ```
+// 1. clone the repository
 git clone https://github.com/maslianok/react-responsive-tabs.git
-cd react-responsive-tabs/example
-npm install && npm start
+
+// 2. Install react-responsive-tabs dependencies. You must do it because we use raw library code in the example
+cd react-responsive-tabs
+npm install
+
+// 3. Install dependencies to run the example
+cd example
+npm install
+
+// 4. Finally run the example
+npm start
 ```
 
 
 ## Example
 
 ```javascript
-import React, {Component} from 'react';
-import {render} from 'react-dom';
+import React, { Component } from 'react';
+import { render } from 'react-dom';
 import Tabs from 'react-responsive-tabs';
+
+// IMPORTANT you need to include the default styles
+import 'react-responsive-tabs/styles.css'
 
 const presidents = [
   {name: 'George Washington', biography: '...'},

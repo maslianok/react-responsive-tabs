@@ -2,7 +2,7 @@
 import React from 'react';
 import Tabs from 'react-responsive-tabs';
 
-import 'react-responsive-tabs/style.css';
+import 'react-responsive-tabs/styles.css';
 
 const presidents = [
   {
