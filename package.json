@@ -33,7 +33,7 @@
     }
   },
   "directories": {
-    "example": "example"
+    "example": "examples"
   },
   "homepage": "https://github.com/maslianok/react-responsive-tabs",
   "keywords": [
@@ -77,16 +77,13 @@
   },
   "scripts": {
     "clean": "rimraf lib dist es coverage",
-    "lint": "npm run lint:src && npm run lint:examples",
-    "lint:src": "eslint src test build",
-    "lint:examples": "eslint examples",
+    "lint": "eslint src",
     "test": "CI=true react-scripts test --env=jsdom",
     "test:cov": "react-scripts test --env=jsdom --coverage",
-    "check:src": "npm run lint:src && npm run test",
     "build:commonjs": "cross-env BABEL_ENV=commonjs babel src --out-dir lib",
     "build:umd": "cross-env BABEL_ENV=commonjs NODE_ENV=development webpack src/index.js dist/tabs.js",
     "build:umd:min": "cross-env BABEL_ENV=commonjs NODE_ENV=production webpack src/index.js dist/tabs.min.js",
     "build": "npm run build:commonjs && npm run build:umd && npm run build:umd:min",
-    "prepublish": "npm run clean && npm run check:src && npm run build"
+    "prepublish": "npm run clean && npm run lint && npm run build"
   }
 }
