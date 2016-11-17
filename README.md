@@ -39,7 +39,7 @@ cd react-responsive-tabs
 npm install
 
 // 3. Install dependencies to run the example
-cd example
+cd examples
 npm install
 
 // 4. Finally run the example
