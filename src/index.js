@@ -195,7 +195,7 @@ export default class Tabs extends Component {
   }
 
   _onKeyDown(event) {
-    if (event.keyCode === 13 && this.state.focusedTabKey) {
+    if (event.keyCode === 13 && this.state.focusedTabKey !== null) {
       this.setState({ selectedTabKey: this.state.focusedTabKey });
     }
   }
