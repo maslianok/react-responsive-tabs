@@ -6,6 +6,29 @@ Please, file an issue if something went wrong or let me know via Twitter @maslia
 
 ---
 
+#### Breaking change in 0.7.x
+
+In this version library renders only active tab panel. To make it possible I've had to change item object structure.
+
+Before:
+
+```javascript
+{
+  title: 'Title',
+  content: 'Content',
+}
+
+After:
+
+```javascript
+{
+  title: 'Title',
+  getContent: () => 'Content',
+}
+```
+
+---
+
 #### Responsive
 * Move tabs to 'Show more' list on medium screen size
 * Transform tabs to accordion on small screen size
@@ -68,7 +91,7 @@ function getTabs() {
     tabClassName: 'tab', // Optional
     panelClassName: 'panel', // Optional
     title: president.name,
-    content: president.biography,
+    getContent: () => president.biography,
   }));
 }
 
