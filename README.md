@@ -17,6 +17,7 @@ Before:
   title: 'Title',
   content: 'Content',
 }
+```
 
 After:
 
