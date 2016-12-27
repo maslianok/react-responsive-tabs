@@ -23,21 +23,10 @@ export default class Tabs extends Component {
       selectedTabKey: props.selectedTabKey,
       focusedTabKey: null,
     };
-
-    this._setTabsWidth = this._setTabsWidth.bind(this);
-    this._getTabs = this._getTabs.bind(this);
-    this._getTabProps = this._getTabProps.bind(this);
-    this._getPanelProps = this._getPanelProps.bind(this);
-
-    this._onChangeTab = this._onChangeTab.bind(this);
-    this._onResize = this._onResize.bind(this);
-    this._onKeyDown = this._onKeyDown.bind(this);
-    this._onFocusTab = this._onFocusTab.bind(this);
-    this._onBlurTab = this._onBlurTab.bind(this);
   }
 
   componentDidMount() {
-    setTimeout(this._setTabsWidth, 0);
+    setTimeout(this.setTabsWidth, 0);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -54,11 +43,30 @@ export default class Tabs extends Component {
 
   componentDidUpdate() {
     if (!this.state.blockWidth) {
-      this._setTabsWidth();
+      this.setTabsWidth();
     }
   }
 
-  _setTabsWidth() {
+  onResize = () => this.setState({ blockWidth: this.tabsWrapper.offsetWidth });
+
+  onChangeTab = (selectedTabKey) => {
+    this.setState({ selectedTabKey });
+    if (this.props.onChange) {
+      this.props.onChange(selectedTabKey);
+    }
+  }
+
+  onFocusTab = focusedTabKey => () => this.setState({ focusedTabKey });
+
+  onBlurTab = () => this.setState({ focusedTabKey: null });
+
+  onKeyDown = (event) => {
+    if (event.keyCode === 13 && this.state.focusedTabKey !== null) {
+      this.setState({ selectedTabKey: this.state.focusedTabKey });
+    }
+  }
+
+  setTabsWidth = () => {
     const blockWidth = this.tabsWrapper.offsetWidth;
     let tabsTotalWidth = 0;
     const tabsWidth = {};
@@ -78,7 +86,7 @@ export default class Tabs extends Component {
     this.setState(newState);
   }
 
-  _getTabs() {
+  getTabs = () => {
     const { showMore, transform, transformWidth, items } = this.props;
     const { blockWidth, tabsTotalWidth, tabsWidth, showMoreWidth, selectedTabKey } = this.state;
     const collapsed = blockWidth && transform && blockWidth < transformWidth;
@@ -87,11 +95,31 @@ export default class Tabs extends Component {
     let availableWidth = blockWidth - (tabsTotalWidth > blockWidth ? showMoreWidth : 0);
 
     return items.reduce((result, item, index) => {
-      const { key = index, title, content, disabled, tabClassName, panelClassName } = item;
+      const {
+        key = index,
+        title,
+        content,
+        getContent,
+        disabled,
+        tabClassName,
+        panelClassName,
+      } = item;
+
       const selected = (!selectedTabKey && !tabIndex) || selectedTabKey === key;
       const payload = { tabIndex, collapsed, selected, disabled, key };
-      const tabPayload = Object.assign({}, payload, { title, className: tabClassName });
-      const panelPayload = Object.assign({}, payload, { content, className: panelClassName });
+      const tabPayload = {
+        ...payload,
+        title,
+        className: tabClassName,
+      };
+
+      const panelPayload = {
+        ...payload,
+        content,
+        getContent,
+        className: panelClassName,
+      };
+
       const tabWidth = tabsWidth[key] || 0;
 
       tabIndex += 1;
@@ -122,41 +150,38 @@ export default class Tabs extends Component {
     }, { tabsVisible: {}, tabsHidden: [], panels: [] });
   }
 
-  _getTabProps({ title, key, selected, collapsed, tabIndex, disabled, className }) {
-    return {
+  getTabProps = ({ title, key, selected, collapsed, tabIndex, disabled, className }) => ({
+    selected,
+    children: title,
+    key: tabPrefix + key,
+    id: tabPrefix + key,
+    ref: e => (this.tabRefs[tabPrefix + key] = e),
+    originalKey: key,
+    onClick: this.onChangeTab,
+    onFocus: this.onFocusTab,
+    onBlur: this.onBlurTab,
+    panelId: panelPrefix + key,
+    classNames: this.getClassNamesFor('tab', {
       selected,
-      children: title,
-      key: tabPrefix + key,
-      id: tabPrefix + key,
-      ref: e => (this.tabRefs[tabPrefix + key] = e),
-      originalKey: key,
-      onClick: this._onChangeTab,
-      onFocus: this._onFocusTab,
-      onBlur: this._onBlurTab,
-      panelId: panelPrefix + key,
-      classNames: this._getClassNamesFor('tab', {
-        selected,
-        collapsed,
-        tabIndex,
-        disabled,
-        className,
-      }),
-    };
-  }
+      collapsed,
+      tabIndex,
+      disabled,
+      className,
+    }),
+  });
 
-  _getPanelProps({ key, content, selected, collapsed, className }) {
-    return {
-      selected,
-      children: content,
-      key: panelPrefix + key,
-      id: panelPrefix + key,
-      tabId: tabPrefix + key,
-      classNames: this._getClassNamesFor('panel', { selected, collapsed, className }),
-    };
-  }
+  getPanelProps = ({ key, content, getContent, selected, collapsed, className }) => ({
+    selected,
+    getContent,
+    children: content,
+    key: panelPrefix + key,
+    id: panelPrefix + key,
+    tabId: tabPrefix + key,
+    classNames: this.getClassNamesFor('panel', { selected, collapsed, className }),
+  });
 
 
-  _getClassNamesFor(type, { selected, collapsed, tabIndex, disabled, className = '' }) {
+  getClassNamesFor = (type, { selected, collapsed, tabIndex, disabled, className = '' }) => {
     switch (type) {
       case 'tab':
         return cs('Tab', className, this.props.tabClass, {
@@ -175,55 +200,30 @@ export default class Tabs extends Component {
     }
   }
 
-  _onResize() {
-    this.setState({ blockWidth: this.tabsWrapper.offsetWidth });
-  }
-
-  _onChangeTab(selectedTabKey) {
-    this.setState({ selectedTabKey });
-    if (this.props.onChange) {
-      this.props.onChange(selectedTabKey);
-    }
-  }
-
-  _onFocusTab(focusedTabKey) {
-    return () => this.setState({ focusedTabKey });
-  }
-
-  _onBlurTab() {
-    this.setState({ focusedTabKey: null });
-  }
-
-  _onKeyDown(event) {
-    if (event.keyCode === 13 && this.state.focusedTabKey !== null) {
-      this.setState({ selectedTabKey: this.state.focusedTabKey });
-    }
-  }
-
   render() {
-    const { tabsVisible, tabsHidden, panels } = this._getTabs();
+    const { tabsVisible, tabsHidden, panels } = this.getTabs();
     const wrapperClasses = cs('Tabs__wrapper', this.props.wrapperClass);
 
     return (
       <div
         className={wrapperClasses}
         ref={e => (this.tabsWrapper = e)}
-        onKeyDown={this._onKeyDown}
+        onKeyDown={this.onKeyDown}
       >
         {panels.reduce((result, panel) => {
           if (tabsVisible[panel.key]) {
-            result.push(<Tab {...this._getTabProps(tabsVisible[panel.key])} />);
+            result.push(<Tab {...this.getTabProps(tabsVisible[panel.key])} />);
           }
-          result.push(<TabPanel {...this._getPanelProps(panel)} />);
+          result.push(<TabPanel {...this.getPanelProps(panel)} />);
           return result;
         }, [])}
 
         <ShowMore ref={e => (this.tabsShowMore = e)} isShown={this.props.showMore}>
-          {tabsHidden.map(tab => <Tab {...this._getTabProps(tab)} />)}
+          {tabsHidden.map(tab => <Tab {...this.getTabProps(tab)} />)}
         </ShowMore>
 
         {(this.props.showMore || this.props.transform) &&
-          <ResizeDetector handleWidth onResize={this._onResize} />
+          <ResizeDetector handleWidth onResize={this.onResize} />
         }
       </div>
     );
@@ -232,17 +232,10 @@ export default class Tabs extends Component {
 
 Tabs.propTypes = {
   /* eslint-disable react/no-unused-prop-types */
-  items: PropTypes.arrayOf(PropTypes.shape({
-    key: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-    title: PropTypes.string,
-    panelClassName: PropTypes.string,
-    tabClassName: PropTypes.string,
-    content: PropTypes.oneOfType([
-      PropTypes.array,
-      PropTypes.object,
-      PropTypes.string,
-    ]),
-  })),
+  items: PropTypes.oneOfType([
+    PropTypes.array,
+    PropTypes.object,
+  ]),
   /* eslint-enable react/no-unused-prop-types */
   selectedTabKey: PropTypes.oneOfType([
     PropTypes.number,

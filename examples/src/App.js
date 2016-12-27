@@ -38,7 +38,9 @@ const presidents = [
 function getTabs() {
   return presidents.map(president => ({
     title: president.name,
-    content: president.biography,
+    getContent: () => {
+      return president.biography;
+    },
     tabClassName: 'aaaa',
     panelClassName: 'bbbb',
   }));

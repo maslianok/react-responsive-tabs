@@ -8,7 +8,7 @@ export default class TabPanel extends Component {
   }
 
   render() {
-    const { classNames, id, tabId, selected, children } = this.props;
+    const { classNames, id, tabId, selected, children, getContent } = this.props;
 
     return (
       <div
@@ -18,13 +18,15 @@ export default class TabPanel extends Component {
         aria-labelledby={tabId}
         aria-hidden={selected ? 'false' : 'true'}
       >
-        {children}
+        {selected && getContent && getContent()}
+        {!getContent && children}
       </div>
     );
   }
 }
 
 TabPanel.propTypes = {
+  getContent: PropTypes.func,
   children: PropTypes.oneOfType([
     PropTypes.array,
     PropTypes.object,

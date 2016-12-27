@@ -9,12 +9,6 @@ export default class ShowMore extends Component {
       isFocused: false,
       isHidden: true,
     };
-
-    this.onKeyDown = this.onKeyDown.bind(this);
-    this.close = this.close.bind(this);
-    this.toggleVisibility = this.toggleVisibility.bind(this);
-    this.onFocus = this.onFocus.bind(this);
-    this.onBlur = this.onBlur.bind(this);
   }
 
   componentWillMount() {
@@ -37,15 +31,11 @@ export default class ShowMore extends Component {
     }
   }
 
-  onFocus() {
-    this.setState({ isFocused: true });
-  }
+  onFocus = () => this.setState({ isFocused: true });
 
-  onBlur() {
-    this.setState({ isFocused: false });
-  }
+  onBlur = () => this.setState({ isFocused: false });
 
-  onKeyDown(event) {
+  onKeyDown = (event) => {
     const { isFocused, isHidden } = this.state;
     if (event.keyCode === 13) {
       if (isFocused) {
@@ -56,13 +46,13 @@ export default class ShowMore extends Component {
     }
   }
 
-  close() {
+  close = () => {
     if (!this.state.isHidden) {
       this.setState({ isHidden: true });
     }
   }
 
-  toggleVisibility(event) {
+  toggleVisibility = (event) => {
     event.stopPropagation();
     this.setState({ isHidden: !this.state.isHidden });
   }
