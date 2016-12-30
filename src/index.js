@@ -67,6 +67,9 @@ export default class Tabs extends Component {
   }
 
   setTabsWidth = () => {
+    if (!this.tabsWrapper) {
+      return;
+    }
     const blockWidth = this.tabsWrapper.offsetWidth;
     let tabsTotalWidth = 0;
     const tabsWidth = {};
