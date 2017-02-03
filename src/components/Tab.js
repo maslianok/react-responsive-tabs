@@ -1,10 +1,10 @@
-import React, { Component, PropTypes } from 'react';
+import React, { PureComponent, PropTypes } from 'react';
 
 function onTabClick(selected, onClick, originalKey) {
   return () => !selected && onClick(originalKey);
 }
 
-export default class Tab extends Component {
+export default class Tab extends PureComponent {
   shouldComponentUpdate(nextProps) {
     return this.props.children !== nextProps.children ||
       this.props.selected !== nextProps.selected ||
@@ -55,15 +55,20 @@ Tab.propTypes = {
   disabled: PropTypes.bool,
 
   // generic props
-  panelId: PropTypes.string,
-  selected: PropTypes.bool,
-  onClick: PropTypes.func,
-  onFocus: PropTypes.func,
-  onBlur: PropTypes.func,
-  id: PropTypes.string,
+  panelId: PropTypes.string.isRequired,
+  selected: PropTypes.bool.isRequired,
+  onClick: PropTypes.func.isRequired,
+  onFocus: PropTypes.func.isRequired,
+  onBlur: PropTypes.func.isRequired,
+  id: PropTypes.string.isRequired,
   originalKey: PropTypes.oneOfType([
     PropTypes.number,
     PropTypes.string,
-  ]),
-  classNames: PropTypes.string,
+  ]).isRequired,
+  classNames: PropTypes.string.isRequired,
+};
+
+Tab.defaultProps = {
+  children: undefined,
+  disabled: false,
 };

@@ -1,7 +1,7 @@
-import React, { Component, PropTypes } from 'react';
+import React, { PureComponent, PropTypes } from 'react';
 import classNames from 'classnames';
 
-export default class ShowMore extends Component {
+export default class ShowMore extends PureComponent {
   constructor() {
     super();
 
@@ -99,4 +99,8 @@ ShowMore.propTypes = {
     PropTypes.string,
   ]),
   isShown: PropTypes.bool.isRequired,
+};
+
+ShowMore.defaultProps = {
+  children: undefined,
 };

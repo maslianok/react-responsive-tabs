@@ -1,6 +1,6 @@
-import React, { Component, PropTypes } from 'react';
+import React, { PureComponent, PropTypes } from 'react';
 
-export default class TabPanel extends Component {
+export default class TabPanel extends PureComponent {
   shouldComponentUpdate(nextProps) {
     return this.props.children !== nextProps.children ||
       this.props.classNames !== nextProps.classNames ||
@@ -32,10 +32,15 @@ TabPanel.propTypes = {
     PropTypes.object,
     PropTypes.string,
   ]),
-  id: PropTypes.string,
+  id: PropTypes.string.isRequired,
 
   // generic props
-  classNames: PropTypes.string,
-  selected: PropTypes.bool,
-  tabId: PropTypes.string,
+  classNames: PropTypes.string.isRequired,
+  selected: PropTypes.bool.isRequired,
+  tabId: PropTypes.string.isRequired,
+};
+
+TabPanel.defaultProps = {
+  getContent: undefined,
+  children: undefined,
 };

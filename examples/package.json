@@ -4,7 +4,7 @@
   "private": true,
   "devDependencies": {
     "linklocal": "^2.6.1",
-    "react-scripts": "0.7.0"
+    "react-scripts": "0.8.5"
   },
   "dependencies": {
     "react": "^15.3.2",

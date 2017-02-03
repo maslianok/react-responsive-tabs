@@ -1,4 +1,4 @@
-import React, { PropTypes, Component } from 'react';
+import React, { PropTypes, PureComponent } from 'react';
 import ResizeDetector from 'react-resize-detector';
 import cs from 'classnames';
 
@@ -9,7 +9,7 @@ import TabPanel from './components/TabPanel';
 const tabPrefix = 'tab-';
 const panelPrefix = 'panel-';
 
-export default class Tabs extends Component {
+export default class Tabs extends PureComponent {
   constructor(props) {
     super(props);
 
@@ -254,10 +254,13 @@ Tabs.propTypes = {
 };
 
 Tabs.defaultProps = {
+  items: [],
+  selectedTabKey: undefined,
   showMore: true,
   transform: true,
   transformWidth: 800,
   wrapperClass: '',
   tabClass: '',
   panelClass: '',
+  onChange: () => null,
 };

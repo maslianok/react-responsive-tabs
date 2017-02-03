@@ -14,7 +14,7 @@ const presidents = [
     biography: 'Thomas Jefferson (April 13 1743 – July 4, 1826) was an American lawyer',
   },
   {
-    name: 'Abraham Lincoln1',
+    name: 'Abraham Lincoln',
     biography: 'Abraham Lincoln (February 12, 1809 – April 15, 1865) was the 16th President of the United States',
   },
   {
