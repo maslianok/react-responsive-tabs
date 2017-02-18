@@ -215,14 +215,14 @@ export default class Tabs extends PureComponent {
       >
         {panels.reduce((result, panel) => {
           if (tabsVisible[panel.key]) {
-            result.push(<Tab {...this.getTabProps(tabsVisible[panel.key]) } />);
+            result.push(<Tab {...this.getTabProps(tabsVisible[panel.key])} />);
           }
-          result.push(<TabPanel {...this.getPanelProps(panel) } />);
+          result.push(<TabPanel {...this.getPanelProps(panel)} />);
           return result;
         }, [])}
 
         <ShowMore ref={e => (this.tabsShowMore = e)} isShown={this.props.showMore}>
-          {tabsHidden.map(tab => <Tab {...this.getTabProps(tab) } />)}
+          {tabsHidden.map(tab => <Tab {...this.getTabProps(tab)} />)}
         </ShowMore>
 
         {(this.props.showMore || this.props.transform) &&
