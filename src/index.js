@@ -1,10 +1,11 @@
-import React, { PropTypes, PureComponent } from 'react';
+import React, { PropTypes, Component, PureComponent } from 'react';
 import ResizeDetector from 'react-resize-detector';
 import cs from 'classnames';
 
 import ShowMore from './components/ShowMore';
 import Tab from './components/Tab';
 import TabPanel from './components/TabPanel';
+import InkBar from './components/InkBar';
 
 const tabPrefix = 'tab-';
 const panelPrefix = 'panel-';
@@ -95,6 +96,8 @@ export default class Tabs extends PureComponent {
     const collapsed = blockWidth && transform && blockWidth < transformWidth;
 
     let tabIndex = 0;
+    let tabLeft = 0;
+    let tabWidth = 0;
     let availableWidth = blockWidth - (tabsTotalWidth > blockWidth ? showMoreWidth : 0);
 
     return items.reduce((result, item, index) => {
@@ -123,9 +126,18 @@ export default class Tabs extends PureComponent {
         className: panelClassName,
       };
 
-      const tabWidth = tabsWidth[key] || 0;
+      // Update tab left (based on width of previous tab)
+      tabLeft = tabIndex == 0 ? 0 : tabLeft + tabWidth
+
+      // Update tab width 
+      tabWidth = tabsWidth[key] || 0;
+
+      // Add tab dimensions to tab payload 
+      tabPayload.left = tabLeft
+      tabPayload.width = tabWidth
 
       tabIndex += 1;
+
 
       /* eslint-disable no-param-reassign */
       if (
@@ -150,7 +162,7 @@ export default class Tabs extends PureComponent {
       availableWidth -= tabWidth;
 
       return result;
-    }, { tabsVisible: {}, tabsHidden: [], panels: [] });
+    }, { collapsed, tabsVisible: {}, tabsHidden: [], panels: [] });
   }
 
   getTabProps = ({ title, key, selected, collapsed, tabIndex, disabled, className }) => ({
@@ -204,32 +216,68 @@ export default class Tabs extends PureComponent {
   }
 
   render() {
-    const { tabsVisible, tabsHidden, panels } = this.getTabs();
+
+    const { collapsed, tabsVisible, tabsHidden, panels } = this.getTabs();
     const wrapperClasses = cs('Tabs__wrapper', this.props.wrapperClass);
 
-    return (
-      <div
+    if (collapsed) {
+      return <div
         className={wrapperClasses}
         ref={e => (this.tabsWrapper = e)}
         onKeyDown={this.onKeyDown}
       >
-        {panels.reduce((result, panel) => {
+        {panels.reduce((result, panel, index) => {
           if (tabsVisible[panel.key]) {
-            result.push(<Tab {...this.getTabProps(tabsVisible[panel.key])} />);
+            result.push(<Tab {...this.getTabProps(tabsVisible[panel.key]) } />);
           }
-          result.push(<TabPanel {...this.getPanelProps(panel)} />);
+          result.push(<TabPanel {...this.getPanelProps(panel) } />);
           return result;
         }, [])}
 
         <ShowMore ref={e => (this.tabsShowMore = e)} isShown={this.props.showMore}>
-          {tabsHidden.map(tab => <Tab {...this.getTabProps(tab)} />)}
+          {tabsHidden.map(tab => <Tab {...this.getTabProps(tab) } />)}
         </ShowMore>
 
         {(this.props.showMore || this.props.transform) &&
           <ResizeDetector handleWidth onResize={this.onResize} />
         }
       </div>
-    );
+
+    } else {
+
+      let selectedTab = panels.map(panel => tabsVisible[panel.key]).find(tab => tab.selected)
+
+      return <div
+        className={wrapperClasses}
+        ref={e => (this.tabsWrapper = e)}
+        onKeyDown={this.onKeyDown}
+      >
+        {panels.reduce((result, panel, index) => {
+          if (tabsVisible[panel.key]) {
+            result.push(<Tab {...this.getTabProps(tabsVisible[panel.key]) } />);
+          }
+          return result;
+        }, [])}
+        <div style={{ width: '100%' }}>
+          <InkBar
+            left={selectedTab ? selectedTab.left : 0}
+            width={selectedTab ? selectedTab.width : 0}
+          />
+        </div>
+        {panels.reduce((result, panel, index) => {
+          result.push(<TabPanel {...this.getPanelProps(panel) } />);
+          return result;
+        }, [])}
+
+        <ShowMore ref={e => (this.tabsShowMore = e)} isShown={this.props.showMore}>
+          {tabsHidden.map(tab => <Tab {...this.getTabProps(tab) } />)}
+        </ShowMore>
+
+        {(this.props.showMore || this.props.transform) &&
+          <ResizeDetector handleWidth onResize={this.onResize} />
+        }
+      </div>
+    }
   }
 }
 
