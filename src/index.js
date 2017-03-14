@@ -252,7 +252,7 @@ export default class Tabs extends PureComponent {
         ref={e => (this.tabsWrapper = e)}
         onKeyDown={this.onKeyDown}
       >
-        {panels.reduce((result, panel, index) => {
+        {panels.reduce((result, panel) => {
           if (tabsVisible[panel.key]) {
             result.push(<Tab {...this.getTabProps(tabsVisible[panel.key]) } />);
           }
@@ -264,7 +264,7 @@ export default class Tabs extends PureComponent {
             width={selectedTab ? selectedTab.width : 0}
           />
         </div>
-        {panels.reduce((result, panel, index) => {
+        {panels.reduce((result, panel) => {
           result.push(<TabPanel {...this.getPanelProps(panel) } />);
           return result;
         }, [])}
