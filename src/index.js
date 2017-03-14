@@ -220,7 +220,7 @@ export default class Tabs extends PureComponent {
     const { collapsed, tabsVisible, tabsHidden, panels } = this.getTabs();
     const wrapperClasses = cs('Tabs__wrapper', this.props.wrapperClass);
 
-    if (collapsed) {
+    if (!this.props.showInkBar || collapsed) {
       return <div
         className={wrapperClasses}
         ref={e => (this.tabsWrapper = e)}
@@ -293,18 +293,20 @@ Tabs.propTypes = {
     PropTypes.string,
   ]),
   showMore: PropTypes.bool,
+  showInkBar: PropTypes.bool,
   transform: PropTypes.bool,
   transformWidth: PropTypes.number,
   wrapperClass: PropTypes.string,
   tabClass: PropTypes.string,
   panelClass: PropTypes.string,
-  onChange: PropTypes.func,
+  onChange: PropTypes.func
 };
 
 Tabs.defaultProps = {
   items: [],
   selectedTabKey: undefined,
   showMore: true,
+  showInkBar: false,
   transform: true,
   transformWidth: 800,
   wrapperClass: '',
