@@ -126,6 +126,9 @@ export default class Tabs extends PureComponent {
         className: panelClassName,
       };
 
+      // Result returns the key of the selected tab
+      result.selectedTabKey = selected ? key : result.selectedTabKey
+
       // Update tab left (based on width of previous tab)
       tabLeft = tabIndex == 0 ? 0 : tabLeft + tabWidth
 
@@ -162,7 +165,7 @@ export default class Tabs extends PureComponent {
       availableWidth -= tabWidth;
 
       return result;
-    }, { collapsed, tabsVisible: {}, tabsHidden: [], panels: [] });
+    }, { collapsed, selectedTabKey, tabsVisible: {}, tabsHidden: [], panels: [] });
   }
 
   getTabProps = ({ title, key, selected, collapsed, tabIndex, disabled, className }) => ({
@@ -217,7 +220,7 @@ export default class Tabs extends PureComponent {
 
   render() {
 
-    const { collapsed, tabsVisible, tabsHidden, panels } = this.getTabs();
+    const { collapsed, selectedTabKey, tabsVisible, tabsHidden, panels } = this.getTabs();
     const wrapperClasses = cs('Tabs__wrapper', this.props.wrapperClass);
 
     if (!this.props.showInkBar || collapsed) {
@@ -245,7 +248,7 @@ export default class Tabs extends PureComponent {
 
     } else {
 
-      let selectedTab = panels.map(panel => tabsVisible[panel.key]).find(tab => tab.selected)
+      let selectedTab = selectedTabKey ? tabsVisible[selectedTabKey] : null
 
       return <div
         className={wrapperClasses}
