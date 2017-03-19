@@ -36,7 +36,8 @@ const presidents = [
 ];
 
 function getTabs() {
-  return presidents.map(president => ({
+  return presidents.map((president, index) => ({
+    key: index,
     title: president.name,
     getContent: () => {
       return president.biography;
@@ -46,6 +47,15 @@ function getTabs() {
   }));
 }
 
-const App = () => <Tabs items={getTabs()} />;
+const App = () => (
+  <div>
+    <div style={{ marginBottom: 40 }}>
+      <Tabs items={getTabs()} selectedTabKey={0} />
+    </div>
+    <div style={{ marginBottom: 40 }}>
+      <Tabs showInkBar items={getTabs()} selectedTabKey={0} />
+    </div>
+  </div>
+);
 
 export default App;

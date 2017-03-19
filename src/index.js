@@ -5,6 +5,7 @@ import cs from 'classnames';
 import ShowMore from './components/ShowMore';
 import Tab from './components/Tab';
 import TabPanel from './components/TabPanel';
+import InkBar from './components/InkBar';
 
 const tabPrefix = 'tab-';
 const panelPrefix = 'panel-';
@@ -17,6 +18,7 @@ export default class Tabs extends PureComponent {
 
     this.state = {
       tabsWidth: {},
+      tabsOffset: {},
       blockWidth: 0,
       tabsTotalWidth: 0,
       showMoreWidth: 40,
@@ -73,13 +75,15 @@ export default class Tabs extends PureComponent {
     const blockWidth = this.tabsWrapper.offsetWidth;
     let tabsTotalWidth = 0;
     const tabsWidth = {};
+    const tabsOffset = {};
     Object.keys(this.tabRefs).forEach((key) => {
       const width = this.tabRefs[key].tab.offsetWidth;
       tabsWidth[key.replace(tabPrefix, '')] = width;
+      tabsOffset[key.replace(tabPrefix, '')] = tabsTotalWidth;
       tabsTotalWidth += width;
     });
 
-    const newState = { tabsWidth, tabsTotalWidth, blockWidth };
+    const newState = { tabsWidth, tabsOffset, tabsTotalWidth, blockWidth };
     const showMore = this.tabsShowMore.showMore;
 
     if (showMore) {
@@ -204,8 +208,10 @@ export default class Tabs extends PureComponent {
   }
 
   render() {
+    const { showInkBar, wrapperClass, showMore, transform } = this.props;
+    const { tabsOffset, tabsWidth, selectedTabKey } = this.state;
     const { tabsVisible, tabsHidden, panels } = this.getTabs();
-    const wrapperClasses = cs('Tabs__wrapper', this.props.wrapperClass);
+    const wrapperClasses = cs('Tabs__wrapper', wrapperClass);
 
     return (
       <div
@@ -221,13 +227,16 @@ export default class Tabs extends PureComponent {
           return result;
         }, [])}
 
-        <ShowMore ref={e => (this.tabsShowMore = e)} isShown={this.props.showMore}>
+        <ShowMore ref={e => (this.tabsShowMore = e)} isShown={showMore}>
           {tabsHidden.map(tab => <Tab {...this.getTabProps(tab)} />)}
         </ShowMore>
 
-        {(this.props.showMore || this.props.transform) &&
-          <ResizeDetector handleWidth onResize={this.onResize} />
-        }
+        {showInkBar && <InkBar
+          left={tabsOffset[selectedTabKey] || 0}
+          width={tabsWidth[selectedTabKey] || 0}
+        />}
+
+        {(showMore || transform) && <ResizeDetector handleWidth onResize={this.onResize} />}
       </div>
     );
   }
@@ -245,6 +254,7 @@ Tabs.propTypes = {
     PropTypes.string,
   ]),
   showMore: PropTypes.bool,
+  showInkBar: PropTypes.bool,
   transform: PropTypes.bool,
   transformWidth: PropTypes.number,
   wrapperClass: PropTypes.string,
@@ -257,6 +267,7 @@ Tabs.defaultProps = {
   items: [],
   selectedTabKey: undefined,
   showMore: true,
+  showInkBar: false,
   transform: true,
   transformWidth: 800,
   wrapperClass: '',
