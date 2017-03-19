@@ -213,8 +213,6 @@ export default class Tabs extends PureComponent {
     const { tabsVisible, tabsHidden, panels } = this.getTabs();
     const wrapperClasses = cs('Tabs__wrapper', wrapperClass);
 
-    console.log(tabsOffset, tabsWidth, selectedTabKey);
-
     return (
       <div
         className={wrapperClasses}
