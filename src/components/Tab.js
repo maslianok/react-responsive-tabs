@@ -27,7 +27,7 @@ export default class Tab extends PureComponent {
 
     return (
       <div
-        ref={e => (this.tab = e)}
+        ref={e => this.tab = e}
         role="tab"
         className={classNames}
         id={id}
@@ -47,11 +47,7 @@ export default class Tab extends PureComponent {
 }
 
 Tab.propTypes = {
-  children: PropTypes.oneOfType([
-    PropTypes.array,
-    PropTypes.object,
-    PropTypes.string,
-  ]),
+  children: PropTypes.oneOfType([PropTypes.array, PropTypes.object, PropTypes.string]),
   disabled: PropTypes.bool,
 
   // generic props
@@ -61,10 +57,7 @@ Tab.propTypes = {
   onFocus: PropTypes.func.isRequired,
   onBlur: PropTypes.func.isRequired,
   id: PropTypes.string.isRequired,
-  originalKey: PropTypes.oneOfType([
-    PropTypes.number,
-    PropTypes.string,
-  ]).isRequired,
+  originalKey: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
   classNames: PropTypes.string.isRequired,
 };
 

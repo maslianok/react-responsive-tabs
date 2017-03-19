@@ -3,9 +3,11 @@
   display: flex;
   flex-wrap: wrap;
 }
+
 .Tabs__hidden {
   display: none;
 }
+
 .Tab__styles {
   background: #eee;
   border: 1px solid #ddd;
@@ -14,6 +16,7 @@
   white-space: nowrap;
   margin-left: -1px;
 }
+
 .Tab {
   background: #eee;
   border-style: solid;
@@ -24,18 +27,23 @@
   white-space: nowrap;
   padding: .7em 1em;
 }
+
 .Tab--first {
   border-left-width: 1px;
 }
+
 .Tab--selected {
   background: #fff;
   border-color: #ddd #ddd #fff;
 }
+
 .Tab--disabled {
 }
+
 .Tab--collapsed {
   width: 100%;
 }
+
 .Tab:focus {
   z-index: 2;
 }
@@ -47,12 +55,15 @@
   order: 1;
   display: none;
 }
+
 .Tab-panel--selected {
   display: block;
 }
+
 .Tab-panel--collapsed {
   order: 0;
 }
+
 .Tabs__show-more {
   background: #eee;
   border: 1px solid #ddd;
@@ -62,24 +73,33 @@
   margin-left: -1px;
   position: relative;
 }
+
 .Tabs__show-more-label {
   padding: .7em 1em;
   position: relative;
   bottom: -1px;
   z-index: 1;
 }
+
 .Tabs__show-more-label--selected {
   background-color: #eee;
 }
+
 .Tabs__show-more-list {
   position: absolute;
   right: -1px;
   top: 100%;
   display: none;
 }
+
 .Tabs__show-more-list--opened {
   display: block;
 }
+
+.Tabs__inkbar-wrapper {
+  width: 100%;
+}
+
 .Tabs__inkbar {
   position: relative;
   bottom: 0;

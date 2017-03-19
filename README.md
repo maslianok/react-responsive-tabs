@@ -130,5 +130,8 @@ render(<App />, document.getElementById('root'));
 #### panelClass
 (String) Tab panel class
 
+#### showInkBar
+(Bool) Add MaterialUI [InkBar effect](http://maslianok.github.io/react-responsive-tabs/#showInkBar)
+
 ### License
 MIT

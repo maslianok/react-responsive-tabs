@@ -35,7 +35,7 @@ export default class ShowMore extends PureComponent {
 
   onBlur = () => this.setState({ isFocused: false });
 
-  onKeyDown = (event) => {
+  onKeyDown = event => {
     const { isFocused, isHidden } = this.state;
     if (event.keyCode === 13) {
       if (isFocused) {
@@ -44,21 +44,22 @@ export default class ShowMore extends PureComponent {
         this.setState({ isHidden: true });
       }
     }
-  }
+  };
 
   close = () => {
     if (!this.state.isHidden) {
       this.setState({ isHidden: true });
     }
-  }
+  };
 
-  toggleVisibility = (event) => {
+  toggleVisibility = event => {
     event.stopPropagation();
     this.setState({ isHidden: !this.state.isHidden });
-  }
+  };
 
   render() {
-    if (!this.props.isShown || !this.props.children || !this.props.children.length) {
+    const { isShown, children, onShowMoreChanged } = this.props;
+    if (!isShown || !children || !children.length) {
       return null;
     }
 
@@ -75,7 +76,7 @@ export default class ShowMore extends PureComponent {
 
     return (
       <div
-        ref={el => (this.showMore = el)}
+        ref={onShowMoreChanged}
         className="Tabs__show-more"
         role="navigation"
         tabIndex="0"
@@ -85,7 +86,7 @@ export default class ShowMore extends PureComponent {
       >
         <div className={showMoreLabelStyles}>...</div>
         <div className={listStyles} aria-hidden={isListHidden} role="menu">
-          {this.props.children}
+          {children}
         </div>
       </div>
     );
@@ -93,14 +94,12 @@ export default class ShowMore extends PureComponent {
 }
 
 ShowMore.propTypes = {
-  children: PropTypes.oneOfType([
-    PropTypes.array,
-    PropTypes.object,
-    PropTypes.string,
-  ]),
+  children: PropTypes.oneOfType([PropTypes.array, PropTypes.object, PropTypes.string]),
   isShown: PropTypes.bool.isRequired,
+  onShowMoreChanged: PropTypes.func,
 };
 
 ShowMore.defaultProps = {
   children: undefined,
+  onShowMoreChanged: () => null,
 };

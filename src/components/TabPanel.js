@@ -9,7 +9,14 @@ export default class TabPanel extends PureComponent {
   }
 
   render() {
-    const { classNames, id, tabId, selected, children, getContent } = this.props;
+    const {
+      classNames,
+      id,
+      tabId,
+      selected,
+      children,
+      getContent,
+    } = this.props;
 
     return (
       <div
@@ -28,11 +35,7 @@ export default class TabPanel extends PureComponent {
 
 TabPanel.propTypes = {
   getContent: PropTypes.func,
-  children: PropTypes.oneOfType([
-    PropTypes.array,
-    PropTypes.object,
-    PropTypes.string,
-  ]),
+  children: PropTypes.oneOfType([PropTypes.array, PropTypes.object, PropTypes.string]),
   id: PropTypes.string.isRequired,
 
   // generic props

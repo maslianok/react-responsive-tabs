@@ -35,25 +35,31 @@ const presidents = [
   },
 ];
 
-function getTabs() {
+function getTabs(tabClassName, panelClassName) {
   return presidents.map((president, index) => ({
     key: index,
     title: president.name,
     getContent: () => {
       return president.biography;
     },
-    tabClassName: 'aaaa',
-    panelClassName: 'bbbb',
+    tabClassName,
+    panelClassName,
   }));
 }
 
 const App = () => (
   <div>
     <div style={{ marginBottom: 40 }}>
+      <h2 id="default">Default props</h2>
       <Tabs items={getTabs()} selectedTabKey={0} />
     </div>
     <div style={{ marginBottom: 40 }}>
-      <Tabs showInkBar items={getTabs()} selectedTabKey={0} />
+      <h2 id="transformWidth">transformWidth: 600px</h2>
+      <Tabs transformWidth={600} items={getTabs()} selectedTabKey={0} />
+    </div>
+    <div style={{ marginBottom: 40 }}>
+      <h2 id="showInkBar">showInkBar: true</h2>
+      <Tabs showInkBar items={getTabs('withoutFocus')} selectedTabKey={0} />
     </div>
   </div>
 );
