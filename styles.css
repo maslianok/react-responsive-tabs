@@ -16,15 +16,16 @@
 }
 .Tab {
   background: #eee;
-  border: 1px solid #ddd;
+  border-style: solid;
+  border-color: #ddd;
+  border-width: 1px 1px 1px 0;
   cursor: pointer;
   z-index: 1;
   white-space: nowrap;
-  margin-left: -1px;
   padding: .7em 1em;
 }
 .Tab--first {
-  margin-left: 0;
+  border-left-width: 1px;
 }
 .Tab--selected {
   background: #fff;
@@ -78,4 +79,13 @@
 }
 .Tabs__show-more-list--opened {
   display: block;
+}
+.Tabs__inkbar {
+  position: relative;
+  bottom: 0;
+  height: 2px;
+  margin-top: -2px;
+  background-color: deepskyblue;
+  transition: left 800ms cubic-bezier(0.23, 1, 0.32, 1);
+  z-index: 2;
 }
