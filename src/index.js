@@ -331,7 +331,7 @@ Tabs.defaultProps = {
   showInkBar: false,
   transform: true,
   transformWidth: 800,
-  resizeThrottle: 300,
+  resizeThrottle: 100,
   containerClass: undefined,
   tabsWrapperClass: undefined,
   tabClass: undefined,
