@@ -4,8 +4,7 @@ export default class TabPanel extends PureComponent {
   shouldComponentUpdate(nextProps) {
     return this.props.getContent !== nextProps.getContent ||
       this.props.children !== nextProps.children ||
-      this.props.classNames !== nextProps.classNames ||
-      this.props.selected !== nextProps.selected;
+      this.props.classNames !== nextProps.classNames;
   }
 
   render() {
@@ -13,20 +12,13 @@ export default class TabPanel extends PureComponent {
       classNames,
       id,
       tabId,
-      selected,
       children,
       getContent,
     } = this.props;
 
     return (
-      <div
-        className={classNames}
-        role="tabpanel"
-        id={id}
-        aria-labelledby={tabId}
-        aria-hidden={selected ? 'false' : 'true'}
-      >
-        {selected && getContent && getContent()}
+      <div className={classNames} role="tabpanel" id={id} aria-labelledby={tabId} aria-hidden="false">
+        {getContent && getContent()}
         {!getContent && children}
       </div>
     );
@@ -40,7 +32,6 @@ TabPanel.propTypes = {
 
   // generic props
   classNames: PropTypes.string.isRequired,
-  selected: PropTypes.bool.isRequired,
   tabId: PropTypes.string.isRequired,
 };
 

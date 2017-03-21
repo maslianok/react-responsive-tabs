@@ -1,0 +1,25 @@
+/* basic example */
+.basic__wrapper {
+  display: flex;
+  flex-grow: 1;
+}
+
+  .basic__props {
+    width: 200px;
+    flex-shrink: 0;
+    padding: 10px;
+    border-right: 1px solid #f0f0f0;
+  }
+
+    .basic__prop {
+      margin: 10px 0;
+    }
+
+      .basic__input {
+        width: 40px;
+      }
+
+  .basic__tabs {
+    padding: 10px;
+    flex-grow: 1;
+  }

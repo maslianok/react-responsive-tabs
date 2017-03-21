@@ -1,9 +1,53 @@
+html, body, #root {
+  min-height: 100%;
+}
+
 body {
-  margin: 10px;
+  margin: 0;
   padding: 0;
   font-family: sans-serif;
 }
 
-.withoutFocus:focus {
-  outline: 0;
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
+
+.jumbotron {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  height: 300px;
+  background-color: #6f5499;
+  color: #cdbfe3;
+  
+  font-size: 32px;
+}
+
+.github-link {
+  margin-top: 20px;
+}
+
+.menu {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  color: #563d7c;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.menu-item {
+  font-size: 18px;
+  font-variant: small-caps;
+  padding: 18px;
+  cursor: pointer;
+}
+
+.menu-item:hover,
+.menu-item--active {
+  background-color: #f9f9f9;
+  text-decoration: underline;
+}
+

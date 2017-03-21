@@ -65,19 +65,19 @@ export default class ShowMore extends PureComponent {
 
     const isListHidden = this.state.isHidden;
     const listStyles = classNames({
-      'Tabs__show-more-list': true,
-      'Tabs__show-more-list--opened': !isListHidden,
+      'RRT__showmore-list': true,
+      'RRT__showmore-list--opened': !isListHidden,
     });
 
     const showMoreLabelStyles = classNames({
-      'Tabs__show-more-label': true,
-      'Tabs__show-more-label--selected': !isListHidden,
+      'RRT__showmore-label': true,
+      'RRT__showmore-label--selected': !isListHidden,
     });
 
     return (
       <div
         ref={onShowMoreChanged}
-        className="Tabs__show-more"
+        className="RRT__showmore"
         role="navigation"
         tabIndex="0"
         onFocus={this.onFocus}

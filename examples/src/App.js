@@ -1,67 +1,78 @@
-/* eslint max-len: 0 */
-import React from 'react';
-import Tabs from 'react-responsive-tabs';
+import React, { PureComponent } from 'react';
+import ReactGA from 'react-ga';
+import Helmet from 'react-helmet';
+import cs from 'classnames';
 
 import 'react-responsive-tabs/styles.css';
+import './index.css';
 
-const presidents = [
-  {
-    name: 'George Washington',
-    biography: 'George Washington (February 22, 1732 – December 14, 1799) was the first President of the United States...',
-  },
-  {
-    name: 'Thomas Jefferson',
-    biography: 'Thomas Jefferson (April 13 1743 – July 4, 1826) was an American lawyer',
-  },
-  {
-    name: 'Abraham Lincoln',
-    biography: 'Abraham Lincoln (February 12, 1809 – April 15, 1865) was the 16th President of the United States',
-  },
-  {
-    name: 'Benjamin Harrison',
-    biography: 'Benjamin Harrison (August 20, 1833 – March 13, 1901) was the 23rd President of the United States',
-  },
-  {
-    name: 'William McKinley',
-    biography: 'William McKinley (January 29, 1843 – September 14, 1901) was the 25th President of the United States',
-  },
-  {
-    name: 'Franklin D. Roosevelt',
-    biography: 'Franklin Delano Roosevelt (January 30, 1882 – April 12, 1945), commonly known by his initials FDR, was an American statesman',
-  },
-  {
-    name: 'Theodore Roosevelt',
-    biography: 'Theodore Roosevelt (October 27, 1858 – January 6, 1919), often referred to as Teddy or TR...',
-  },
-];
+import BasicExample from './Basic';
+import TabsRemovalExample from './TabsRemoval';
 
-function getTabs(tabClassName, panelClassName) {
-  return presidents.map((president, index) => ({
-    key: index,
-    title: president.name,
-    getContent: () => {
-      return president.biography;
-    },
-    tabClassName,
-    panelClassName,
-  }));
+ReactGA.initialize('UA-94085609-1');
+ReactGA.set({ page: window.location.pathname });
+ReactGA.pageview(window.location.pathname);
+
+class App extends PureComponent {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      active: 'basic',
+    };
+  }
+
+  onChangeExample = type => () => this.setState({ active: type });
+
+  render() {
+    const { active } = this.state;
+    return (
+      <div className="container">
+        <Helmet
+          title="React tabs"
+          script={[{ src: 'https://buttons.github.io/buttons.js', async: true, defer: true }]}
+          meta={[
+            { name: 'description', content: 'React responsive tabs' },
+            { property: 'keywords', content: 'react, tabs, responsive, accordion' },
+          ]}
+        />
+        <div className="jumbotron">
+          <div>react-responsive-tabs</div>
+          <div className="github-link">
+            <a
+              className="github-button"
+              href="https://github.com/maslianok/react-responsive-tabs"
+              data-icon="octicon-star"
+              data-style="mega"
+              data-count-href="/maslianok/react-responsive-tabs/stargazers"
+              data-count-api="/repos/maslianok/react-responsive-tabs#stargazers_count"
+              data-count-aria-label="# stargazers on GitHub"
+              aria-label="Star maslianok/react-responsive-tabs on GitHub"
+            >
+              Star
+            </a>
+          </div>
+        </div>
+        <div className="menu">
+          <div
+            className={cs('menu-item', { 'menu-item--active': active === 'basic' })}
+            onClick={this.onChangeExample('basic')}
+          >
+            basic usage
+          </div>
+          <div
+            className={cs('menu-item', { 'menu-item--active': active === 'removal' })}
+            onClick={this.onChangeExample('removal')}
+          >
+            tabs removal
+          </div>
+        </div>
+
+        {active === 'basic' && <BasicExample />}
+        {active === 'removal' && <TabsRemovalExample />}
+      </div>
+    );
+  }
 }
-
-const App = () => (
-  <div>
-    <div style={{ marginBottom: 40 }}>
-      <h2 id="default">Default props</h2>
-      <Tabs items={getTabs()} selectedTabKey={0} />
-    </div>
-    <div style={{ marginBottom: 40 }}>
-      <h2 id="transformWidth">transformWidth: 600px</h2>
-      <Tabs transformWidth={600} items={getTabs()} selectedTabKey={0} />
-    </div>
-    <div style={{ marginBottom: 40 }}>
-      <h2 id="showInkBar">showInkBar: true</h2>
-      <Tabs showInkBar items={getTabs('withoutFocus')} selectedTabKey={0} />
-    </div>
-  </div>
-);
 
 export default App;

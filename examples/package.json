@@ -3,12 +3,20 @@
   "version": "0.1.0",
   "private": true,
   "devDependencies": {
+    "babel-eslint": "^7.2.0",
+    "eslint": "^3.18.0",
+    "eslint-config-airbnb": "^14.1.0",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-react": "^6.10.3",
     "linklocal": "^2.6.1",
-    "react-scripts": "0.8.5"
+    "react-scripts": "^0.9.5"
   },
   "dependencies": {
+    "classnames": "^2.2.5",
     "react": "^15.3.2",
     "react-dom": "^15.3.2",
+    "react-ga": "^2.1.2",
+    "react-helmet": "^4.0.0",
     "react-responsive-tabs": "file:../"
   },
   "scripts": {
