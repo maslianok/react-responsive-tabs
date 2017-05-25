@@ -1,8 +1,8 @@
-import React, { PropTypes, PureComponent } from 'react';
+import React, { PureComponent } from 'react';
 import ResizeDetector from 'react-resize-detector';
 import cs from 'classnames';
 import throttle from 'lodash.throttle';
-
+import PropTypes from 'prop-types';
 import ShowMore from './components/ShowMore';
 import Tab from './components/Tab';
 import TabPanel from './components/TabPanel';

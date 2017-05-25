@@ -1,4 +1,5 @@
-import React, { PureComponent, PropTypes } from 'react';
+import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 
 function onTabClick(selected, onClick, originalKey) {
   return () => !selected && onClick(originalKey);

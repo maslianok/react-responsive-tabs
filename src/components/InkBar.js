@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 
 export const InkBar = ({ left, width }) => (
   <div className="RRT__inkbar-wrapper"><div className="RRT__inkbar" style={{ left, width }} /></div>
