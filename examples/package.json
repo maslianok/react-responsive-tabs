@@ -16,7 +16,7 @@
     "react": "^15.3.2",
     "react-dom": "^15.3.2",
     "react-ga": "^2.1.2",
-    "react-helmet": "^4.0.0",
+    "react-helmet": "^5.1.3",
     "react-responsive-tabs": "file:../"
   },
   "scripts": {

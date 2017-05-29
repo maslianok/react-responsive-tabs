@@ -26,7 +26,8 @@
       {
         "requireForBlockBody": false
       }
-    ]
+    ],
+    "linebreak-style": ["error", "windows"]
   },
   "settings": {
     "import/resolve": {

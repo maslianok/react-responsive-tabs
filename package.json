@@ -29,10 +29,11 @@
     "react": "^0.14.7 || ^15.1.0"
   },
   "dependencies": {
-    "classnames": "^2.2.3",
+    "classnames": "^2.2.5",
     "lodash.throttle": "^4.1.1",
-    "react": "^15.4.2",
-    "react-resize-detector": "^0.3.0"
+    "prop-types": "^15.5.10",
+    "react": "^15.5.4",
+    "react-resize-detector": "^0.5.0"
   },
   "devDependencies": {
     "babel-cli": "^6.24.0",
