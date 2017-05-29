@@ -1,4 +1,4 @@
-#React responsive tabs
+# React responsive tabs
 
 ### Your feedback is highly appreciated!
 
