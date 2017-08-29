@@ -124,10 +124,10 @@ render(<App />, document.getElementById('root'));
 #### tabsWrapperClass
 (String) Wrapper class
 
-#### tabClass
+#### tabClassName
 (String) Tab class
 
-#### panelClass
+#### panelClassName
 (String) Tab panel class
 
 #### showInkBar
