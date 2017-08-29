@@ -1,3 +1,5 @@
+/* eslint jsx-a11y/no-noninteractive-element-interactions: 0, jsx-a11y/no-noninteractive-tabindex: 0 */
+
 import React, { PureComponent } from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
@@ -20,9 +22,11 @@ export default class ShowMore extends PureComponent {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    return this.props.children.length !== nextProps.children.length ||
+    return (
+      this.props.children.length !== nextProps.children.length ||
       this.props.isShown !== nextProps.isShown ||
-      this.state !== nextState;
+      this.state !== nextState
+    );
   }
 
   componentWillUnmount() {
