@@ -52,13 +52,15 @@ export default class Tabs extends PureComponent {
   shouldComponentUpdate(nextProps, nextState) {
     const { selectedTabKey, blockWidth, showMoreWidth } = this.state;
 
-    return this.props.items !== nextProps.items ||
+    return (
+      this.props.items !== nextProps.items ||
       nextProps.transform !== this.props.transform ||
       nextProps.showMore !== this.props.showMore ||
       nextProps.showInkBar !== this.props.showInkBar ||
       nextState.blockWidth !== blockWidth ||
       nextState.showMoreWidth !== showMoreWidth ||
-      nextState.selectedTabKey !== selectedTabKey;
+      nextState.selectedTabKey !== selectedTabKey
+    );
   }
 
   componentDidUpdate() {
@@ -68,7 +70,9 @@ export default class Tabs extends PureComponent {
   }
 
   onResize = () => {
-    this.setState({ blockWidth: this.tabsWrapper.offsetWidth });
+    if (this.tabsWrapper) {
+      this.setState({ blockWidth: this.tabsWrapper.offsetWidth });
+    }
   };
 
   onChangeTab = selectedTabKey => {
@@ -122,15 +126,7 @@ export default class Tabs extends PureComponent {
 
     return items.reduce(
       (result, item, index) => {
-        const {
-          key = index,
-          title,
-          content,
-          getContent,
-          disabled,
-          tabClassName,
-          panelClassName,
-        } = item;
+        const { key = index, title, content, getContent, disabled, tabClassName, panelClassName } = item;
 
         const selected = selectedTabKey === key;
         const payload = { tabIndex, collapsed, selected, disabled, key };
@@ -175,7 +171,7 @@ export default class Tabs extends PureComponent {
 
         return result;
       },
-      { tabsVisible: [], tabsHidden: [], panels: {} }
+      { tabsVisible: [], tabsHidden: [], panels: {} },
     );
   };
 
@@ -184,7 +180,7 @@ export default class Tabs extends PureComponent {
     children: title,
     key: tabPrefix + key,
     id: tabPrefix + key,
-    ref: e => this.tabRefs[tabPrefix + key] = e,
+    ref: e => (this.tabRefs[tabPrefix + key] = e),
     originalKey: key,
     onClick: this.onChangeTab,
     onFocus: this.onFocusTab,
@@ -266,29 +262,26 @@ export default class Tabs extends PureComponent {
     const tabsClasses = cs('RRT__tabs', tabsWrapperClass, { RRT__accordion: collapsed });
 
     return (
-      <div className={containerClasses} ref={e => this.tabsWrapper = e} onKeyDown={this.onKeyDown}>
+      <div className={containerClasses} ref={e => (this.tabsWrapper = e)} onKeyDown={this.onKeyDown}>
         <div className={tabsClasses}>
-          {tabsVisible.reduce(
-            (result, tab) => {
-              result.push(<Tab {...this.getTabProps(tab)} />);
+          {tabsVisible.reduce((result, tab) => {
+            result.push(<Tab {...this.getTabProps(tab)} />);
 
-              if (collapsed && selectedTabKey === tab.key) {
-                result.push(<TabPanel {...this.getPanelProps(panels[tab.key])} />);
-              }
-              return result;
-            },
-            []
-          )}
+            if (collapsed && selectedTabKey === tab.key) {
+              result.push(<TabPanel {...this.getPanelProps(panels[tab.key])} />);
+            }
+            return result;
+          }, [])}
 
-          {!collapsed &&
+          {!collapsed && (
             <ShowMore onShowMoreChanged={this.showMoreChanged} isShown={showMore}>
               {tabsHidden.map(tab => <Tab {...this.getTabProps(tab)} />)}
-            </ShowMore>}
+            </ShowMore>
+          )}
         </div>
 
         {showInkBar &&
-          !collapsed &&
-          <InkBar left={selectedTabDimensions.offset || 0} width={selectedTabDimensions.width || 0} />}
+        !collapsed && <InkBar left={selectedTabDimensions.offset || 0} width={selectedTabDimensions.width || 0} />}
 
         {!collapsed && panels[selectedTabKey] && <TabPanel {...this.getPanelProps(panels[selectedTabKey])} />}
 
