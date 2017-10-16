@@ -1,10 +1,10 @@
 /* eslint jsx-a11y/no-noninteractive-element-interactions: 0, jsx-a11y/no-noninteractive-tabindex: 0 */
 
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 
-export default class ShowMore extends PureComponent {
+export default class ShowMore extends Component {
   constructor() {
     super();
 
