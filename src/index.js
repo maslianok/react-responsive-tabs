@@ -182,8 +182,9 @@ export default class Tabs extends PureComponent {
     );
   };
 
-  getTabProps = ({ title, key, selected, collapsed, tabIndex, disabled, className, onRemove, allowRemove,
-                   removeActiveOnly }) => ({
+  getTabProps = ({
+    title, key, selected, collapsed, tabIndex, disabled, className, onRemove, allowRemove, removeActiveOnly
+  }) => ({
     selected,
     children: title,
     key: tabPrefix + key,
@@ -291,12 +292,12 @@ export default class Tabs extends PureComponent {
           )}
         </div>
 
-        {showInkBar &&
-        !collapsed && <InkBar left={selectedTabDimensions.offset || 0} width={selectedTabDimensions.width || 0} />}
+        {showInkBar && !collapsed &&
+        <InkBar left={selectedTabDimensions.offset || 0} width={selectedTabDimensions.width || 0} /> }
 
         {!collapsed && panels[selectedTabKey] && <TabPanel {...this.getPanelProps(panels[selectedTabKey])} />}
 
-        {(showMore || transform) && <ResizeDetector handleWidth onResize={this.onResizeThrottled} />}
+        {(showMore || transform) && <ResizeDetector handleWidth onResize={this.onResizeThrottled} /> }
       </div>
     );
   }

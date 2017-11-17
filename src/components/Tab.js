@@ -12,28 +12,25 @@ export default class Tab extends PureComponent {
       this.props.classNames !== nextProps.classNames;
   }
 
-  _renderTabs = (selected, tabs, onRemove, allowRemove, removeActiveOnly) => {
-    if (allowRemove && !removeActiveOnly) {
-      return (
-        <div style={{ position: 'relative', background: 'red' }}>
-          <div style={{ marginRight: '10px'}}>{tabs}</div>
-          <div style={{ position: 'absolute', rigth: '10px', top: '10px' }} onClick={onRemove()}>x</div>
-        </div>
-      );
+  _renderRemovableTab = (children, onRemove) => (
+    <div className="RRT__removable">
+      <div className="RRT__removable-text">{children}</div>
+      <div className="RRT__removable-icon" onClick={onRemove()}>x</div>
+    </div>
+  );
 
-    } else if (allowRemove && removeActiveOnly) {
+  _renderTabs = (selected, children, onRemove, allowRemove, removeActiveOnly) => {
+    if (allowRemove && !removeActiveOnly) this._renderRemovableTab(children, onRemove);
+
+    if (allowRemove && removeActiveOnly) {
       return (
         selected ?
-          (
-            <div style={{ position: 'relative', background: 'red' }}>
-              <div style={{ marginRight: '10px'}}>{tabs}</div>
-              <div style={{ position: 'absolute', right: '10px', top: '10px' }} onClick={onRemove()}>x</div>
-            </div>
-          ) : <div>{tabs}</div>
+          this._renderRemovableTab(children, onRemove) :
+          children
       );
     }
 
-    return (tabs);
+    return (children);
   };
 
   render() {
@@ -91,6 +88,8 @@ Tab.propTypes = {
   onRemove: PropTypes.func,
   onFocus: PropTypes.func.isRequired,
   onBlur: PropTypes.func.isRequired,
+  allowRemove: PropTypes.bool,
+  removeActiveOnly: PropTypes.bool,
   id: PropTypes.string.isRequired,
   originalKey: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
   classNames: PropTypes.string.isRequired,
@@ -98,7 +97,8 @@ Tab.propTypes = {
 
 Tab.defaultProps = {
   children: undefined,
-  onRemove: () => {
-  },
+  onRemove: () => {},
+  allowRemove: false,
+  removeActiveOnly: false,
   disabled: false,
 };
