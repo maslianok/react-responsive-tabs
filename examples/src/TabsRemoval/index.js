@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, {PureComponent} from 'react';
 import Tabs from 'react-responsive-tabs';
 
 import dummyData from '../dummyData';
@@ -11,12 +11,17 @@ export class TabsRemoval extends PureComponent {
 
     this.state = {
       items: this.getTabs(),
+      tabOptions: {
+        selectedTabKey: 0,
+        allowRemove: true,
+        removeActiveOnly: true
+      }
     };
   }
 
   onChangeProp = propsName =>
     evt => {
-      this.setState({ [propsName]: evt.target.type === 'checkbox' ? evt.target.checked : +evt.target.value });
+      this.setState({[propsName]: evt.target.type === 'checkbox' ? evt.target.checked : +evt.target.value});
     };
 
   onRemoveTab = key =>
@@ -32,26 +37,29 @@ export class TabsRemoval extends PureComponent {
       // create a new array without [indexToRemove] item
       const newTabs = [...currentTabs.slice(0, indexToRemove), ...currentTabs.slice(indexToRemove + 1)];
 
-      this.setState({ items: newTabs });
+      this.setState({items: newTabs});
     };
 
   getTabs = () =>
-    dummyData.map(({ name, biography }, i) => ({
+    dummyData.map(({name, biography}, i) => ({
       key: i,
       title: (
         <div className="tab-container">
           <div className="tab-name">{name}</div>
-          <div className="tab-cross-icon" onClick={this.onRemoveTab(i)}>x</div>
         </div>
       ),
       getContent: () => biography,
+      onRemove: () => this.onRemoveTab(i),
       tabClassName: 'tab-wrapper',
     }));
 
   render() {
     return (
       <div className="itemRemoval__wrapper">
-        <Tabs items={this.state.items} />
+        <Tabs
+          items={this.state.items}
+          {...this.state.tabOptions}
+        />
       </div>
     );
   }
