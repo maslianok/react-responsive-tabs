@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import ResizeDetector from 'react-resize-detector';
 import cs from 'classnames';
 import throttle from 'lodash.throttle';
@@ -11,7 +11,7 @@ import InkBar from './components/InkBar';
 const tabPrefix = 'tab-';
 const panelPrefix = 'panel-';
 
-export default class Tabs extends PureComponent {
+export default class Tabs extends Component {
   constructor(props) {
     super(props);
 

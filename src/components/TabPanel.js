@@ -1,7 +1,7 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-export default class TabPanel extends PureComponent {
+export default class TabPanel extends Component {
   shouldComponentUpdate(nextProps) {
     return this.props.getContent !== nextProps.getContent ||
       this.props.children !== nextProps.children ||
