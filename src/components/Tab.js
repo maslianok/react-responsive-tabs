@@ -12,20 +12,20 @@ export default class Tab extends PureComponent {
       this.props.classNames !== nextProps.classNames;
   }
 
-  _renderRemovableTab = (children, onRemove) => (
+  _renderRemovableTab = (children, onRemove, tabRemoveButton) => (
     <div className="RRT__removable">
       <div className="RRT__removable-text">{children}</div>
-      <div className="RRT__removable-icon" onClick={onRemove()}>x</div>
+      <div className="RRT__removable-icon" onClick={onRemove()}>{tabRemoveButton}</div>
     </div>
   );
 
-  _renderTabs = (selected, children, onRemove, allowRemove, removeActiveOnly) => {
-    if (allowRemove && !removeActiveOnly) this._renderRemovableTab(children, onRemove);
+  _renderTabs = (selected, children, onRemove, allowRemove, removeActiveOnly, tabRemoveButton) => {
+    if (allowRemove && !removeActiveOnly) this._renderRemovableTab(children, onRemove, tabRemoveButton);
 
     if (allowRemove && removeActiveOnly) {
       return (
         selected ?
-          this._renderRemovableTab(children, onRemove) :
+          this._renderRemovableTab(children, onRemove, tabRemoveButton) :
           children
       );
     }
@@ -47,7 +47,8 @@ export default class Tab extends PureComponent {
       children,
       onRemove,
       allowRemove,
-      removeActiveOnly
+      removeActiveOnly,
+      tabRemoveButton
     } = this.props;
 
     return (
@@ -70,7 +71,8 @@ export default class Tab extends PureComponent {
           children,
           onRemove,
           allowRemove,
-          removeActiveOnly
+          removeActiveOnly,
+          tabRemoveButton
         )}
       </div>
     );
@@ -90,6 +92,7 @@ Tab.propTypes = {
   onBlur: PropTypes.func.isRequired,
   allowRemove: PropTypes.bool,
   removeActiveOnly: PropTypes.bool,
+  tabRemoveButton: PropTypes.object,
   id: PropTypes.string.isRequired,
   originalKey: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
   classNames: PropTypes.string.isRequired,
@@ -100,5 +103,6 @@ Tab.defaultProps = {
   onRemove: () => {},
   allowRemove: false,
   removeActiveOnly: false,
+  tabRemoveButton: () => 'x',
   disabled: false,
 };

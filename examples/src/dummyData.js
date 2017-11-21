@@ -1,6 +1,6 @@
 /* eslint max-len: 0 */
 
-export const presidents = [
+export const tabs = [
   {
     name: 'George Washington',
     biography: 'George Washington (February 22, 1732 – December 14, 1799) was the first President of the United States...',
@@ -31,4 +31,7 @@ export const presidents = [
   },
 ];
 
-export default presidents;
+export const newTab = {
+  name: 'New Tab',
+  biography: 'Some very important information displayed here...'
+};

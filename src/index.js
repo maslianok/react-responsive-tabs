@@ -23,8 +23,6 @@ export default class Tabs extends PureComponent {
       tabsTotalWidth: 0,
       showMoreWidth: 40,
       selectedTabKey: props.selectedTabKey,
-      allowRemove: props.allowRemove,
-      removeActiveOnly: props.removeActiveOnly,
       focusedTabKey: null,
     };
 
@@ -62,6 +60,7 @@ export default class Tabs extends PureComponent {
       nextState.blockWidth !== blockWidth ||
       nextState.showMoreWidth !== showMoreWidth ||
       nextState.selectedTabKey !== selectedTabKey ||
+      nextState.allowAdd !== this.props.allowAdd ||
       nextState.allowRemove !== this.props.allowRemove ||
       nextState.removeActiveOnly !== this.props.removeActiveOnly
     );
@@ -120,8 +119,8 @@ export default class Tabs extends PureComponent {
   };
 
   getTabs = () => {
-    const { showMore, transform, transformWidth, items } = this.props;
-    const { blockWidth, tabsTotalWidth, tabDimensions, showMoreWidth, allowRemove, removeActiveOnly } = this.state;
+    const { showMore, transform, transformWidth, items, allowRemove, removeActiveOnly } = this.props;
+    const { blockWidth, tabsTotalWidth, tabDimensions, showMoreWidth } = this.state;
     const selectedTabKey = this.getSelectedTabKey();
     const collapsed = blockWidth && transform && blockWidth < transformWidth;
 
@@ -157,15 +156,15 @@ export default class Tabs extends PureComponent {
         /* eslint-disable no-param-reassign */
         if (
           // don't need to `Show more` button
-          !showMore ||
-          // initial call
-          !blockWidth ||
-          // collapsed mode
-          collapsed ||
-          // all tabs are fit into the block
-          blockWidth > tabsTotalWidth ||
-          // current tab fit into the block
-          availableWidth - tabWidth > 0
+        !showMore ||
+        // initial call
+        !blockWidth ||
+        // collapsed mode
+        collapsed ||
+        // all tabs are fit into the block
+        blockWidth > tabsTotalWidth ||
+        // current tab fit into the block
+        availableWidth - tabWidth > 0
         ) {
           result.tabsVisible.push(tabPayload);
         } else {
@@ -182,30 +181,37 @@ export default class Tabs extends PureComponent {
     );
   };
 
-  getTabProps = ({
-    title, key, selected, collapsed, tabIndex, disabled, className, onRemove, allowRemove, removeActiveOnly
-  }) => ({
-    selected,
-    children: title,
-    key: tabPrefix + key,
-    id: tabPrefix + key,
-    ref: e => (this.tabRefs[tabPrefix + key] = e),
-    originalKey: key,
-    onClick: this.onChangeTab,
-    onFocus: this.onFocusTab,
-    onBlur: this.onBlurTab,
-    onRemove,
-    allowRemove,
-    removeActiveOnly,
-    panelId: panelPrefix + key,
-    classNames: this.getClassNamesFor('tab', {
+  getTabProps = tab => {
+    const {
+      title, key, selected, collapsed, tabIndex, disabled,
+      className, onRemove, allowRemove, removeActiveOnly
+    } = tab;
+    const { tabRemoveButton } = this.props;
+
+    return {
       selected,
-      collapsed,
-      tabIndex,
-      disabled,
-      className,
-    }),
-  });
+      children: title,
+      key: tabPrefix + key,
+      id: tabPrefix + key,
+      ref: e => (this.tabRefs[tabPrefix + key] = e),
+      originalKey: key,
+      onClick: this.onChangeTab,
+      onFocus: this.onFocusTab,
+      onBlur: this.onBlurTab,
+      onRemove,
+      allowRemove,
+      tabRemoveButton,
+      removeActiveOnly,
+      panelId: panelPrefix + key,
+      classNames: this.getClassNamesFor('tab', {
+        selected,
+        collapsed,
+        tabIndex,
+        disabled,
+        className,
+      }),
+    };
+  };
 
   getPanelProps = ({ key, content, getContent, className }) => ({
     getContent,
@@ -263,7 +269,10 @@ export default class Tabs extends PureComponent {
   };
 
   render() {
-    const { showInkBar, containerClass, tabsWrapperClass, showMore, transform, transformWidth } = this.props;
+    const {
+      showInkBar, containerClass, tabsWrapperClass, showMore,
+      transform, transformWidth, allowAdd, tabAddButton
+    } = this.props;
     const { tabDimensions, blockWidth } = this.state;
     const { tabsVisible, tabsHidden, panels } = this.getTabs();
     const collapsed = blockWidth && transform && blockWidth < transformWidth;
@@ -285,6 +294,8 @@ export default class Tabs extends PureComponent {
             return result;
           }, [])}
 
+          {allowAdd && <div>{tabAddButton}</div>}
+
           {!collapsed && (
             <ShowMore onShowMoreChanged={this.showMoreChanged} isShown={showMore}>
               {tabsHidden.map(tab => <Tab {...this.getTabProps(tab)} />)}
@@ -293,11 +304,11 @@ export default class Tabs extends PureComponent {
         </div>
 
         {showInkBar && !collapsed &&
-        <InkBar left={selectedTabDimensions.offset || 0} width={selectedTabDimensions.width || 0} /> }
+        <InkBar left={selectedTabDimensions.offset || 0} width={selectedTabDimensions.width || 0}/>}
 
         {!collapsed && panels[selectedTabKey] && <TabPanel {...this.getPanelProps(panels[selectedTabKey])} />}
 
-        {(showMore || transform) && <ResizeDetector handleWidth onResize={this.onResizeThrottled} /> }
+        {(showMore || transform) && <ResizeDetector handleWidth onResize={this.onResizeThrottled}/>}
       </div>
     );
   }
@@ -310,8 +321,14 @@ Tabs.propTypes = {
   /* eslint-enable react/no-unused-prop-types */
   // selected tab key
   selectedTabKey: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-  // show 'X' and remove tab
+  // show add element for tabs adding
+  allowAdd: PropTypes.bool,
+  // show remove element and remove tab
   allowRemove: PropTypes.bool,
+  // render add tab
+  tabAddButton: PropTypes.oneOfType([PropTypes.element, PropTypes.object]),
+  // render remove tab
+  tabRemoveButton: PropTypes.oneOfType([PropTypes.element, PropTypes.object]),
   // show 'X' closing element only for active tab
   removeActiveOnly: PropTypes.bool,
   // move tabs to the special `Show more` tab if they don't fit into a screen
@@ -338,7 +355,10 @@ Tabs.defaultProps = {
   selectedTabKey: undefined,
   showMore: true,
   showInkBar: false,
+  allowAdd: false,
   allowRemove: false,
+  tabAddButton: () => '+',
+  tabRemoveButton: () => 'x',
   removeActiveOnly: false,
   transform: true,
   transformWidth: 800,

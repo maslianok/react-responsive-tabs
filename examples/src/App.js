@@ -8,6 +8,7 @@ import './index.css';
 
 import BasicExample from './Basic';
 import TabsDynamicExample from './TabsDynamic';
+import TabsDynamicAddExample from './TabsDynamicAdd';
 import TabsRemovalExample from './TabsRemoval';
 
 ReactGA.initialize('UA-94085609-1');
@@ -19,7 +20,7 @@ class App extends PureComponent {
     super(props);
 
     this.state = {
-      active: 'dynamic',
+      active: 'dynamicAdd',
     };
   }
 
@@ -68,6 +69,12 @@ class App extends PureComponent {
             tabs dynamic
           </div>
           <div
+            className={cs('menu-item', { 'menu-item--active': active === 'dynamicAdd' })}
+            onClick={this.onChangeExample('dynamicAdd')}
+          >
+            tabs dynamic add
+          </div>
+          <div
             className={cs('menu-item', { 'menu-item--active': active === 'removal' })}
             onClick={this.onChangeExample('removal')}
           >
@@ -77,6 +84,7 @@ class App extends PureComponent {
 
         {active === 'basic' && <BasicExample />}
         {active === 'dynamic' && <TabsDynamicExample />}
+        {active === 'dynamicAdd' && <TabsDynamicAddExample />}
         {active === 'removal' && <TabsRemovalExample />}
       </div>
     );
