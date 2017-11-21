@@ -1,9 +1,9 @@
 import React, { PureComponent } from 'react';
 import Tabs from 'react-responsive-tabs';
-
 import dummyData from '../dummyData';
-
 import './styles.css';
+
+let tabsData = dummyData;
 
 export class TabsRemoval extends PureComponent {
   constructor(props) {
@@ -11,11 +11,10 @@ export class TabsRemoval extends PureComponent {
 
     this.state = {
       items: this.getTabs(),
-      tabOptions: {
-        selectedTabKey: 0,
-        allowRemove: true,
-        removeActiveOnly: true
-      }
+      selectedTabKey: 0,
+      allowRemove: true,
+      removeActiveOnly: true,
+      showMore: false
     };
   }
 
@@ -35,17 +34,20 @@ export class TabsRemoval extends PureComponent {
       const indexToRemove = currentTabs.findIndex(tab => tab.key === key);
 
       // create a new array without [indexToRemove] item
-      const newTabs = [...currentTabs.slice(0, indexToRemove), ...currentTabs.slice(indexToRemove + 1)];
+      tabsData = [
+        ...tabsData.slice(0, indexToRemove),
+        ...tabsData.slice(indexToRemove + 1)
+      ];
 
-      this.setState({ items: newTabs });
+      this.updateOnRemove(tabsData, indexToRemove);
     };
 
-  getTabs = () =>
-    dummyData.map(({ name, biography }, i) => ({
+  getTabs = (data = tabsData) =>
+    data.map(({ name, biography }, i) => ({
       key: i,
       title: (
         <div className="tab-container">
-          <div className="tab-name">{name}</div>
+          <div className="tab-name">{i} - {name}</div>
         </div>
       ),
       getContent: () => biography,
@@ -53,13 +55,29 @@ export class TabsRemoval extends PureComponent {
       tabClassName: 'tab-wrapper',
     }));
 
+  updateOnRemove = (newTabs, removedIndex) => {
+    const next = removedIndex;
+    const prev = removedIndex - 1;
+
+    if (newTabs[next]) {
+      this.setState({
+        items: this.getTabs(newTabs)
+      });
+    } else if (newTabs[prev]) {
+      this.setState({
+        items: this.getTabs(newTabs),
+        selectedTabKey: prev
+      });
+    }
+    else {
+      alert('You deleting last tab!');
+    }
+  };
+
   render() {
     return (
       <div className="itemRemoval__wrapper">
-        <Tabs
-          items={this.state.items}
-          {...this.state.tabOptions}
-        />
+        <Tabs {...this.state} />
       </div>
     );
   }

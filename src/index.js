@@ -59,7 +59,10 @@ export default class Tabs extends Component {
       nextProps.showInkBar !== this.props.showInkBar ||
       nextState.blockWidth !== blockWidth ||
       nextState.showMoreWidth !== showMoreWidth ||
-      nextState.selectedTabKey !== selectedTabKey
+      nextState.selectedTabKey !== selectedTabKey ||
+      nextState.allowAdd !== this.props.allowAdd ||
+      nextState.allowRemove !== this.props.allowRemove ||
+      nextState.removeActiveOnly !== this.props.removeActiveOnly
     );
   }
 
@@ -116,7 +119,7 @@ export default class Tabs extends Component {
   };
 
   getTabs = () => {
-    const { showMore, transform, transformWidth, items } = this.props;
+    const { showMore, transform, transformWidth, items, allowRemove, removeActiveOnly } = this.props;
     const { blockWidth, tabsTotalWidth, tabDimensions, showMoreWidth } = this.state;
     const selectedTabKey = this.getSelectedTabKey();
     const collapsed = blockWidth && transform && blockWidth < transformWidth;
@@ -126,12 +129,15 @@ export default class Tabs extends Component {
 
     return items.reduce(
       (result, item, index) => {
-        const { key = index, title, content, getContent, disabled, tabClassName, panelClassName } = item;
+        const { key = index, title, content, getContent, disabled, tabClassName, panelClassName, onRemove } = item;
 
         const selected = selectedTabKey === key;
         const payload = { tabIndex, collapsed, selected, disabled, key };
         const tabPayload = {
           ...payload,
+          onRemove,
+          allowRemove,
+          removeActiveOnly,
           title,
           className: tabClassName,
         };
@@ -150,15 +156,15 @@ export default class Tabs extends Component {
         /* eslint-disable no-param-reassign */
         if (
           // don't need to `Show more` button
-          !showMore ||
-          // initial call
-          !blockWidth ||
-          // collapsed mode
-          collapsed ||
-          // all tabs are fit into the block
-          blockWidth > tabsTotalWidth ||
-          // current tab fit into the block
-          availableWidth - tabWidth > 0
+        !showMore ||
+        // initial call
+        !blockWidth ||
+        // collapsed mode
+        collapsed ||
+        // all tabs are fit into the block
+        blockWidth > tabsTotalWidth ||
+        // current tab fit into the block
+        availableWidth - tabWidth > 0
         ) {
           result.tabsVisible.push(tabPayload);
         } else {
@@ -175,25 +181,37 @@ export default class Tabs extends Component {
     );
   };
 
-  getTabProps = ({ title, key, selected, collapsed, tabIndex, disabled, className }) => ({
-    selected,
-    children: title,
-    key: tabPrefix + key,
-    id: tabPrefix + key,
-    ref: e => (this.tabRefs[tabPrefix + key] = e),
-    originalKey: key,
-    onClick: this.onChangeTab,
-    onFocus: this.onFocusTab,
-    onBlur: this.onBlurTab,
-    panelId: panelPrefix + key,
-    classNames: this.getClassNamesFor('tab', {
+  getTabProps = tab => {
+    const {
+      title, key, selected, collapsed, tabIndex, disabled,
+      className, onRemove, allowRemove, removeActiveOnly
+    } = tab;
+    const { tabRemoveButton } = this.props;
+
+    return {
       selected,
-      collapsed,
-      tabIndex,
-      disabled,
-      className,
-    }),
-  });
+      children: title,
+      key: tabPrefix + key,
+      id: tabPrefix + key,
+      ref: e => (this.tabRefs[tabPrefix + key] = e),
+      originalKey: key,
+      onClick: this.onChangeTab,
+      onFocus: this.onFocusTab,
+      onBlur: this.onBlurTab,
+      onRemove,
+      allowRemove,
+      tabRemoveButton,
+      removeActiveOnly,
+      panelId: panelPrefix + key,
+      classNames: this.getClassNamesFor('tab', {
+        selected,
+        collapsed,
+        tabIndex,
+        disabled,
+        className,
+      }),
+    };
+  };
 
   getPanelProps = ({ key, content, getContent, className }) => ({
     getContent,
@@ -251,7 +269,10 @@ export default class Tabs extends Component {
   };
 
   render() {
-    const { showInkBar, containerClass, tabsWrapperClass, showMore, transform, transformWidth } = this.props;
+    const {
+      showInkBar, containerClass, tabsWrapperClass, showMore,
+      transform, transformWidth, allowAdd, tabAddButton
+    } = this.props;
     const { tabDimensions, blockWidth } = this.state;
     const { tabsVisible, tabsHidden, panels } = this.getTabs();
     const collapsed = blockWidth && transform && blockWidth < transformWidth;
@@ -273,6 +294,8 @@ export default class Tabs extends Component {
             return result;
           }, [])}
 
+          {allowAdd && <div>{tabAddButton}</div>}
+
           {!collapsed && (
             <ShowMore onShowMoreChanged={this.showMoreChanged} isShown={showMore}>
               {tabsHidden.map(tab => <Tab {...this.getTabProps(tab)} />)}
@@ -280,12 +303,12 @@ export default class Tabs extends Component {
           )}
         </div>
 
-        {showInkBar &&
-        !collapsed && <InkBar left={selectedTabDimensions.offset || 0} width={selectedTabDimensions.width || 0} />}
+        {showInkBar && !collapsed &&
+        <InkBar left={selectedTabDimensions.offset || 0} width={selectedTabDimensions.width || 0}/>}
 
         {!collapsed && panels[selectedTabKey] && <TabPanel {...this.getPanelProps(panels[selectedTabKey])} />}
 
-        {(showMore || transform) && <ResizeDetector handleWidth onResize={this.onResizeThrottled} />}
+        {(showMore || transform) && <ResizeDetector handleWidth onResize={this.onResizeThrottled}/>}
       </div>
     );
   }
@@ -298,6 +321,16 @@ Tabs.propTypes = {
   /* eslint-enable react/no-unused-prop-types */
   // selected tab key
   selectedTabKey: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  // show add element for tabs adding
+  allowAdd: PropTypes.bool,
+  // show remove element and remove tab
+  allowRemove: PropTypes.bool,
+  // render add tab
+  tabAddButton: PropTypes.oneOfType([PropTypes.element, PropTypes.object]),
+  // render remove tab
+  tabRemoveButton: PropTypes.oneOfType([PropTypes.element, PropTypes.object]),
+  // show 'X' closing element only for active tab
+  removeActiveOnly: PropTypes.bool,
   // move tabs to the special `Show more` tab if they don't fit into a screen
   showMore: PropTypes.bool,
   // materialUI-like rail under the selected tab
@@ -322,6 +355,11 @@ Tabs.defaultProps = {
   selectedTabKey: undefined,
   showMore: true,
   showInkBar: false,
+  allowAdd: false,
+  allowRemove: false,
+  tabAddButton: () => '+',
+  tabRemoveButton: () => 'x',
+  removeActiveOnly: false,
   transform: true,
   transformWidth: 800,
   resizeThrottle: 100,

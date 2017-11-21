@@ -7,6 +7,8 @@ import 'react-responsive-tabs/styles.css';
 import './index.css';
 
 import BasicExample from './Basic';
+import TabsDynamicExample from './TabsDynamic';
+import TabsDynamicAddExample from './TabsDynamicAdd';
 import TabsRemovalExample from './TabsRemoval';
 
 ReactGA.initialize('UA-94085609-1');
@@ -18,7 +20,7 @@ class App extends PureComponent {
     super(props);
 
     this.state = {
-      active: 'basic',
+      active: 'dynamicAdd',
     };
   }
 
@@ -61,6 +63,18 @@ class App extends PureComponent {
             basic usage
           </div>
           <div
+            className={cs('menu-item', { 'menu-item--active': active === 'dynamic' })}
+            onClick={this.onChangeExample('dynamic')}
+          >
+            tabs dynamic
+          </div>
+          <div
+            className={cs('menu-item', { 'menu-item--active': active === 'dynamicAdd' })}
+            onClick={this.onChangeExample('dynamicAdd')}
+          >
+            tabs dynamic add
+          </div>
+          <div
             className={cs('menu-item', { 'menu-item--active': active === 'removal' })}
             onClick={this.onChangeExample('removal')}
           >
@@ -69,6 +83,8 @@ class App extends PureComponent {
         </div>
 
         {active === 'basic' && <BasicExample />}
+        {active === 'dynamic' && <TabsDynamicExample />}
+        {active === 'dynamicAdd' && <TabsDynamicAddExample />}
         {active === 'removal' && <TabsRemovalExample />}
       </div>
     );
