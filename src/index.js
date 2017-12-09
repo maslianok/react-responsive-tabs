@@ -205,6 +205,12 @@ export default class Tabs extends Component {
     classNames: this.getClassNamesFor('panel', { className }),
   });
 
+  getShowMoreProps = (isShown, isSelectedTabHidden) => ({
+    onShowMoreChanged: this.showMoreChanged,
+    isShown,
+    hasChildSelected: isSelectedTabHidden
+  });
+
   getClassNamesFor = (type, { selected, collapsed, tabIndex, disabled, className = '' }) => {
     switch (type) {
       case 'tab':
@@ -275,7 +281,7 @@ export default class Tabs extends Component {
           }, [])}
 
           {!collapsed && (
-            <ShowMore onShowMoreChanged={this.showMoreChanged} isShown={showMore}>
+            <ShowMore {...this.getShowMoreProps(showMore, isSelectedTabHidden)}>
               {tabsHidden.map(tab => <Tab {...this.getTabProps(tab)} />)}
             </ShowMore>
           )}
