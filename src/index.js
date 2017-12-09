@@ -163,6 +163,7 @@ export default class Tabs extends Component {
           result.tabsVisible.push(tabPayload);
         } else {
           result.tabsHidden.push(tabPayload);
+          if (selected) result.isSelectedTabHidden = true;
         }
         /* eslint-enable no-param-reassign */
 
@@ -171,7 +172,7 @@ export default class Tabs extends Component {
 
         return result;
       },
-      { tabsVisible: [], tabsHidden: [], panels: {} },
+      { tabsVisible: [], tabsHidden: [], panels: {}, isSelectedTabHidden: false },
     );
   };
 
@@ -253,7 +254,7 @@ export default class Tabs extends Component {
   render() {
     const { showInkBar, containerClass, tabsWrapperClass, showMore, transform, transformWidth } = this.props;
     const { tabDimensions, blockWidth } = this.state;
-    const { tabsVisible, tabsHidden, panels } = this.getTabs();
+    const { tabsVisible, tabsHidden, panels, isSelectedTabHidden } = this.getTabs();
     const collapsed = blockWidth && transform && blockWidth < transformWidth;
     const selectedTabKey = this.getSelectedTabKey();
     const selectedTabDimensions = tabDimensions[selectedTabKey] || {};
@@ -281,7 +282,9 @@ export default class Tabs extends Component {
         </div>
 
         {showInkBar &&
-        !collapsed && <InkBar left={selectedTabDimensions.offset || 0} width={selectedTabDimensions.width || 0} />}
+        !collapsed &&
+        !isSelectedTabHidden &&
+          <InkBar left={selectedTabDimensions.offset || 0} width={selectedTabDimensions.width || 0} />}
 
         {!collapsed && panels[selectedTabKey] && <TabPanel {...this.getPanelProps(panels[selectedTabKey])} />}
 
