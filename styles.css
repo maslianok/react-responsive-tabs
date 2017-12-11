@@ -98,6 +98,11 @@
   position: relative;
 }
 
+.RRT__showmore--selected {
+  background: white;
+  border-bottom: none;
+}
+
 .RRT__showmore-label {
   padding: .7em 1em;
   position: relative;

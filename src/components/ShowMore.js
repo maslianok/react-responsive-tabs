@@ -1,10 +1,10 @@
 /* eslint jsx-a11y/no-noninteractive-element-interactions: 0, jsx-a11y/no-noninteractive-tabindex: 0 */
 
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 
-export default class ShowMore extends PureComponent {
+export default class ShowMore extends Component {
   constructor() {
     super();
 
@@ -25,6 +25,7 @@ export default class ShowMore extends PureComponent {
     return (
       this.props.children.length !== nextProps.children.length ||
       this.props.isShown !== nextProps.isShown ||
+      this.props.hasChildSelected !== nextProps.hasChildSelected ||
       this.state !== nextState
     );
   }
@@ -63,12 +64,17 @@ export default class ShowMore extends PureComponent {
   };
 
   render() {
-    const { isShown, children, onShowMoreChanged } = this.props;
+    const { isShown, children, onShowMoreChanged, hasChildSelected } = this.props;
     if (!isShown || !children || !children.length) {
       return null;
     }
 
     const isListHidden = this.state.isHidden;
+    const showMoreStyles = classNames({
+      RRT__showmore: true,
+      'RRT__showmore--selected': hasChildSelected
+    });
+
     const listStyles = classNames({
       'RRT__showmore-list': true,
       'RRT__showmore-list--opened': !isListHidden,
@@ -82,7 +88,7 @@ export default class ShowMore extends PureComponent {
     return (
       <div
         ref={onShowMoreChanged}
-        className="RRT__showmore"
+        className={showMoreStyles}
         role="navigation"
         tabIndex="0"
         onFocus={this.onFocus}
@@ -100,11 +106,13 @@ export default class ShowMore extends PureComponent {
 
 ShowMore.propTypes = {
   children: PropTypes.oneOfType([PropTypes.array, PropTypes.object, PropTypes.string]),
+  hasChildSelected: PropTypes.bool,
   isShown: PropTypes.bool.isRequired,
   onShowMoreChanged: PropTypes.func,
 };
 
 ShowMore.defaultProps = {
   children: undefined,
+  hasChildSelected: false,
   onShowMoreChanged: () => null,
 };

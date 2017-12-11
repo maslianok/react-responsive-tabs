@@ -1,11 +1,11 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 function onTabClick(selected, onClick, originalKey) {
   return () => !selected && onClick(originalKey);
 }
 
-export default class Tab extends PureComponent {
+export default class Tab extends Component {
   shouldComponentUpdate(nextProps) {
     return this.props.children !== nextProps.children ||
       this.props.selected !== nextProps.selected ||

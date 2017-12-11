@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import ResizeDetector from 'react-resize-detector';
 import cs from 'classnames';
 import throttle from 'lodash.throttle';
@@ -11,7 +11,7 @@ import InkBar from './components/InkBar';
 const tabPrefix = 'tab-';
 const panelPrefix = 'panel-';
 
-export default class Tabs extends PureComponent {
+export default class Tabs extends Component {
   constructor(props) {
     super(props);
 
@@ -170,6 +170,7 @@ export default class Tabs extends PureComponent {
           result.tabsVisible.push(tabPayload);
         } else {
           result.tabsHidden.push(tabPayload);
+          if (selected) result.isSelectedTabHidden = true;
         }
         /* eslint-enable no-param-reassign */
 
@@ -178,7 +179,7 @@ export default class Tabs extends PureComponent {
 
         return result;
       },
-      { tabsVisible: [], tabsHidden: [], panels: {} },
+      { tabsVisible: [], tabsHidden: [], panels: {}, isSelectedTabHidden: false },
     );
   };
 
@@ -214,6 +215,12 @@ export default class Tabs extends PureComponent {
     id: panelPrefix + key,
     tabId: tabPrefix + key,
     classNames: this.getClassNamesFor('panel', { className }),
+  });
+
+  getShowMoreProps = (isShown, isSelectedTabHidden) => ({
+    onShowMoreChanged: this.showMoreChanged,
+    isShown,
+    hasChildSelected: isSelectedTabHidden
   });
 
   getClassNamesFor = (type, { selected, collapsed, tabIndex, disabled, className = '' }) => {
@@ -265,7 +272,7 @@ export default class Tabs extends PureComponent {
   render() {
     const { showInkBar, containerClass, tabsWrapperClass, showMore, transform, transformWidth } = this.props;
     const { tabDimensions, blockWidth } = this.state;
-    const { tabsVisible, tabsHidden, panels } = this.getTabs();
+    const { tabsVisible, tabsHidden, panels, isSelectedTabHidden } = this.getTabs();
     const collapsed = blockWidth && transform && blockWidth < transformWidth;
     const selectedTabKey = this.getSelectedTabKey();
     const selectedTabDimensions = tabDimensions[selectedTabKey] || {};
@@ -286,13 +293,13 @@ export default class Tabs extends PureComponent {
           }, [])}
 
           {!collapsed && (
-            <ShowMore onShowMoreChanged={this.showMoreChanged} isShown={showMore}>
+            <ShowMore {...this.getShowMoreProps(showMore, isSelectedTabHidden)}>
               {tabsHidden.map(tab => <Tab {...this.getTabProps(tab)} />)}
             </ShowMore>
           )}
         </div>
 
-        {showInkBar && !collapsed &&
+        {showInkBar && !collapsed && !isSelectedTabHidden &&
         <InkBar left={selectedTabDimensions.offset || 0} width={selectedTabDimensions.width || 0} /> }
 
         {!collapsed && panels[selectedTabKey] && <TabPanel {...this.getPanelProps(panels[selectedTabKey])} />}
