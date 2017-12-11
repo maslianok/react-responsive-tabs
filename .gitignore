@@ -16,5 +16,6 @@ lib
 .env
 npm-debug.log
 
-# Visual studio code
+# IDE
 .vscode
+.idea

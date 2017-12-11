@@ -56,6 +56,22 @@
   z-index: 2;
 }
 
+.RRT__tab--selected .RRT__removable {
+  position: relative;
+}
+
+.RRT__tab--selected .RRT__removable-text {
+  margin-right: 10px;
+}
+
+.RRT__tab--selected .RRT__removable-icon {
+  position: absolute;
+  font-size: 18px;
+  right: 0.5em;
+  top: 0.2em;
+}
+
+
 /****************************/
 /********* panel styles *****/
 /****************************/

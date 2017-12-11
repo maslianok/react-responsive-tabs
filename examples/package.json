@@ -4,10 +4,10 @@
   "private": true,
   "devDependencies": {
     "babel-eslint": "^7.2.0",
-    "eslint": "^3.18.0",
-    "eslint-config-airbnb": "^14.1.0",
-    "eslint-plugin-import": "^2.2.0",
-    "eslint-plugin-react": "^6.10.3",
+    "eslint": "^4.5.0",
+    "eslint-config-airbnb": "^15.1.0",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-react": "^7.3.0",
     "linklocal": "^2.6.1",
     "react-scripts": "^0.9.5"
   },

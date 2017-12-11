@@ -23,6 +23,8 @@ export default class Tabs extends Component {
       tabsTotalWidth: 0,
       showMoreWidth: 40,
       selectedTabKey: props.selectedTabKey,
+      allowRemove: props.allowRemove,
+      removeActiveOnly: props.removeActiveOnly,
       focusedTabKey: null,
     };
 
@@ -59,7 +61,9 @@ export default class Tabs extends Component {
       nextProps.showInkBar !== this.props.showInkBar ||
       nextState.blockWidth !== blockWidth ||
       nextState.showMoreWidth !== showMoreWidth ||
-      nextState.selectedTabKey !== selectedTabKey
+      nextState.selectedTabKey !== selectedTabKey ||
+      nextState.allowRemove !== this.props.allowRemove ||
+      nextState.removeActiveOnly !== this.props.removeActiveOnly
     );
   }
 
@@ -117,7 +121,7 @@ export default class Tabs extends Component {
 
   getTabs = () => {
     const { showMore, transform, transformWidth, items } = this.props;
-    const { blockWidth, tabsTotalWidth, tabDimensions, showMoreWidth } = this.state;
+    const { blockWidth, tabsTotalWidth, tabDimensions, showMoreWidth, allowRemove, removeActiveOnly } = this.state;
     const selectedTabKey = this.getSelectedTabKey();
     const collapsed = blockWidth && transform && blockWidth < transformWidth;
 
@@ -126,12 +130,15 @@ export default class Tabs extends Component {
 
     return items.reduce(
       (result, item, index) => {
-        const { key = index, title, content, getContent, disabled, tabClassName, panelClassName } = item;
+        const { key = index, title, content, getContent, disabled, tabClassName, panelClassName, onRemove } = item;
 
         const selected = selectedTabKey === key;
         const payload = { tabIndex, collapsed, selected, disabled, key };
         const tabPayload = {
           ...payload,
+          onRemove,
+          allowRemove,
+          removeActiveOnly,
           title,
           className: tabClassName,
         };
@@ -176,7 +183,9 @@ export default class Tabs extends Component {
     );
   };
 
-  getTabProps = ({ title, key, selected, collapsed, tabIndex, disabled, className }) => ({
+  getTabProps = ({
+    title, key, selected, collapsed, tabIndex, disabled, className, onRemove, allowRemove, removeActiveOnly
+  }) => ({
     selected,
     children: title,
     key: tabPrefix + key,
@@ -186,6 +195,9 @@ export default class Tabs extends Component {
     onClick: this.onChangeTab,
     onFocus: this.onFocusTab,
     onBlur: this.onBlurTab,
+    onRemove,
+    allowRemove,
+    removeActiveOnly,
     panelId: panelPrefix + key,
     classNames: this.getClassNamesFor('tab', {
       selected,
@@ -287,14 +299,12 @@ export default class Tabs extends Component {
           )}
         </div>
 
-        {showInkBar &&
-        !collapsed &&
-        !isSelectedTabHidden &&
-          <InkBar left={selectedTabDimensions.offset || 0} width={selectedTabDimensions.width || 0} />}
+        {showInkBar && !collapsed && !isSelectedTabHidden &&
+        <InkBar left={selectedTabDimensions.offset || 0} width={selectedTabDimensions.width || 0} /> }
 
         {!collapsed && panels[selectedTabKey] && <TabPanel {...this.getPanelProps(panels[selectedTabKey])} />}
 
-        {(showMore || transform) && <ResizeDetector handleWidth onResize={this.onResizeThrottled} />}
+        {(showMore || transform) && <ResizeDetector handleWidth onResize={this.onResizeThrottled} /> }
       </div>
     );
   }
@@ -307,6 +317,10 @@ Tabs.propTypes = {
   /* eslint-enable react/no-unused-prop-types */
   // selected tab key
   selectedTabKey: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  // show 'X' and remove tab
+  allowRemove: PropTypes.bool,
+  // show 'X' closing element only for active tab
+  removeActiveOnly: PropTypes.bool,
   // move tabs to the special `Show more` tab if they don't fit into a screen
   showMore: PropTypes.bool,
   // materialUI-like rail under the selected tab
@@ -331,6 +345,8 @@ Tabs.defaultProps = {
   selectedTabKey: undefined,
   showMore: true,
   showInkBar: false,
+  allowRemove: false,
+  removeActiveOnly: false,
   transform: true,
   transformWidth: 800,
   resizeThrottle: 100,

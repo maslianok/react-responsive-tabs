@@ -11,6 +11,11 @@ export class TabsRemoval extends PureComponent {
 
     this.state = {
       items: this.getTabs(),
+      tabOptions: {
+        selectedTabKey: 0,
+        allowRemove: true,
+        removeActiveOnly: true
+      }
     };
   }
 
@@ -41,17 +46,20 @@ export class TabsRemoval extends PureComponent {
       title: (
         <div className="tab-container">
           <div className="tab-name">{name}</div>
-          <div className="tab-cross-icon" onClick={this.onRemoveTab(i)}>x</div>
         </div>
       ),
       getContent: () => biography,
+      onRemove: () => this.onRemoveTab(i),
       tabClassName: 'tab-wrapper',
     }));
 
   render() {
     return (
       <div className="itemRemoval__wrapper">
-        <Tabs items={this.state.items} />
+        <Tabs
+          items={this.state.items}
+          {...this.state.tabOptions}
+        />
       </div>
     );
   }

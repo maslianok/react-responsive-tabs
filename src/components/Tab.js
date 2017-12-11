@@ -12,6 +12,27 @@ export default class Tab extends Component {
       this.props.classNames !== nextProps.classNames;
   }
 
+  _renderRemovableTab = (children, onRemove) => (
+    <div className="RRT__removable">
+      <div className="RRT__removable-text">{children}</div>
+      <div className="RRT__removable-icon" onClick={onRemove()}>x</div>
+    </div>
+  );
+
+  _renderTabs = (selected, children, onRemove, allowRemove, removeActiveOnly) => {
+    if (allowRemove && !removeActiveOnly) this._renderRemovableTab(children, onRemove);
+
+    if (allowRemove && removeActiveOnly) {
+      return (
+        selected ?
+          this._renderRemovableTab(children, onRemove) :
+          children
+      );
+    }
+
+    return (children);
+  };
+
   render() {
     const {
       id,
@@ -24,6 +45,9 @@ export default class Tab extends Component {
       onBlur,
       originalKey,
       children,
+      onRemove,
+      allowRemove,
+      removeActiveOnly
     } = this.props;
 
     return (
@@ -41,7 +65,13 @@ export default class Tab extends Component {
         onFocus={onFocus(originalKey)}
         onBlur={onBlur}
       >
-        {children}
+        {this._renderTabs(
+          selected,
+          children,
+          onRemove,
+          allowRemove,
+          removeActiveOnly
+        )}
       </div>
     );
   }
@@ -55,8 +85,11 @@ Tab.propTypes = {
   panelId: PropTypes.string.isRequired,
   selected: PropTypes.bool.isRequired,
   onClick: PropTypes.func.isRequired,
+  onRemove: PropTypes.func,
   onFocus: PropTypes.func.isRequired,
   onBlur: PropTypes.func.isRequired,
+  allowRemove: PropTypes.bool,
+  removeActiveOnly: PropTypes.bool,
   id: PropTypes.string.isRequired,
   originalKey: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
   classNames: PropTypes.string.isRequired,
@@ -64,5 +97,8 @@ Tab.propTypes = {
 
 Tab.defaultProps = {
   children: undefined,
+  onRemove: () => {},
+  allowRemove: false,
+  removeActiveOnly: false,
   disabled: false,
 };
