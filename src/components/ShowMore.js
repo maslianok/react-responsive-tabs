@@ -25,6 +25,7 @@ export default class ShowMore extends Component {
     return (
       this.props.children.length !== nextProps.children.length ||
       this.props.isShown !== nextProps.isShown ||
+      this.props.hasChildSelected !== nextProps.hasChildSelected ||
       this.state !== nextState
     );
   }
@@ -63,12 +64,17 @@ export default class ShowMore extends Component {
   };
 
   render() {
-    const { isShown, children, onShowMoreChanged } = this.props;
+    const { isShown, children, onShowMoreChanged, hasChildSelected } = this.props;
     if (!isShown || !children || !children.length) {
       return null;
     }
 
     const isListHidden = this.state.isHidden;
+    const showMoreStyles = classNames({
+      RRT__showmore: true,
+      'RRT__showmore--selected': hasChildSelected
+    });
+
     const listStyles = classNames({
       'RRT__showmore-list': true,
       'RRT__showmore-list--opened': !isListHidden,
@@ -82,7 +88,7 @@ export default class ShowMore extends Component {
     return (
       <div
         ref={onShowMoreChanged}
-        className="RRT__showmore"
+        className={showMoreStyles}
         role="navigation"
         tabIndex="0"
         onFocus={this.onFocus}
@@ -100,11 +106,13 @@ export default class ShowMore extends Component {
 
 ShowMore.propTypes = {
   children: PropTypes.oneOfType([PropTypes.array, PropTypes.object, PropTypes.string]),
+  hasChildSelected: PropTypes.bool,
   isShown: PropTypes.bool.isRequired,
   onShowMoreChanged: PropTypes.func,
 };
 
 ShowMore.defaultProps = {
   children: undefined,
+  hasChildSelected: false,
   onShowMoreChanged: () => null,
 };
