@@ -11,34 +11,27 @@ export class TabsRemoval extends PureComponent {
 
     this.state = {
       items: this.getTabs(),
-      tabOptions: {
-        selectedTabKey: 0,
-        allowRemove: true,
-        removeActiveOnly: true
-      }
     };
   }
 
-  onChangeProp = propsName =>
-    evt => {
-      this.setState({ [propsName]: evt.target.type === 'checkbox' ? evt.target.checked : +evt.target.value });
-    };
+  onChangeProp = propsName => evt => {
+    this.setState({ [propsName]: evt.target.type === 'checkbox' ? evt.target.checked : +evt.target.value });
+  };
 
-  onRemoveTab = key =>
-    evt => {
-      evt.stopPropagation();
+  onRemoveTab = (key, evt) => {
+    evt.stopPropagation();
 
-      // current tabs
-      const currentTabs = this.state.items;
+    // current tabs
+    const currentTabs = this.state.items;
 
-      // find index to remove
-      const indexToRemove = currentTabs.findIndex(tab => tab.key === key);
+    // find index to remove
+    const indexToRemove = currentTabs.findIndex(tab => tab.key === key);
 
-      // create a new array without [indexToRemove] item
-      const newTabs = [...currentTabs.slice(0, indexToRemove), ...currentTabs.slice(indexToRemove + 1)];
+    // create a new array without [indexToRemove] item
+    const newTabs = [...currentTabs.slice(0, indexToRemove), ...currentTabs.slice(indexToRemove + 1)];
 
-      this.setState({ items: newTabs });
-    };
+    this.setState({ items: newTabs });
+  };
 
   getTabs = () =>
     dummyData.map(({ name, biography }, i) => ({
@@ -49,17 +42,13 @@ export class TabsRemoval extends PureComponent {
         </div>
       ),
       getContent: () => biography,
-      onRemove: () => this.onRemoveTab(i),
       tabClassName: 'tab-wrapper',
     }));
 
   render() {
     return (
       <div className="itemRemoval__wrapper">
-        <Tabs
-          items={this.state.items}
-          {...this.state.tabOptions}
-        />
+        <Tabs items={this.state.items} selectedTabKey={0} allowRemove removeActiveOnly onRemove={this.onRemoveTab} />
       </div>
     );
   }

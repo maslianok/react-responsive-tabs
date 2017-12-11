@@ -7,52 +7,41 @@ function onTabClick(selected, onClick, originalKey) {
 
 export default class Tab extends Component {
   shouldComponentUpdate(nextProps) {
-    return this.props.children !== nextProps.children ||
+    return (
+      this.props.children !== nextProps.children ||
       this.props.selected !== nextProps.selected ||
-      this.props.classNames !== nextProps.classNames;
+      this.props.classNames !== nextProps.classNames
+    );
   }
 
-  _renderRemovableTab = (children, onRemove) => (
-    <div className="RRT__removable">
-      <div className="RRT__removable-text">{children}</div>
-      <div className="RRT__removable-icon" onClick={onRemove()}>x</div>
-    </div>
-  );
+  renderRemovableTab = () => {
+    const { children, onRemove } = this.props;
+    return (
+      <div className="RRT__removable">
+        <div className="RRT__removable-text">{children}</div>
+        <div className="RRT__removable-icon" onClick={onRemove}>
+          x
+        </div>
+      </div>
+    );
+  };
 
-  _renderTabs = (selected, children, onRemove, allowRemove, removeActiveOnly) => {
-    if (allowRemove && !removeActiveOnly) this._renderRemovableTab(children, onRemove);
+  renderTab = () => {
+    const { children, allowRemove } = this.props;
 
-    if (allowRemove && removeActiveOnly) {
-      return (
-        selected ?
-          this._renderRemovableTab(children, onRemove) :
-          children
-      );
+    if (allowRemove) {
+      return this.renderRemovableTab();
     }
 
-    return (children);
+    return children;
   };
 
   render() {
-    const {
-      id,
-      classNames,
-      selected,
-      disabled,
-      panelId,
-      onClick,
-      onFocus,
-      onBlur,
-      originalKey,
-      children,
-      onRemove,
-      allowRemove,
-      removeActiveOnly
-    } = this.props;
+    const { id, classNames, selected, disabled, panelId, onClick, onFocus, onBlur, originalKey } = this.props;
 
     return (
       <div
-        ref={e => this.tab = e}
+        ref={e => (this.tab = e)}
         role="tab"
         className={classNames}
         id={id}
@@ -65,13 +54,7 @@ export default class Tab extends Component {
         onFocus={onFocus(originalKey)}
         onBlur={onBlur}
       >
-        {this._renderTabs(
-          selected,
-          children,
-          onRemove,
-          allowRemove,
-          removeActiveOnly
-        )}
+        {this.renderTab()}
       </div>
     );
   }

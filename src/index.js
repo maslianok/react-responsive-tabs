@@ -23,8 +23,6 @@ export default class Tabs extends Component {
       tabsTotalWidth: 0,
       showMoreWidth: 40,
       selectedTabKey: props.selectedTabKey,
-      allowRemove: props.allowRemove,
-      removeActiveOnly: props.removeActiveOnly,
       focusedTabKey: null,
     };
 
@@ -59,11 +57,11 @@ export default class Tabs extends Component {
       nextProps.transform !== this.props.transform ||
       nextProps.showMore !== this.props.showMore ||
       nextProps.showInkBar !== this.props.showInkBar ||
+      nextProps.allowRemove !== this.props.allowRemove ||
+      nextProps.removeActiveOnly !== this.props.removeActiveOnly ||
       nextState.blockWidth !== blockWidth ||
       nextState.showMoreWidth !== showMoreWidth ||
-      nextState.selectedTabKey !== selectedTabKey ||
-      nextState.allowRemove !== this.props.allowRemove ||
-      nextState.removeActiveOnly !== this.props.removeActiveOnly
+      nextState.selectedTabKey !== selectedTabKey
     );
   }
 
@@ -120,8 +118,8 @@ export default class Tabs extends Component {
   };
 
   getTabs = () => {
-    const { showMore, transform, transformWidth, items } = this.props;
-    const { blockWidth, tabsTotalWidth, tabDimensions, showMoreWidth, allowRemove, removeActiveOnly } = this.state;
+    const { showMore, transform, transformWidth, items, allowRemove, removeActiveOnly, onRemove } = this.props;
+    const { blockWidth, tabsTotalWidth, tabDimensions, showMoreWidth } = this.state;
     const selectedTabKey = this.getSelectedTabKey();
     const collapsed = blockWidth && transform && blockWidth < transformWidth;
 
@@ -130,16 +128,19 @@ export default class Tabs extends Component {
 
     return items.reduce(
       (result, item, index) => {
-        const { key = index, title, content, getContent, disabled, tabClassName, panelClassName, onRemove } = item;
+        const { key = index, title, content, getContent, disabled, tabClassName, panelClassName } = item;
 
         const selected = selectedTabKey === key;
         const payload = { tabIndex, collapsed, selected, disabled, key };
         const tabPayload = {
           ...payload,
-          onRemove,
-          allowRemove,
-          removeActiveOnly,
           title,
+          onRemove: evt => {
+            if (typeof onRemove === 'function') {
+              onRemove(key, evt);
+            }
+          },
+          allowRemove: allowRemove && (!removeActiveOnly || selected),
           className: tabClassName,
         };
 
@@ -183,10 +184,9 @@ export default class Tabs extends Component {
     );
   };
 
-  getTabProps = ({
-    title, key, selected, collapsed, tabIndex, disabled, className, onRemove, allowRemove, removeActiveOnly
-  }) => ({
+  getTabProps = ({ title, key, selected, collapsed, tabIndex, disabled, className, onRemove, allowRemove }) => ({
     selected,
+    allowRemove,
     children: title,
     key: tabPrefix + key,
     id: tabPrefix + key,
@@ -196,8 +196,6 @@ export default class Tabs extends Component {
     onFocus: this.onFocusTab,
     onBlur: this.onBlurTab,
     onRemove,
-    allowRemove,
-    removeActiveOnly,
     panelId: panelPrefix + key,
     classNames: this.getClassNamesFor('tab', {
       selected,
@@ -220,7 +218,7 @@ export default class Tabs extends Component {
   getShowMoreProps = (isShown, isSelectedTabHidden) => ({
     onShowMoreChanged: this.showMoreChanged,
     isShown,
-    hasChildSelected: isSelectedTabHidden
+    hasChildSelected: isSelectedTabHidden,
   });
 
   getClassNamesFor = (type, { selected, collapsed, tabIndex, disabled, className = '' }) => {
@@ -299,12 +297,15 @@ export default class Tabs extends Component {
           )}
         </div>
 
-        {showInkBar && !collapsed && !isSelectedTabHidden &&
-        <InkBar left={selectedTabDimensions.offset || 0} width={selectedTabDimensions.width || 0} /> }
+        {showInkBar &&
+          !collapsed &&
+          !isSelectedTabHidden && (
+            <InkBar left={selectedTabDimensions.offset || 0} width={selectedTabDimensions.width || 0} />
+          )}
 
         {!collapsed && panels[selectedTabKey] && <TabPanel {...this.getPanelProps(panels[selectedTabKey])} />}
 
-        {(showMore || transform) && <ResizeDetector handleWidth onResize={this.onResizeThrottled} /> }
+        {(showMore || transform) && <ResizeDetector handleWidth onResize={this.onResizeThrottled} />}
       </div>
     );
   }
@@ -331,6 +332,8 @@ Tabs.propTypes = {
   transformWidth: PropTypes.number,
   // onChange active tab callback
   onChange: PropTypes.func,
+  // onRemove callback
+  onRemove: PropTypes.func,
   // frequency of onResize recalculation fires
   resizeThrottle: PropTypes.number,
   // classnames
@@ -355,4 +358,5 @@ Tabs.defaultProps = {
   tabClass: undefined,
   panelClass: undefined,
   onChange: () => null,
+  onRemove: () => null,
 };
