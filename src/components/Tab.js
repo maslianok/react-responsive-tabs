@@ -72,7 +72,6 @@ Tab.propTypes = {
   onFocus: PropTypes.func.isRequired,
   onBlur: PropTypes.func.isRequired,
   allowRemove: PropTypes.bool,
-  removeActiveOnly: PropTypes.bool,
   id: PropTypes.string.isRequired,
   originalKey: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
   classNames: PropTypes.string.isRequired,
@@ -82,6 +81,5 @@ Tab.defaultProps = {
   children: undefined,
   onRemove: () => {},
   allowRemove: false,
-  removeActiveOnly: false,
   disabled: false,
 };
