@@ -34,7 +34,8 @@ export default class Tabs extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { items, selectedTabKey } = this.props;
+    const { items } = this.props;
+    const { selectedTabKey } = this.state;
     const newState = {};
     if (items !== nextProps.items) {
       newState.blockWidth = 0;

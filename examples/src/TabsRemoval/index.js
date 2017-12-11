@@ -11,6 +11,7 @@ export class TabsRemoval extends PureComponent {
 
     this.state = {
       items: this.getTabs(),
+      selectedTabKey: 0,
     };
   }
 
@@ -30,7 +31,13 @@ export class TabsRemoval extends PureComponent {
     // create a new array without [indexToRemove] item
     const newTabs = [...currentTabs.slice(0, indexToRemove), ...currentTabs.slice(indexToRemove + 1)];
 
-    this.setState({ items: newTabs });
+    const nextSelectedIndex = newTabs[indexToRemove] ? indexToRemove : indexToRemove - 1;
+    if (!newTabs[nextSelectedIndex]) {
+      alert('You can not delete the last tab!');
+      return;
+    }
+
+    this.setState({ items: newTabs, selectedTabKey: newTabs[nextSelectedIndex].key });
   };
 
   getTabs = () =>
@@ -46,9 +53,10 @@ export class TabsRemoval extends PureComponent {
     }));
 
   render() {
+    const { items, selectedTabKey } = this.state;
     return (
       <div className="itemRemoval__wrapper">
-        <Tabs items={this.state.items} selectedTabKey={0} allowRemove removeActiveOnly onRemove={this.onRemoveTab} />
+        <Tabs items={items} selectedTabKey={selectedTabKey} allowRemove removeActiveOnly onRemove={this.onRemoveTab} />
       </div>
     );
   }
