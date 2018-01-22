@@ -216,9 +216,10 @@ export default class Tabs extends Component {
     classNames: this.getClassNamesFor('panel', { className }),
   });
 
-  getShowMoreProps = (isShown, isSelectedTabHidden) => ({
+  getShowMoreProps = (isShown, isSelectedTabHidden, showMoreLabel) => ({
     onShowMoreChanged: this.showMoreChanged,
     isShown,
+    label: showMoreLabel,
     hasChildSelected: isSelectedTabHidden,
   });
 
@@ -269,7 +270,8 @@ export default class Tabs extends Component {
   };
 
   render() {
-    const { showInkBar, containerClass, tabsWrapperClass, showMore, transform, transformWidth } = this.props;
+    const { showInkBar, containerClass, tabsWrapperClass, showMore, transform, transformWidth,
+      showMoreLabel } = this.props;
     const { tabDimensions, blockWidth } = this.state;
     const { tabsVisible, tabsHidden, panels, isSelectedTabHidden } = this.getTabs();
     const collapsed = blockWidth && transform && blockWidth < transformWidth;
@@ -292,7 +294,7 @@ export default class Tabs extends Component {
           }, [])}
 
           {!collapsed && (
-            <ShowMore {...this.getShowMoreProps(showMore, isSelectedTabHidden)}>
+            <ShowMore {...this.getShowMoreProps(showMore, isSelectedTabHidden, showMoreLabel)}>
               {tabsHidden.map(tab => <Tab {...this.getTabProps(tab)} />)}
             </ShowMore>
           )}
@@ -342,6 +344,8 @@ Tabs.propTypes = {
   tabsWrapperClass: PropTypes.string,
   tabClass: PropTypes.string,
   panelClass: PropTypes.string,
+  // labels
+  showMoreLabel: PropTypes.string,
 };
 
 Tabs.defaultProps = {
@@ -358,6 +362,7 @@ Tabs.defaultProps = {
   tabsWrapperClass: undefined,
   tabClass: undefined,
   panelClass: undefined,
+  showMoreLabel: '...',
   onChange: () => null,
   onRemove: () => null,
 };
