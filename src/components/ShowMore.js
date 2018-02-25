@@ -10,7 +10,7 @@ export default class ShowMore extends Component {
 
     this.state = {
       isFocused: false,
-      isHidden: true,
+      isHidden: true
     };
   }
 
@@ -77,12 +77,12 @@ export default class ShowMore extends Component {
 
     const listStyles = classNames({
       'RRT__showmore-list': true,
-      'RRT__showmore-list--opened': !isListHidden,
+      'RRT__showmore-list--opened': !isListHidden
     });
 
     const showMoreLabelStyles = classNames({
       'RRT__showmore-label': true,
-      'RRT__showmore-label--selected': !isListHidden,
+      'RRT__showmore-label--selected': !isListHidden
     });
 
     return (
@@ -109,12 +109,12 @@ ShowMore.propTypes = {
   hasChildSelected: PropTypes.bool,
   isShown: PropTypes.bool.isRequired,
   onShowMoreChanged: PropTypes.func,
-  label: PropTypes.string,
+  label: PropTypes.string
 };
 
 ShowMore.defaultProps = {
   children: undefined,
   hasChildSelected: false,
   label: '...',
-  onShowMoreChanged: () => null,
+  onShowMoreChanged: () => null
 };
