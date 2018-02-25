@@ -64,7 +64,7 @@ export default class ShowMore extends Component {
   };
 
   render() {
-    const { isShown, children, onShowMoreChanged, hasChildSelected } = this.props;
+    const { isShown, children, onShowMoreChanged, hasChildSelected, label } = this.props;
     if (!isShown || !children || !children.length) {
       return null;
     }
@@ -95,7 +95,7 @@ export default class ShowMore extends Component {
         onBlur={this.onBlur}
         onClick={this.toggleVisibility}
       >
-        <div className={showMoreLabelStyles}>...</div>
+        <div className={showMoreLabelStyles}>{label}</div>
         <div className={listStyles} aria-hidden={isListHidden} role="menu">
           {children}
         </div>
@@ -109,10 +109,12 @@ ShowMore.propTypes = {
   hasChildSelected: PropTypes.bool,
   isShown: PropTypes.bool.isRequired,
   onShowMoreChanged: PropTypes.func,
+  label: PropTypes.string,
 };
 
 ShowMore.defaultProps = {
   children: undefined,
   hasChildSelected: false,
+  label: '...',
   onShowMoreChanged: () => null,
 };

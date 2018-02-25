@@ -118,6 +118,10 @@ render(<App />, document.getElementById('root'));
 
 (Bool) Show `Show more` list. Default: `true`.
 
+#### showMoreLabel
+
+(String) Text to show on the `Show more` tab. Default: `...`
+
 #### transform
 
 (Bool) Transform to accordion if element width less than `transformWidth`. Default: `true`.
