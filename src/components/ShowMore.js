@@ -22,11 +22,12 @@ export default class ShowMore extends Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
+    const { children, isShown, hasChildSelected } = this.props;
     return (
-      this.props.children.length !== nextProps.children.length ||
-      this.props.isShown !== nextProps.isShown ||
-      this.props.hasChildSelected !== nextProps.hasChildSelected ||
-      this.state !== nextState
+      children.length !== nextProps.children.length
+      || isShown !== nextProps.isShown
+      || hasChildSelected !== nextProps.hasChildSelected
+      || this.state !== nextState
     );
   }
 
@@ -45,7 +46,7 @@ export default class ShowMore extends Component {
     const { isFocused, isHidden } = this.state;
     if (event.keyCode === 13) {
       if (isFocused) {
-        this.setState({ isHidden: !this.state.isHidden });
+        this.setState({ isHidden: !isHidden });
       } else if (!isHidden) {
         this.setState({ isHidden: true });
       }
@@ -53,23 +54,26 @@ export default class ShowMore extends Component {
   };
 
   close = () => {
-    if (!this.state.isHidden) {
+    const { isHidden } = this.state;
+    if (!isHidden) {
       this.setState({ isHidden: true });
     }
   };
 
   toggleVisibility = event => {
+    const { isHidden } = this.state;
     event.stopPropagation();
-    this.setState({ isHidden: !this.state.isHidden });
+    this.setState({ isHidden: !isHidden });
   };
 
   render() {
     const { isShown, children, onShowMoreChanged, hasChildSelected, label } = this.props;
+    const { isHidden } = this.state;
     if (!isShown || !children || !children.length) {
       return null;
     }
 
-    const isListHidden = this.state.isHidden;
+    const isListHidden = isHidden;
     const showMoreStyles = classNames({
       RRT__showmore: true,
       'RRT__showmore--selected': hasChildSelected
@@ -95,7 +99,9 @@ export default class ShowMore extends Component {
         onBlur={this.onBlur}
         onClick={this.toggleVisibility}
       >
-        <div className={showMoreLabelStyles}>{label}</div>
+        <div className={showMoreLabelStyles}>
+          {label}
+        </div>
         <div className={listStyles} aria-hidden={isListHidden} role="menu">
           {children}
         </div>

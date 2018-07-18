@@ -3,19 +3,14 @@ import PropTypes from 'prop-types';
 
 export default class TabPanel extends Component {
   shouldComponentUpdate(nextProps) {
-    return this.props.getContent !== nextProps.getContent ||
-      this.props.children !== nextProps.children ||
-      this.props.classNames !== nextProps.classNames;
+    const { children, getContent, classNames } = this.props;
+    return (
+      getContent !== nextProps.getContent || children !== nextProps.children || classNames !== nextProps.classNames
+    );
   }
 
   render() {
-    const {
-      classNames,
-      id,
-      tabId,
-      children,
-      getContent,
-    } = this.props;
+    const { classNames, id, tabId, children, getContent } = this.props;
 
     return (
       <div className={classNames} role="tabpanel" id={id} aria-labelledby={tabId} aria-hidden="false">
@@ -33,10 +28,10 @@ TabPanel.propTypes = {
 
   // generic props
   classNames: PropTypes.string.isRequired,
-  tabId: PropTypes.string.isRequired,
+  tabId: PropTypes.string.isRequired
 };
 
 TabPanel.defaultProps = {
   getContent: undefined,
-  children: undefined,
+  children: undefined
 };

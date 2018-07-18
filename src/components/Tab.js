@@ -7,18 +7,17 @@ function onTabClick(selected, onClick, originalKey) {
 
 export default class Tab extends Component {
   shouldComponentUpdate(nextProps) {
-    return (
-      this.props.children !== nextProps.children ||
-      this.props.selected !== nextProps.selected ||
-      this.props.classNames !== nextProps.classNames
-    );
+    const { children, selected, classNames } = this.props;
+    return children !== nextProps.children || selected !== nextProps.selected || classNames !== nextProps.classNames;
   }
 
   renderRemovableTab = () => {
     const { children, onRemove } = this.props;
     return (
       <div className="RRT__removable">
-        <div className="RRT__removable-text">{children}</div>
+        <div className="RRT__removable-text">
+          {children}
+        </div>
         <div className="RRT__removable-icon" onClick={onRemove}>
           x
         </div>
@@ -74,12 +73,12 @@ Tab.propTypes = {
   allowRemove: PropTypes.bool,
   id: PropTypes.string.isRequired,
   originalKey: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
-  classNames: PropTypes.string.isRequired,
+  classNames: PropTypes.string.isRequired
 };
 
 Tab.defaultProps = {
   children: undefined,
   onRemove: () => {},
   allowRemove: false,
-  disabled: false,
+  disabled: false
 };

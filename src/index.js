@@ -52,22 +52,24 @@ export default class Tabs extends Component {
 
   shouldComponentUpdate(nextProps, nextState) {
     const { selectedTabKey, blockWidth, showMoreWidth } = this.state;
+    const { items, transform, showMore, showInkBar, allowRemove, removeActiveOnly } = this.props;
 
     return (
-      this.props.items !== nextProps.items ||
-      nextProps.transform !== this.props.transform ||
-      nextProps.showMore !== this.props.showMore ||
-      nextProps.showInkBar !== this.props.showInkBar ||
-      nextProps.allowRemove !== this.props.allowRemove ||
-      nextProps.removeActiveOnly !== this.props.removeActiveOnly ||
-      nextState.blockWidth !== blockWidth ||
-      nextState.showMoreWidth !== showMoreWidth ||
-      nextState.selectedTabKey !== selectedTabKey
+      items !== nextProps.items
+      || nextProps.transform !== transform
+      || nextProps.showMore !== showMore
+      || nextProps.showInkBar !== showInkBar
+      || nextProps.allowRemove !== allowRemove
+      || nextProps.removeActiveOnly !== removeActiveOnly
+      || nextState.blockWidth !== blockWidth
+      || nextState.showMoreWidth !== showMoreWidth
+      || nextState.selectedTabKey !== selectedTabKey
     );
   }
 
   componentDidUpdate() {
-    if (!this.state.blockWidth) {
+    const { blockWidth } = this.state;
+    if (!blockWidth) {
       this.setTabsDimensions();
     }
   }
@@ -79,9 +81,10 @@ export default class Tabs extends Component {
   };
 
   onChangeTab = selectedTabKey => {
+    const { onChange } = this.props;
     this.setState({ selectedTabKey });
-    if (this.props.onChange) {
-      this.props.onChange(selectedTabKey);
+    if (onChange) {
+      onChange(selectedTabKey);
     }
   };
 
@@ -90,8 +93,9 @@ export default class Tabs extends Component {
   onBlurTab = () => this.setState({ focusedTabKey: null });
 
   onKeyDown = event => {
-    if (event.keyCode === 13 && this.state.focusedTabKey !== null) {
-      this.setState({ selectedTabKey: this.state.focusedTabKey });
+    const { focusedTabKey } = this.state;
+    if (event.keyCode === 13 && focusedTabKey !== null) {
+      this.setState({ selectedTabKey: focusedTabKey });
     }
   };
 
@@ -159,15 +163,15 @@ export default class Tabs extends Component {
         /* eslint-disable no-param-reassign */
         if (
           // don't need to `Show more` button
-          !showMore ||
+          !showMore
           // initial call
-          !blockWidth ||
+          || !blockWidth
           // collapsed mode
-          collapsed ||
+          || collapsed
           // all tabs are fit into the block
-          blockWidth > tabsTotalWidth ||
+          || blockWidth > tabsTotalWidth
           // current tab fit into the block
-          availableWidth - tabWidth > 0
+          || availableWidth - tabWidth > 0
         ) {
           result.tabsVisible.push(tabPayload);
         } else {
@@ -224,16 +228,17 @@ export default class Tabs extends Component {
   });
 
   getClassNamesFor = (type, { selected, collapsed, tabIndex, disabled, className = '' }) => {
+    const { tabClass, panelClass } = this.props;
     switch (type) {
       case 'tab':
-        return cs('RRT__tab', className, this.props.tabClass, {
+        return cs('RRT__tab', className, tabClass, {
           'RRT__tab--first': !tabIndex,
           'RRT__tab--selected': selected,
           'RRT__tab--disabled': disabled,
           'RRT__tab--collapsed': collapsed
         });
       case 'panel':
-        return cs('RRT__panel', className, this.props.panelClass);
+        return cs('RRT__panel', className, panelClass);
       default:
         return '';
     }
@@ -259,13 +264,14 @@ export default class Tabs extends Component {
       return;
     }
 
-    const showMoreWidth = element.offsetWidth;
-    if (this.state.showMoreWidth === showMoreWidth) {
+    const { showMoreWidth } = this.state;
+    const { offsetWidth } = element;
+    if (showMoreWidth === offsetWidth) {
       return;
     }
 
     this.setState({
-      showMoreWidth
+      showMoreWidth: offsetWidth
     });
   };
 
@@ -307,11 +313,11 @@ export default class Tabs extends Component {
           )}
         </div>
 
-        {showInkBar &&
-          !collapsed &&
-          !isSelectedTabHidden && (
+        {showInkBar
+          && !collapsed
+          && !isSelectedTabHidden && (
             <InkBar left={selectedTabDimensions.offset || 0} width={selectedTabDimensions.width || 0} />
-          )}
+        )}
 
         {!collapsed && panels[selectedTabKey] && <TabPanel {...this.getPanelProps(panels[selectedTabKey])} />}
 
