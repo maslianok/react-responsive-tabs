@@ -76,15 +76,33 @@ export default class Tabs extends Component {
 
   onResize = () => {
     if (this.tabsWrapper) {
-      this.setState({ blockWidth: this.tabsWrapper.offsetWidth });
+      const currentIsCollapsed = this.getIsCollapsed();
+      this.setState({ blockWidth: this.tabsWrapper.offsetWidth }, () => {
+        const { items } = this.props;
+        const { selectedTabKey } = this.state;
+        const nextIsCollapsed = this.getIsCollapsed();
+        if (currentIsCollapsed && !nextIsCollapsed && selectedTabKey === -1 && items && items.length) {
+          const firstTabKey = items[0].key || 0;
+          this.setState({ selectedTabKey: firstTabKey });
+        }
+      });
     }
   };
 
-  onChangeTab = selectedTabKey => {
+  onChangeTab = nextTabKey => {
     const { onChange } = this.props;
-    this.setState({ selectedTabKey });
+    const { selectedTabKey } = this.state;
+    const isCollapsed = this.getIsCollapsed();
+    if (isCollapsed && selectedTabKey === nextTabKey) {
+      // hide on mobile
+      this.setState({ selectedTabKey: -1 });
+    } else {
+      // change active tab
+      this.setState({ selectedTabKey: nextTabKey });
+    }
+
     if (onChange) {
-      onChange(selectedTabKey);
+      onChange(nextTabKey);
     }
   };
 
@@ -259,6 +277,12 @@ export default class Tabs extends Component {
     return selectedTabKey;
   };
 
+  getIsCollapsed = () => {
+    const { transform, transformWidth } = this.props;
+    const { blockWidth } = this.state;
+    return blockWidth && transform && blockWidth < transformWidth;
+  };
+
   showMoreChanged = element => {
     if (!element) {
       return;
@@ -276,23 +300,15 @@ export default class Tabs extends Component {
   };
 
   render() {
-    const {
-      showInkBar,
-      containerClass,
-      tabsWrapperClass,
-      showMore,
-      transform,
-      transformWidth,
-      showMoreLabel
-    } = this.props;
-    const { tabDimensions, blockWidth } = this.state;
+    const { showInkBar, containerClass, tabsWrapperClass, showMore, transform, showMoreLabel } = this.props;
+    const { tabDimensions } = this.state;
     const { tabsVisible, tabsHidden, panels, isSelectedTabHidden } = this.getTabs();
-    const collapsed = blockWidth && transform && blockWidth < transformWidth;
+    const isCollapsed = this.getIsCollapsed();
     const selectedTabKey = this.getSelectedTabKey();
     const selectedTabDimensions = tabDimensions[selectedTabKey] || {};
 
     const containerClasses = cs('RRT__container', containerClass);
-    const tabsClasses = cs('RRT__tabs', tabsWrapperClass, { RRT__accordion: collapsed });
+    const tabsClasses = cs('RRT__tabs', tabsWrapperClass, { RRT__accordion: isCollapsed });
 
     return (
       <div className={containerClasses} ref={e => (this.tabsWrapper = e)} onKeyDown={this.onKeyDown}>
@@ -300,13 +316,13 @@ export default class Tabs extends Component {
           {tabsVisible.reduce((result, tab) => {
             result.push(<Tab {...this.getTabProps(tab)} />);
 
-            if (collapsed && selectedTabKey === tab.key) {
+            if (isCollapsed && selectedTabKey === tab.key) {
               result.push(<TabPanel {...this.getPanelProps(panels[tab.key])} />);
             }
             return result;
           }, [])}
 
-          {!collapsed && (
+          {!isCollapsed && (
             <ShowMore {...this.getShowMoreProps(showMore, isSelectedTabHidden, showMoreLabel)}>
               {tabsHidden.map(tab => <Tab {...this.getTabProps(tab)} />)}
             </ShowMore>
@@ -314,12 +330,12 @@ export default class Tabs extends Component {
         </div>
 
         {showInkBar
-          && !collapsed
+          && !isCollapsed
           && !isSelectedTabHidden && (
             <InkBar left={selectedTabDimensions.offset || 0} width={selectedTabDimensions.width || 0} />
         )}
 
-        {!collapsed && panels[selectedTabKey] && <TabPanel {...this.getPanelProps(panels[selectedTabKey])} />}
+        {!isCollapsed && panels[selectedTabKey] && <TabPanel {...this.getPanelProps(panels[selectedTabKey])} />}
 
         {(showMore || transform) && <ResizeDetector handleWidth onResize={this.onResizeThrottled} />}
       </div>

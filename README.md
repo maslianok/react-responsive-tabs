@@ -4,36 +4,10 @@
 
 Please, file an issue if something went wrong or let me know via Twitter @maslianok
 
----
-
-#### Breaking change in 0.7.x
-
-In this version library renders only active tab panel. To make it possible I've had to change item object structure.
-
-Before:
-
-```javascript
-{
-  title: 'Title',
-  content: 'Content',
-}
-```
-
-After:
-
-```javascript
-{
-  title: 'Title',
-  getContent: () => 'Content',
-}
-```
-
----
-
 #### Responsive
 
-* Move tabs to 'Show more' list on medium screen size
-* Transform tabs to accordion on small screen size
+- Hide tabs under the 'Show more' option when they don't fit into the screen
+- Transform tabs into the accordion when the wrapper width reaches the `transformWidth` value
 
 ![Responsive tabs](https://cloud.githubusercontent.com/assets/3485490/11324577/f6536f2c-913d-11e5-80b0-8755a2ec11cb.gif)
 
@@ -86,12 +60,13 @@ import 'react-responsive-tabs/styles.css';
 const presidents = [{ name: 'George Washington', biography: '...' }, { name: 'Theodore Roosevelt', biography: '...' }];
 
 function getTabs() {
-  return presidents.map(president => ({
-    key: index, // Optional. Equals to tab index if this property is omitted
-    tabClassName: 'tab', // Optional
-    panelClassName: 'panel', // Optional
+  return presidents.map((president, index) => ({
     title: president.name,
     getContent: () => president.biography,
+    /* Optional parameters */
+    key: index,
+    tabClassName: 'tab',
+    panelClassName: 'panel',
   }));
 }
 
@@ -102,57 +77,21 @@ render(<App />, document.getElementById('root'));
 
 ## API
 
-#### items
-
-(Array) Tabs data
-
-#### onChange(key)
-
-(Function) onChange callback
-
-#### selectedTabKey
-
-(Number|String) Tab with this key will be selected by default.
-
-#### showMore
-
-(Bool) Show `Show more` list. Default: `true`.
-
-#### showMoreLabel
-
-(String) Text to show on the `Show more` tab. Default: `...`
-
-#### transform
-
-(Bool) Transform to accordion if element width less than `transformWidth`. Default: `true`.
-
-#### transformWidth
-
-(Number) Transform to accordion if wrapper width less than this value. Default: 800
-
-#### tabsWrapperClass
-
-(String) Wrapper class
-
-#### tabClassName
-
-(String) Tab class
-
-#### panelClassName
-
-(String) Tab panel class
-
-#### allowRemove
-
-(Bool) Allows tabs removal. Default: false
-
-#### removeActiveOnly
-
-(Bool) Only active tab has removal option
-
-#### showInkBar
-
-(Bool) Add MaterialUI [InkBar effect](http://maslianok.github.io/react-responsive-tabs/#showInkBar)
+| Prop             | Type          | Description                                                                  | Default   |
+| ---------------- | ------------- | ---------------------------------------------------------------------------- | --------- |
+| items            | Array         | Tabs data                                                                    | []        |
+| onChange         | Function      | onChange callback                                                            | undefined |
+| selectedTabKey   | Number/String | Selected tab                                                                 | undefined |
+| showMore         | Bool          | Whether to show `Show more` or not                                           | `true`    |
+| showMoreLabel    | String        | `Show more` tab name                                                         | `...`     |
+| transform        | Bool          | Transform to accordion when the wrapper width is less than `transformWidth`. | `true`    |
+| transformWidth   | Number        | Transform width.                                                             | 800       |
+| tabsWrapperClass | String        | Wrapper class                                                                | undefined |
+| tabClassName     | String        | Tab class                                                                    | undefined |
+| panelClassName   | String        | Tab panel class                                                              | undefined |
+| allowRemove      | Bool          | Allows tabs removal.                                                         | `false`   |
+| removeActiveOnly | Bool          | Only active tab has removal option                                           | `false`   |
+| showInkBar       | Bool          | Add MaterialUI InkBar effect                                                 | `false`   |
 
 ### License
 

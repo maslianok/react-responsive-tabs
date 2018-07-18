@@ -1,15 +1,16 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-function onTabClick(selected, onClick, originalKey) {
-  return () => !selected && onClick(originalKey);
-}
-
 export default class Tab extends Component {
   shouldComponentUpdate(nextProps) {
     const { children, selected, classNames } = this.props;
     return children !== nextProps.children || selected !== nextProps.selected || classNames !== nextProps.classNames;
   }
+
+  onTabClick = () => {
+    const { onClick, originalKey } = this.props;
+    onClick(originalKey);
+  };
 
   renderRemovableTab = () => {
     const { children, onRemove } = this.props;
@@ -36,7 +37,7 @@ export default class Tab extends Component {
   };
 
   render() {
-    const { id, classNames, selected, disabled, panelId, onClick, onFocus, onBlur, originalKey } = this.props;
+    const { id, classNames, selected, disabled, panelId, onFocus, onBlur, originalKey } = this.props;
 
     return (
       <div
@@ -49,7 +50,7 @@ export default class Tab extends Component {
         aria-disabled={disabled ? 'true' : 'false'}
         aria-controls={panelId}
         tabIndex="0"
-        onClick={onTabClick(selected, onClick, originalKey)}
+        onClick={this.onTabClick}
         onFocus={onFocus(originalKey)}
         onBlur={onBlur}
       >
