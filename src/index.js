@@ -374,7 +374,10 @@ Tabs.propTypes = {
   tabClass: PropTypes.string,
   panelClass: PropTypes.string,
   // labels
-  showMoreLabel: PropTypes.string
+  showMoreLabel: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.node,
+  ]),
 };
 
 Tabs.defaultProps = {

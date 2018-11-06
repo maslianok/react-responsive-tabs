@@ -83,7 +83,7 @@ render(<App />, document.getElementById('root'));
 | onChange         | Function      | onChange callback                                                            | undefined |
 | selectedTabKey   | Number/String | Selected tab                                                                 | undefined |
 | showMore         | Bool          | Whether to show `Show more` or not                                           | `true`    |
-| showMoreLabel    | String        | `Show more` tab name                                                         | `...`     |
+| showMoreLabel    | String/Node   | `Show more` tab name                                                         | `...`     |
 | transform        | Bool          | Transform to accordion when the wrapper width is less than `transformWidth`. | `true`    |
 | transformWidth   | Number        | Transform width.                                                             | 800       |
 | tabsWrapperClass | String        | Wrapper class                                                                | undefined |

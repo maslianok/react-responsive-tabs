@@ -115,7 +115,10 @@ ShowMore.propTypes = {
   hasChildSelected: PropTypes.bool,
   isShown: PropTypes.bool.isRequired,
   onShowMoreChanged: PropTypes.func,
-  label: PropTypes.string
+  label: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.node,
+  ]),
 };
 
 ShowMore.defaultProps = {
