@@ -1,16 +1,42 @@
 {
-  "presets": [
-    "latest",
-    "react"
+  "presets": ["@babel/env", "@babel/react"],
+  "plugins": [
+    "@babel/plugin-proposal-class-properties",
+    [
+      "transform-imports",
+      {
+        "lodash": {
+          "transform": "lodash/${member}",
+          "preventFullImport": true
+        }
+      }
+    ],
+    [
+      "module-resolver",
+      {
+        "root": ["./", "./src"]
+      }
+    ]
   ],
-  "plugins": ["transform-class-properties", "transform-object-rest-spread"],
   "env": {
-    "commonjs": {
+    "esm": {
+      "presets": [
+        [
+          "@babel/env",
+          {
+            "modules": false
+          }
+        ],
+        "@babel/react"
+      ],
       "plugins": [
         [
-          "transform-es2015-modules-commonjs",
+          "transform-imports",
           {
-            "loose": true
+            "lodash": {
+              "transform": "lodash-es/${member}",
+              "preventFullImport": true
+            }
           }
         ]
       ]
