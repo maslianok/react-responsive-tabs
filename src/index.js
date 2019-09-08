@@ -1,3 +1,5 @@
+/* eslint camelcase: ['error', {allow: ['^UNSAFE_', 'RRT__']}] */
+
 import React, { Component } from 'react';
 import ResizeDetector from 'react-resize-detector';
 import cs from 'classnames';
@@ -33,7 +35,7 @@ export default class Tabs extends Component {
     this.setTabsDimensions();
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     const { items } = this.props;
     const { selectedTabKey } = this.state;
     const newState = {};

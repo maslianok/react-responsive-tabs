@@ -1,4 +1,5 @@
 /* eslint jsx-a11y/no-noninteractive-element-interactions: 0, jsx-a11y/no-noninteractive-tabindex: 0 */
+/* eslint camelcase: ['error', {allow: ['^UNSAFE_', 'RRT__']}] */
 
 import React, { Component } from 'react';
 import classNames from 'classnames';
@@ -14,7 +15,7 @@ export default class ShowMore extends Component {
     };
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     if (typeof window !== 'undefined') {
       window.addEventListener('click', this.close);
       window.addEventListener('keydown', this.onKeyDown);
