@@ -16,6 +16,7 @@ export default class Tabs extends Component {
     super(props);
 
     this.tabRefs = {};
+    this.selectedTabKeyProp = props.selectedTabKey;
 
     this.state = {
       tabDimensions: {},
@@ -33,23 +34,6 @@ export default class Tabs extends Component {
     this.setTabsDimensions();
   }
 
-  componentWillReceiveProps(nextProps) {
-    const { items } = this.props;
-    const { selectedTabKey } = this.state;
-    const newState = {};
-    if (items !== nextProps.items) {
-      newState.blockWidth = 0;
-    }
-
-    if (selectedTabKey !== nextProps.selectedTabKey) {
-      newState.selectedTabKey = nextProps.selectedTabKey;
-    }
-
-    if (Object.keys(newState).length) {
-      this.setState(newState);
-    }
-  }
-
   shouldComponentUpdate(nextProps, nextState) {
     const { selectedTabKey, blockWidth, showMoreWidth } = this.state;
     const { items, transform, showMore, showInkBar, allowRemove, removeActiveOnly } = this.props;
@@ -63,15 +47,24 @@ export default class Tabs extends Component {
       nextProps.removeActiveOnly !== removeActiveOnly ||
       nextState.blockWidth !== blockWidth ||
       nextState.showMoreWidth !== showMoreWidth ||
+      nextProps.selectedTabKey !== this.selectedTabKeyProp ||
       nextState.selectedTabKey !== selectedTabKey
     );
   }
 
-  componentDidUpdate() {
-    const { blockWidth } = this.state;
-    if (!blockWidth) {
+  componentDidUpdate(prevProps) {
+    const { items, selectedTabKey } = this.props;
+
+    if (this.selectedTabKeyProp !== selectedTabKey) {
+      // eslint-disable-next-line react/no-did-update-set-state
+      this.setState({ selectedTabKey });
+    }
+
+    if (items !== prevProps.items) {
       this.setTabsDimensions();
     }
+
+    this.selectedTabKeyProp = selectedTabKey;
   }
 
   onResize = () => {

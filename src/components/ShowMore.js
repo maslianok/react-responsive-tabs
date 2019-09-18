@@ -14,7 +14,7 @@ export default class ShowMore extends Component {
     };
   }
 
-  componentWillMount() {
+  componentDidMount() {
     if (typeof window !== 'undefined') {
       window.addEventListener('click', this.close);
       window.addEventListener('keydown', this.onKeyDown);
