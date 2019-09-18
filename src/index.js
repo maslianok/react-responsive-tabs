@@ -55,15 +55,15 @@ export default class Tabs extends Component {
     const { items, transform, showMore, showInkBar, allowRemove, removeActiveOnly } = this.props;
 
     return (
-      items !== nextProps.items
-      || nextProps.transform !== transform
-      || nextProps.showMore !== showMore
-      || nextProps.showInkBar !== showInkBar
-      || nextProps.allowRemove !== allowRemove
-      || nextProps.removeActiveOnly !== removeActiveOnly
-      || nextState.blockWidth !== blockWidth
-      || nextState.showMoreWidth !== showMoreWidth
-      || nextState.selectedTabKey !== selectedTabKey
+      items !== nextProps.items ||
+      nextProps.transform !== transform ||
+      nextProps.showMore !== showMore ||
+      nextProps.showInkBar !== showInkBar ||
+      nextProps.allowRemove !== allowRemove ||
+      nextProps.removeActiveOnly !== removeActiveOnly ||
+      nextState.blockWidth !== blockWidth ||
+      nextState.showMoreWidth !== showMoreWidth ||
+      nextState.selectedTabKey !== selectedTabKey
     );
   }
 
@@ -181,15 +181,15 @@ export default class Tabs extends Component {
         /* eslint-disable no-param-reassign */
         if (
           // don't need to `Show more` button
-          !showMore
+          !showMore ||
           // initial call
-          || !blockWidth
+          !blockWidth ||
           // collapsed mode
-          || collapsed
+          collapsed ||
           // all tabs are fit into the block
-          || blockWidth > tabsTotalWidth
+          blockWidth > tabsTotalWidth ||
           // current tab fit into the block
-          || availableWidth - tabWidth > 0
+          availableWidth - tabWidth > 0
         ) {
           result.tabsVisible.push(tabPayload);
         } else {
@@ -324,15 +324,15 @@ export default class Tabs extends Component {
 
           {!isCollapsed && (
             <ShowMore {...this.getShowMoreProps(showMore, isSelectedTabHidden, showMoreLabel)}>
-              {tabsHidden.map(tab => <Tab {...this.getTabProps(tab)} />)}
+              {tabsHidden.map(tab => (
+                <Tab {...this.getTabProps(tab)} />
+              ))}
             </ShowMore>
           )}
         </div>
 
-        {showInkBar
-          && !isCollapsed
-          && !isSelectedTabHidden && (
-            <InkBar left={selectedTabDimensions.offset || 0} width={selectedTabDimensions.width || 0} />
+        {showInkBar && !isCollapsed && !isSelectedTabHidden && (
+          <InkBar left={selectedTabDimensions.offset || 0} width={selectedTabDimensions.width || 0} />
         )}
 
         {!isCollapsed && panels[selectedTabKey] && <TabPanel {...this.getPanelProps(panels[selectedTabKey])} />}
@@ -374,10 +374,7 @@ Tabs.propTypes = {
   tabClass: PropTypes.string,
   panelClass: PropTypes.string,
   // labels
-  showMoreLabel: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.node,
-  ]),
+  showMoreLabel: PropTypes.oneOfType([PropTypes.string, PropTypes.node])
 };
 
 Tabs.defaultProps = {

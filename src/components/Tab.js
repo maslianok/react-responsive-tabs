@@ -16,9 +16,7 @@ export default class Tab extends Component {
     const { children, onRemove } = this.props;
     return (
       <div className="RRT__removable">
-        <div className="RRT__removable-text">
-          {children}
-        </div>
+        <div className="RRT__removable-text">{children}</div>
         <div className="RRT__removable-icon" onClick={onRemove}>
           x
         </div>
