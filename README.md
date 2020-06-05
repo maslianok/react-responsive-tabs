@@ -97,6 +97,7 @@ render(<App />, document.getElementById('root'));
 | allowRemove      | Bool          | Allows tabs removal.                                                         | `false`   |
 | removeActiveOnly | Bool          | Only active tab has removal option                                           | `false`   |
 | showInkBar       | Bool          | Add MaterialUI InkBar effect                                                 | `false`   |
+| uid              | any           | An optional external id. The component rerenders when it changes             | undefined |
 
 ### License
 
