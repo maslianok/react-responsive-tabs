@@ -1,0 +1,5 @@
+{
+    "prettier.singleQuote": true,
+    "prettier.arrowParens": "avoid",
+    "prettier.printWidth": 120
+}

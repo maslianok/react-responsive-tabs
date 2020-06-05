@@ -4,9 +4,7 @@
   "env": {
     "browser": true
   },
-  "plugins": [
-    "react"
-  ],
+  "plugins": ["react"],
   "rules": {
     "no-underscore-dangle": 0,
     "react/jsx-filename-extension": 0,
@@ -16,10 +14,8 @@
     "comma-dangle": 0,
     "import/no-named-as-default": 0,
     "jsx-a11y/label-has-for": 0,
-    "max-len": [
-      "error",
-      120
-    ],
+    "jsx-a11y/click-events-have-key-events": 0,
+    "max-len": ["error", 120],
     "arrow-parens": [
       "error",
       "as-needed",
@@ -30,9 +26,7 @@
   },
   "settings": {
     "import/resolve": {
-      "moduleDirectory": [
-        "node_modules"
-      ]
+      "moduleDirectory": ["node_modules"]
     }
   }
 }

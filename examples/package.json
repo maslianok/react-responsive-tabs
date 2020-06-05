@@ -5,12 +5,12 @@
   "dependencies": {
     "classnames": "^2.2.6",
     "linklocal": "^2.8.2",
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6",
-    "react-ga": "^2.5.7",
-    "react-helmet": "^5.2.1",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-ga": "^2.7.0",
+    "react-helmet": "^6.0.0",
     "react-responsive-tabs": "file:../",
-    "react-scripts": "3.0.1"
+    "react-scripts": "3.4.1"
   },
   "scripts": {
     "start": "linklocal && react-scripts start",
