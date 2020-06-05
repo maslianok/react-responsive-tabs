@@ -16,22 +16,31 @@ export class Basic extends PureComponent {
       items: this.getSimpleTabs(),
       selectedTabKey: 0,
       unmountOnExit: true,
+      key: +Date.now(),
     };
+  }
+
+  componentDidMount() {
+    setTimeout(() => {
+      this.setState({ key: +Date.now() });
+    }, 5000);
   }
 
   onChangeProp = propsName => evt => {
     this.setState({ [propsName]: evt.target.type === 'checkbox' ? evt.target.checked : +evt.target.value });
   };
 
-  getSimpleTabs = () =>
+  getSimpleTabs = withTS =>
     dummyData.map(({ name, biography }, index) => ({
       key: index,
-      title: name,
+      title: name + (withTS ? Date.now() : ''),
       getContent: () => biography,
     }));
 
   render() {
     const { showMore, transform, showInkBar, selectedTabKey, unmountOnExit } = this.state;
+
+    console.log('UPDATE key', this.state.key);
     return (
       <div className="basic__wrapper">
         <div className="basic__props">
@@ -73,7 +82,7 @@ export class Basic extends PureComponent {
           </div>
         </div>
         <div className="basic__tabs">
-          <Tabs {...this.state} />
+          <Tabs {...this.state} uid={this.state.key} />
         </div>
       </div>
     );

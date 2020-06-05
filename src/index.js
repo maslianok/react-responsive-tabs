@@ -35,16 +35,18 @@ export default class Tabs extends Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    const { selectedTabKey, blockWidth, showMoreWidth } = this.state;
-    const { items, transform, showMore, showInkBar, allowRemove, removeActiveOnly } = this.props;
+    const { selectedTabKey, tabsTotalWidth, blockWidth, showMoreWidth } = this.state;
+    const { items, transform, showMore, showInkBar, allowRemove, removeActiveOnly, uid } = this.props;
 
     return (
       items !== nextProps.items ||
+      nextProps.uid !== uid ||
       nextProps.transform !== transform ||
       nextProps.showMore !== showMore ||
       nextProps.showInkBar !== showInkBar ||
       nextProps.allowRemove !== allowRemove ||
       nextProps.removeActiveOnly !== removeActiveOnly ||
+      nextState.tabsTotalWidth !== tabsTotalWidth ||
       nextState.blockWidth !== blockWidth ||
       nextState.showMoreWidth !== showMoreWidth ||
       nextProps.selectedTabKey !== this.selectedTabKeyProp ||
@@ -53,14 +55,18 @@ export default class Tabs extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { items, selectedTabKey } = this.props;
+    const { uid, items, selectedTabKey } = this.props;
 
     if (this.selectedTabKeyProp !== selectedTabKey) {
       // eslint-disable-next-line react/no-did-update-set-state
       this.setState({ selectedTabKey });
     }
 
-    if (items !== prevProps.items) {
+    if (
+      uid !== prevProps.uid ||
+      items.length !== prevProps.items.length ||
+      items.every((item, i) => item !== prevProps.items[i])
+    ) {
       this.setTabsDimensions();
     }
 
@@ -121,7 +127,7 @@ export default class Tabs extends Component {
 
   setTabsDimensions = () => {
     if (!this.tabsWrapper) {
-      // it shouldn't happens evern. Just paranoic check
+      // it shouldn't happen ever. Just a paranoic check
       return;
     }
 
@@ -409,12 +415,16 @@ Tabs.propTypes = {
   tabsWrapperClass: PropTypes.string,
   tabClass: PropTypes.string,
   panelClass: PropTypes.string,
+  // optional external id. Force rerender when it changes
+  // eslint-disable-next-line react/forbid-prop-types
+  uid: PropTypes.any,
   // labels
   showMoreLabel: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
 };
 
 Tabs.defaultProps = {
   items: [],
+  uid: undefined,
   selectedTabKey: undefined,
   showMore: true,
   showInkBar: false,
