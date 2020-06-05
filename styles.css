@@ -22,7 +22,7 @@
   cursor: pointer;
   z-index: 1;
   white-space: nowrap;
-  padding: .7em 1em;
+  padding: 0.7em 1em;
 }
 
 .RRT__tab:focus {
@@ -71,7 +71,6 @@
   top: 0.2em;
 }
 
-
 /****************************/
 /********* panel styles *****/
 /****************************/
@@ -79,6 +78,10 @@
   margin-top: -1px;
   padding: 1em;
   border: 1px solid #ddd;
+}
+
+.RRT__panel--hidden {
+  display: none;
 }
 
 .RRT__accordion .RRT__panel {
@@ -104,7 +107,7 @@
 }
 
 .RRT__showmore-label {
-  padding: .7em 1em;
+  padding: 0.7em 1em;
   position: relative;
   bottom: -1px;
   z-index: 1;

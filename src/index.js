@@ -24,7 +24,7 @@ export default class Tabs extends Component {
       tabsTotalWidth: 0,
       showMoreWidth: 40,
       selectedTabKey: props.selectedTabKey,
-      focusedTabKey: null
+      focusedTabKey: null,
     };
 
     this.onResizeThrottled = throttle(this.onResize, props.resizeThrottle, { trailing: true });
@@ -157,14 +157,14 @@ export default class Tabs extends Component {
             }
           },
           allowRemove: allowRemove && (!removeActiveOnly || selected),
-          className: tabClassName
+          className: tabClassName,
         };
 
         const panelPayload = {
           ...payload,
           content,
           getContent,
-          className: panelClassName
+          className: panelClassName,
         };
 
         const tabWidth = tabDimensions[key] ? tabDimensions[key].width : 0;
@@ -196,7 +196,7 @@ export default class Tabs extends Component {
 
         return result;
       },
-      { tabsVisible: [], tabsHidden: [], panels: {}, isSelectedTabHidden: false }
+      { tabsVisible: [], tabsHidden: [], panels: {}, isSelectedTabHidden: false },
     );
   };
 
@@ -218,27 +218,28 @@ export default class Tabs extends Component {
       collapsed,
       tabIndex,
       disabled,
-      className
-    })
+      className,
+    }),
   });
 
-  getPanelProps = ({ key, content, getContent, className }) => ({
+  getPanelProps = ({ key, content, getContent, className }, isHidden) => ({
     getContent,
     children: content,
     key: panelPrefix + key,
     id: panelPrefix + key,
     tabId: tabPrefix + key,
-    classNames: this.getClassNamesFor('panel', { className })
+    classNames: this.getClassNamesFor('panel', { className, isHidden }),
+    isHidden,
   });
 
   getShowMoreProps = (isShown, isSelectedTabHidden, showMoreLabel) => ({
     onShowMoreChanged: this.showMoreChanged,
     isShown,
     label: showMoreLabel,
-    hasChildSelected: isSelectedTabHidden
+    hasChildSelected: isSelectedTabHidden,
   });
 
-  getClassNamesFor = (type, { selected, collapsed, tabIndex, disabled, className = '' }) => {
+  getClassNamesFor = (type, { selected, collapsed, tabIndex, disabled, className = '', isHidden }) => {
     const { tabClass, panelClass } = this.props;
     switch (type) {
       case 'tab':
@@ -246,10 +247,10 @@ export default class Tabs extends Component {
           'RRT__tab--first': !tabIndex,
           'RRT__tab--selected': selected,
           'RRT__tab--disabled': disabled,
-          'RRT__tab--collapsed': collapsed
+          'RRT__tab--collapsed': collapsed,
         });
       case 'panel':
-        return cs('RRT__panel', className, panelClass);
+        return cs('RRT__panel', className, panelClass, { 'RRT__panel--hidden': isHidden });
       default:
         return '';
     }
@@ -288,12 +289,41 @@ export default class Tabs extends Component {
     }
 
     this.setState({
-      showMoreWidth: offsetWidth
+      showMoreWidth: offsetWidth,
     });
   };
 
+  getExpandedTabs = (panels, selectedTabKey, isCollapsed) => {
+    const { unmountOnExit } = this.props;
+    if (isCollapsed) {
+      return undefined;
+    }
+
+    if (!unmountOnExit) {
+      // render all tabs if unmountOnExit === false (inactive are hidden)
+      return Object.keys(panels).map(key => (
+        <TabPanel {...this.getPanelProps(panels[key], `${selectedTabKey}` !== `${key}`)} />
+      ));
+    }
+
+    if (panels[selectedTabKey]) {
+      // render only active tab if unmountOnExit === true
+      return <TabPanel {...this.getPanelProps(panels[selectedTabKey])} />;
+    }
+
+    return undefined;
+  };
+
   render() {
-    const { showInkBar, containerClass, tabsWrapperClass, showMore, transform, showMoreLabel } = this.props;
+    const {
+      showInkBar,
+      containerClass,
+      tabsWrapperClass,
+      showMore,
+      transform,
+      showMoreLabel,
+      unmountOnExit,
+    } = this.props;
     const { tabDimensions } = this.state;
     const { tabsVisible, tabsHidden, panels, isSelectedTabHidden } = this.getTabs();
     const isCollapsed = this.getIsCollapsed();
@@ -309,8 +339,8 @@ export default class Tabs extends Component {
           {tabsVisible.reduce((result, tab) => {
             result.push(<Tab {...this.getTabProps(tab)} />);
 
-            if (isCollapsed && selectedTabKey === tab.key) {
-              result.push(<TabPanel {...this.getPanelProps(panels[tab.key])} />);
+            if (isCollapsed && (!unmountOnExit || selectedTabKey === tab.key)) {
+              result.push(<TabPanel {...this.getPanelProps(panels[tab.key], selectedTabKey !== tab.key)} />);
             }
             return result;
           }, [])}
@@ -328,7 +358,7 @@ export default class Tabs extends Component {
           <InkBar left={selectedTabDimensions.offset || 0} width={selectedTabDimensions.width || 0} />
         )}
 
-        {!isCollapsed && panels[selectedTabKey] && <TabPanel {...this.getPanelProps(panels[selectedTabKey])} />}
+        {this.getExpandedTabs(panels, selectedTabKey, isCollapsed)}
 
         {(showMore || transform) && <ResizeDetector handleWidth onResize={this.onResizeThrottled} />}
       </div>
@@ -361,13 +391,15 @@ Tabs.propTypes = {
   onRemove: PropTypes.func,
   // frequency of onResize recalculation fires
   resizeThrottle: PropTypes.number,
+  // unmounts the tab when it gets inactive (unselected)
+  unmountOnExit: PropTypes.bool,
   // classnames
   containerClass: PropTypes.string,
   tabsWrapperClass: PropTypes.string,
   tabClass: PropTypes.string,
   panelClass: PropTypes.string,
   // labels
-  showMoreLabel: PropTypes.oneOfType([PropTypes.string, PropTypes.node])
+  showMoreLabel: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
 };
 
 Tabs.defaultProps = {
@@ -385,6 +417,7 @@ Tabs.defaultProps = {
   tabClass: undefined,
   panelClass: undefined,
   showMoreLabel: '...',
+  unmountOnExit: true,
   onChange: () => null,
-  onRemove: () => null
+  onRemove: () => null,
 };

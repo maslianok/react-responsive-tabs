@@ -57,7 +57,10 @@ import Tabs from 'react-responsive-tabs';
 // IMPORTANT you need to include the default styles
 import 'react-responsive-tabs/styles.css';
 
-const presidents = [{ name: 'George Washington', biography: '...' }, { name: 'Theodore Roosevelt', biography: '...' }];
+const presidents = [
+  { name: 'George Washington', biography: '...' },
+  { name: 'Theodore Roosevelt', biography: '...' },
+];
 
 function getTabs() {
   return presidents.map((president, index) => ({
@@ -86,6 +89,7 @@ render(<App />, document.getElementById('root'));
 | showMoreLabel    | String/Node   | `Show more` tab name                                                         | `...`     |
 | transform        | Bool          | Transform to accordion when the wrapper width is less than `transformWidth`. | `true`    |
 | transformWidth   | Number        | Transform width.                                                             | 800       |
+| unmountOnExit    | Bool          | Whether to unmount inactive tabs from DOM tree or not                        | `true`    |
 | tabsWrapperClass | String        | Wrapper class                                                                | undefined |
 | tabClassName     | String        | Tab class                                                                    | undefined |
 | panelClassName   | String        | Tab panel class                                                              | undefined |
