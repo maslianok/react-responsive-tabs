@@ -7,9 +7,9 @@ export default class Tab extends Component {
     return children !== nextProps.children || selected !== nextProps.selected || classNames !== nextProps.classNames;
   }
 
-  onTabClick = () => {
+  onTabClick = evt => {
     const { onClick, originalKey } = this.props;
-    onClick(originalKey);
+    onClick(originalKey, evt);
   };
 
   renderRemovableTab = () => {
@@ -72,12 +72,12 @@ Tab.propTypes = {
   allowRemove: PropTypes.bool,
   id: PropTypes.string.isRequired,
   originalKey: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
-  classNames: PropTypes.string.isRequired
+  classNames: PropTypes.string.isRequired,
 };
 
 Tab.defaultProps = {
   children: undefined,
   onRemove: () => {},
   allowRemove: false,
-  disabled: false
+  disabled: false,
 };

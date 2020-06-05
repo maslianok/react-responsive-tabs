@@ -83,6 +83,7 @@ render(<App />, document.getElementById('root'));
 | Prop             | Type          | Description                                                                  | Default   |
 | ---------------- | ------------- | ---------------------------------------------------------------------------- | --------- |
 | items            | Array         | Tabs data                                                                    | []        |
+| beforeChange     | Function      | Fires right before a tab changes. Return `false` to prevent the tab change   | undefined |
 | onChange         | Function      | onChange callback                                                            | undefined |
 | selectedTabKey   | Number/String | Selected tab                                                                 | undefined |
 | showMore         | Bool          | Whether to show `Show more` or not                                           | `true`    |

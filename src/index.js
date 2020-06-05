@@ -82,9 +82,18 @@ export default class Tabs extends Component {
     }
   };
 
-  onChangeTab = nextTabKey => {
-    const { onChange } = this.props;
+  onChangeTab = (nextTabKey, evt) => {
+    const { beforeChange, onChange } = this.props;
     const { selectedTabKey } = this.state;
+
+    if (typeof beforeChange === 'function') {
+      const beforeChangeRes = beforeChange({ selectedTabKey, nextTabKey });
+      if (beforeChangeRes === false) {
+        evt.preventDefault();
+        return;
+      }
+    }
+
     const isCollapsed = this.getIsCollapsed();
     if (isCollapsed && selectedTabKey === nextTabKey) {
       // hide on mobile
@@ -385,6 +394,8 @@ Tabs.propTypes = {
   transform: PropTypes.bool,
   // tabs will be transformed to accodrion for screen sizes below `transformWidth`px
   transformWidth: PropTypes.number,
+  // beforeChange callback: return false to prevent tab change
+  beforeChange: PropTypes.func,
   // onChange active tab callback
   onChange: PropTypes.func,
   // onRemove callback
@@ -418,6 +429,7 @@ Tabs.defaultProps = {
   panelClass: undefined,
   showMoreLabel: '...',
   unmountOnExit: true,
+  beforeChange: undefined,
   onChange: () => null,
   onRemove: () => null,
 };
