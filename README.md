@@ -1,5 +1,7 @@
 # React responsive tabs
 
+#### [Live demo](http://maslianok.github.io/react-responsive-tabs/)
+
 ### Your feedback is highly appreciated!
 
 Please, file an issue if something went wrong or let me know via Twitter @maslianok
