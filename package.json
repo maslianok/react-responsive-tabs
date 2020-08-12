@@ -32,7 +32,7 @@
     "classnames": "^2.2.6",
     "lodash.throttle": "^4.1.1",
     "prop-types": "^15.7.2",
-    "react-resize-detector": "^4.2.3"
+    "react-resize-detector": "^5.0.7"
   },
   "devDependencies": {
     "@babel/cli": "^7.10.1",
