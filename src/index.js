@@ -65,7 +65,7 @@ export default class Tabs extends Component {
     if (
       uid !== prevProps.uid ||
       items.length !== prevProps.items.length ||
-      items.every((item, i) => item !== prevProps.items[i])
+      items.every((item, i) => item.title !== prevProps.items[i].title)
     ) {
       this.setTabsDimensions();
     }
