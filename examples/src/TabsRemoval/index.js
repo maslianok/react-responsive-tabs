@@ -23,13 +23,13 @@ export class TabsRemoval extends PureComponent {
     evt.stopPropagation();
 
     // current tabs
-    const currentTabs = this.state.items;
+    const { items } = this.state;
 
     // find index to remove
-    const indexToRemove = currentTabs.findIndex(tab => tab.key === key);
+    const indexToRemove = items.findIndex(tab => tab.key === key);
 
     // create a new array without [indexToRemove] item
-    const newTabs = [...currentTabs.slice(0, indexToRemove), ...currentTabs.slice(indexToRemove + 1)];
+    const newTabs = [...items.slice(0, indexToRemove), ...items.slice(indexToRemove + 1)];
 
     const nextSelectedIndex = newTabs[indexToRemove] ? indexToRemove : indexToRemove - 1;
     if (!newTabs[nextSelectedIndex]) {
@@ -41,6 +41,7 @@ export class TabsRemoval extends PureComponent {
   };
 
   getTabs = () =>
+    // eslint-disable-next-line
     dummyData.map(({ name, biography }, i) => ({
       key: i,
       title: (

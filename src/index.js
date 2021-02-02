@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, createRef } from 'react';
 import ResizeDetector from 'react-resize-detector';
 import cs from 'classnames';
 import throttle from 'lodash.throttle';
@@ -16,6 +16,7 @@ export default class Tabs extends Component {
     super(props);
 
     this.tabRefs = {};
+    this.tabsWrapper = createRef();
     this.selectedTabKeyProp = props.selectedTabKey;
 
     this.state = {
@@ -74,9 +75,9 @@ export default class Tabs extends Component {
   }
 
   onResize = () => {
-    if (this.tabsWrapper) {
+    if (this.tabsWrapper.current) {
       const currentIsCollapsed = this.getIsCollapsed();
-      this.setState({ blockWidth: this.tabsWrapper.offsetWidth }, () => {
+      this.setState({ blockWidth: this.tabsWrapper.current.offsetWidth }, () => {
         const { items } = this.props;
         const { selectedTabKey } = this.state;
         const nextIsCollapsed = this.getIsCollapsed();
@@ -126,13 +127,13 @@ export default class Tabs extends Component {
   };
 
   setTabsDimensions = () => {
-    if (!this.tabsWrapper) {
+    if (!this.tabsWrapper.current) {
       // it shouldn't happen ever. Just a paranoic check
       return;
     }
 
     // initial wrapper width calculation
-    const blockWidth = this.tabsWrapper.offsetWidth;
+    const blockWidth = this.tabsWrapper.current.offsetWidth;
 
     // calculate width and offset for each tab
     let tabsTotalWidth = 0;
@@ -348,35 +349,44 @@ export default class Tabs extends Component {
     const containerClasses = cs('RRT__container', containerClass);
     const tabsClasses = cs('RRT__tabs', tabsWrapperClass, { RRT__accordion: isCollapsed });
 
+    const handleResize = showMore || transform;
+
     return (
-      <div className={containerClasses} ref={e => (this.tabsWrapper = e)} onKeyDown={this.onKeyDown}>
-        <div className={tabsClasses}>
-          {tabsVisible.reduce((result, tab) => {
-            result.push(<Tab {...this.getTabProps(tab)} />);
+      <ResizeDetector
+        handleWidth={handleResize}
+        handleHeight={false}
+        targetRef={this.tabsWrapper}
+        onResize={this.onResizeThrottled}
+      >
+        {() => (
+          <div className={containerClasses} ref={this.tabsWrapper} onKeyDown={this.onKeyDown}>
+            <div className={tabsClasses}>
+              {tabsVisible.reduce((result, tab) => {
+                result.push(<Tab {...this.getTabProps(tab)} />);
 
-            if (isCollapsed && (!unmountOnExit || selectedTabKey === tab.key)) {
-              result.push(<TabPanel {...this.getPanelProps(panels[tab.key], selectedTabKey !== tab.key)} />);
-            }
-            return result;
-          }, [])}
+                if (isCollapsed && (!unmountOnExit || selectedTabKey === tab.key)) {
+                  result.push(<TabPanel {...this.getPanelProps(panels[tab.key], selectedTabKey !== tab.key)} />);
+                }
+                return result;
+              }, [])}
 
-          {!isCollapsed && (
-            <ShowMore {...this.getShowMoreProps(showMore, isSelectedTabHidden, showMoreLabel)}>
-              {tabsHidden.map(tab => (
-                <Tab {...this.getTabProps(tab)} />
-              ))}
-            </ShowMore>
-          )}
-        </div>
+              {!isCollapsed && (
+                <ShowMore {...this.getShowMoreProps(showMore, isSelectedTabHidden, showMoreLabel)}>
+                  {tabsHidden.map(tab => (
+                    <Tab {...this.getTabProps(tab)} />
+                  ))}
+                </ShowMore>
+              )}
+            </div>
 
-        {showInkBar && !isCollapsed && !isSelectedTabHidden && (
-          <InkBar left={selectedTabDimensions.offset || 0} width={selectedTabDimensions.width || 0} />
+            {showInkBar && !isCollapsed && !isSelectedTabHidden && (
+              <InkBar left={selectedTabDimensions.offset || 0} width={selectedTabDimensions.width || 0} />
+            )}
+
+            {this.getExpandedTabs(panels, selectedTabKey, isCollapsed)}
+          </div>
         )}
-
-        {this.getExpandedTabs(panels, selectedTabKey, isCollapsed)}
-
-        {(showMore || transform) && <ResizeDetector handleWidth onResize={this.onResizeThrottled} />}
-      </div>
+      </ResizeDetector>
     );
   }
 }
