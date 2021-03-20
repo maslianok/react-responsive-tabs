@@ -82,6 +82,8 @@ render(<App />, document.getElementById('root'));
 
 ## API
 
+All entities listed below should be used as props to the `Tabs` component.
+
 | Prop             | Type          | Description                                                                  | Default   |
 | ---------------- | ------------- | ---------------------------------------------------------------------------- | --------- |
 | items            | Array         | Tabs data                                                                    | []        |
