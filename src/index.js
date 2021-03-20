@@ -1,5 +1,5 @@
 import React, { Component, createRef } from 'react';
-import ResizeDetector from 'react-resize-detector';
+import ResizeDetector from 'react-resize-detector/build/withPolyfill';
 import cs from 'classnames';
 import throttle from 'lodash.throttle';
 import PropTypes from 'prop-types';

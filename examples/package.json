@@ -10,7 +10,7 @@
     "react-ga": "^3.3.0",
     "react-helmet": "^6.1.0",
     "react-responsive-tabs": "file:../",
-    "react-scripts": "4.0.1"
+    "react-scripts": "4.0.3"
   },
   "scripts": {
     "start": "linklocal && react-scripts start",
