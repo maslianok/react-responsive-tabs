@@ -132,17 +132,25 @@ export default class Tabs extends Component {
       return;
     }
 
+    const { tabDimensions } = this.state;
+
     // initial wrapper width calculation
     const blockWidth = this.tabsWrapper.current.offsetWidth;
 
     // calculate width and offset for each tab
     let tabsTotalWidth = 0;
-    const tabDimensions = {};
+    const tabDimensionsNext = {};
     Object.keys(this.tabRefs).forEach(key => {
       if (this.tabRefs[key]) {
+        const tabKey = key.replace(tabPrefix, '');
         const width = this.tabRefs[key].tab.offsetWidth;
-        tabDimensions[key.replace(tabPrefix, '')] = { width, offset: tabsTotalWidth };
-        tabsTotalWidth += width;
+        if (width) {
+          tabDimensionsNext[tabKey] = { width, offset: tabsTotalWidth };
+        } else {
+          tabDimensionsNext[tabKey] = tabDimensions[tabKey];
+        }
+
+        tabsTotalWidth += tabDimensionsNext[tabKey].width;
       }
     });
 
