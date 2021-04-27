@@ -33,19 +33,19 @@ We are using [`react-resize-detector`](https://github.com/maslianok/react-resize
 
 Local demo
 
-```
-// 1. clone the repository
+```sh
+# 1. clone the repository
 git clone https://github.com/maslianok/react-responsive-tabs.git
 
-// 2. Install react-responsive-tabs dependencies. You must do it because we use raw library code in the example
+# 2. Install react-responsive-tabs dependencies. You must do it because we use raw library code in the example
 cd react-responsive-tabs
 npm install
 
-// 3. Install dependencies to run the example
+# 3. Install dependencies to run the example
 cd examples
 npm install
 
-// 4. Finally run the example
+# 4. Finally run the example
 npm start
 ```
 
