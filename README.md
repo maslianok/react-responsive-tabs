@@ -84,24 +84,35 @@ render(<App />, document.getElementById('root'));
 
 All entities listed below should be used as props to the `Tabs` component.
 
-| Prop             | Type          | Description                                                                  | Default   |
-| ---------------- | ------------- | ---------------------------------------------------------------------------- | --------- |
-| items            | Array         | Tabs data                                                                    | []        |
-| beforeChange     | Function      | Fires right before a tab changes. Return `false` to prevent the tab change   | undefined |
-| onChange         | Function      | onChange callback                                                            | undefined |
-| selectedTabKey   | Number/String | Selected tab                                                                 | undefined |
-| showMore         | Bool          | Whether to show `Show more` or not                                           | `true`    |
-| showMoreLabel    | String/Node   | `Show more` tab name                                                         | `...`     |
-| transform        | Bool          | Transform to accordion when the wrapper width is less than `transformWidth`. | `true`    |
-| transformWidth   | Number        | Transform width.                                                             | 800       |
-| unmountOnExit    | Bool          | Whether to unmount inactive tabs from DOM tree or not                        | `true`    |
-| tabsWrapperClass | String        | Wrapper class                                                                | undefined |
-| tabClassName     | String        | Tab class                                                                    | undefined |
-| panelClassName   | String        | Tab panel class                                                              | undefined |
-| allowRemove      | Bool          | Allows tabs removal.                                                         | `false`   |
-| removeActiveOnly | Bool          | Only active tab has removal option                                           | `false`   |
-| showInkBar       | Bool          | Add MaterialUI InkBar effect                                                 | `false`   |
-| uid              | any           | An optional external id. The component rerenders when it changes             | undefined |
+| Prop             | Type          | Description                                                                  | Default         |
+| ---------------- | ------------- | ---------------------------------------------------------------------------- | --------------- |
+| items            | Array         | Tabs data                                                                    | [Item](#Item)[] |
+| beforeChange     | Function      | Fires right before a tab changes. Return `false` to prevent the tab change   | undefined       |
+| onChange         | Function      | onChange callback                                                            | undefined       |
+| selectedTabKey   | Number/String | Selected tab                                                                 | undefined       |
+| showMore         | Bool          | Whether to show `Show more` or not                                           | `true`          |
+| showMoreLabel    | String/Node   | `Show more` tab name                                                         | `...`           |
+| transform        | Bool          | Transform to accordion when the wrapper width is less than `transformWidth`. | `true`          |
+| transformWidth   | Number        | Transform width.                                                             | 800             |
+| unmountOnExit    | Bool          | Whether to unmount inactive tabs from DOM tree or not                        | `true`          |
+| tabsWrapperClass | String        | Wrapper class                                                                | undefined       |
+| tabClassName     | String        | Tab class                                                                    | undefined       |
+| panelClassName   | String        | Tab panel class                                                              | undefined       |
+| allowRemove      | Bool          | Allows tabs removal.                                                         | `false`         |
+| removeActiveOnly | Bool          | Only active tab has removal option                                           | `false`         |
+| showInkBar       | Bool          | Add MaterialUI InkBar effect                                                 | `false`         |
+| uid              | any           | An optional external id. The component rerenders when it changes             | undefined       |
+
+#### Item
+
+| Prop           | Type     | Description                                                                                                                                                      |
+| -------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| title          | String   | Tab title                                                                                                                                                        |
+| getContent     | Function | A function that returns data that will be rendered when tab become active                                                                                        |
+| content        | String   | Use this prop insted of getContent. This is a sync version of `getContent`. The data will be always rendered in a hidden div. Sometimes it may be useful for SEO |
+| key            | Number   | A uniq tab id                                                                                                                                                    |
+| tabClassName   | String   | Tab class name                                                                                                                                                   |
+| panelClassName | String   | Panel class name                                                                                                                                                 |
 
 ### License
 
