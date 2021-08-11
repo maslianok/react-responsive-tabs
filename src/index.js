@@ -154,7 +154,7 @@ export default class Tabs extends Component {
       }
     });
 
-    this.setState({ tabDimensions, tabsTotalWidth, blockWidth });
+    this.setState({ tabDimensions: tabDimensionsNext, tabsTotalWidth, blockWidth });
   };
 
   getTabs = () => {
@@ -339,15 +339,8 @@ export default class Tabs extends Component {
   };
 
   render() {
-    const {
-      showInkBar,
-      containerClass,
-      tabsWrapperClass,
-      showMore,
-      transform,
-      showMoreLabel,
-      unmountOnExit,
-    } = this.props;
+    const { showInkBar, containerClass, tabsWrapperClass, showMore, transform, showMoreLabel, unmountOnExit } =
+      this.props;
     const { tabDimensions } = this.state;
     const { tabsVisible, tabsHidden, panels, isSelectedTabHidden } = this.getTabs();
     const isCollapsed = this.getIsCollapsed();
