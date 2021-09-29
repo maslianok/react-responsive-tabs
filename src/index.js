@@ -168,7 +168,7 @@ export default class Tabs extends Component {
 
     return items.reduce(
       (result, item, index) => {
-        const { key = index, title, content, getContent, disabled, tabClassName, panelClassName } = item;
+        const { key = index, title, content, getContent, disabled, tabClassName, tabSelectedClassName, panelClassName } = item;
 
         const selected = selectedTabKey === key;
         const payload = { tabIndex, collapsed, selected, disabled, key };
@@ -182,6 +182,7 @@ export default class Tabs extends Component {
           },
           allowRemove: allowRemove && (!removeActiveOnly || selected),
           className: tabClassName,
+          classNameSelected: tabSelectedClassName,
         };
 
         const panelPayload = {
@@ -224,7 +225,7 @@ export default class Tabs extends Component {
     );
   };
 
-  getTabProps = ({ title, key, selected, collapsed, tabIndex, disabled, className, onRemove, allowRemove }) => ({
+  getTabProps = ({ title, key, selected, collapsed, tabIndex, disabled, className, classNameSelected, onRemove, allowRemove }) => ({
     selected,
     allowRemove,
     children: title,
@@ -243,6 +244,7 @@ export default class Tabs extends Component {
       tabIndex,
       disabled,
       className,
+      classNameSelected
     }),
   });
 
@@ -263,13 +265,14 @@ export default class Tabs extends Component {
     hasChildSelected: isSelectedTabHidden,
   });
 
-  getClassNamesFor = (type, { selected, collapsed, tabIndex, disabled, className = '', isHidden }) => {
+  getClassNamesFor = (type, { selected, collapsed, tabIndex, disabled, className = '', classNameSelected = '', isHidden }) => {
     const { tabClass, panelClass } = this.props;
     switch (type) {
       case 'tab':
+        console.log(classNameSelected);
         return cs('RRT__tab', className, tabClass, {
           'RRT__tab--first': !tabIndex,
-          'RRT__tab--selected': selected,
+          ['RRT__tab--selected' + (classNameSelected.length ? ' ' + classNameSelected : '')]: selected,
           'RRT__tab--disabled': disabled,
           'RRT__tab--collapsed': collapsed,
         });
@@ -425,6 +428,7 @@ Tabs.propTypes = {
   containerClass: PropTypes.string,
   tabsWrapperClass: PropTypes.string,
   tabClass: PropTypes.string,
+  tabClassSelected: PropTypes.string,
   panelClass: PropTypes.string,
   // optional external id. Force rerender when it changes
   // eslint-disable-next-line react/forbid-prop-types
@@ -447,6 +451,7 @@ Tabs.defaultProps = {
   containerClass: undefined,
   tabsWrapperClass: undefined,
   tabClass: undefined,
+  tabClassSelected: undefined,
   panelClass: undefined,
   showMoreLabel: '...',
   unmountOnExit: true,
