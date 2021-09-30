@@ -269,7 +269,6 @@ export default class Tabs extends Component {
     const { tabClass, panelClass } = this.props;
     switch (type) {
       case 'tab':
-        console.log(classNameSelected);
         return cs('RRT__tab', className, tabClass, {
           'RRT__tab--first': !tabIndex,
           ['RRT__tab--selected' + (classNameSelected.length ? ' ' + classNameSelected : '')]: selected,
